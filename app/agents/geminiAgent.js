@@ -1,27 +1,4 @@
-[4:56 p.m., 25/1/2026] 🦈: /**
- * GEMINI AGENT
- * Encargado de la comunicación con el Proxy Server.
- * Transforma los datos crudos en un prompt multimodal.
- */
-
-const PROXY_URL = "http://localhost:3000/api/transmutar"; // Tu servidor local
-
-export async function runGeminiDebate(input) {
-  const { crossRatio, imageDNA, mandalaSeed } = input;
-
-  console.log(">> GEMINI AGENT: Contactando al Núcleo...");
-
-  // 1. Construcción del Prompt
-  // Inyectamos la matemática (R) y la semilla del caos
-  const promptText = `
-    CONTEXTO MATEMÁTICO: Razón Anarmónica R=${crossRatio}.
-    SEMILLA DEL CAOS: ${mandalaSeed}.
-    
-    TAREA:
-    Analiza la IMAGEN adjunta bajo estos parámetros.
-    Genera un debate técnico y esotérico sobre la validez de esta realidad.
-    JORGE (el auditor) debe buscar fa…
-[4:58 p.m., 25/1/2026] 🦈: import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 /**
  * GEMINI AGENT
@@ -66,3 +43,64 @@ Rules:
 - You must debate internally before producing output.
 - Output MUST be valid JSON.
 - No metaphysical claims without structural grounding.
+`;
+
+    // User-level payload (what makes this an application, not a chatbot)
+    const userPrompt = `
+INPUT SIGNAL DETECTED
+
+Cross Ratio (Invariant): ${crossRatio}
+Mandala Seed: ${mandalaSeed}
+DNA Chain Hash (previous context): ${dnaChain || "GENESIS"}
+
+Task:
+1. Interpret the invariant R as a systemic signature.
+2. Run an internal expert debate.
+3. Detect coordination failures or strengths.
+4. Produce a reusable JSON blueprint.
+
+Output schema (MANDATORY):
+{
+  "resonance_hz": number,
+  "mandala_coordinates": [{ "x": number, "y": number, "z": number }],
+  "survival_protocol": {
+    "type": "cognitive | spatial | temporal",
+    "instruction": "string"
+  },
+  "jorge_panic_trigger": boolean,
+  "dna_chain_hash": "string"
+}
+`;
+
+    // Multimodal input (image + reasoning)
+    const parts = [
+        { text: systemPrompt },
+        { text: userPrompt }
+    ];
+
+    // If an image exists, include it (this is CRITICAL for the hackathon)
+    if (imageBase64) {
+        parts.push({
+            inlineData: {
+                mimeType: "image/png",
+                data: imageBase64
+            }
+        });
+    }
+
+    const result = await model.generateContent({
+        contents: [{ role: "user", parts }]
+    });
+
+    const responseText = result.response.text();
+
+    // Gemini sometimes wraps JSON in markdown — we strip it safely
+    const cleaned = responseText
+        .replace(/json/g, "")
+        .replace(//g, "")
+        .trim();
+
+    console.log(">> GEMINI AGENT: Debate completed.");
+
+    return JSON.parse(cleaned);
+}
