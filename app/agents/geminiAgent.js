@@ -1,106 +1,67 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generarPromptOMNI } from "../prompts/omniPrompt.js";
 
 /**
- * GEMINI AGENT
- * Handles multimodal reasoning using Gemini 3 via AI Studio.
- * Receives mathematical invariants + image context
- * Returns a structured expert debate as JSON.
+ * GEMINI REASONING AGENT
+ * This agent runs the multi-archetype debate using Gemini 3
+ * and returns structured reasoning (NOT raw chat text).
  */
 
-// Gemini client (API key must be set in environment variables)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// We explicitly use a reasoning-capable model
+// IMPORTANT: Gemini 3 reasoning model (Hackathon requirement)
 const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-pro" // Gemini 3 equivalent in AI Studio free tier
+  model: "gemini-3-pro",
+  generationConfig: {
+    temperature: 0.7,
+    topP: 0.9,
+    maxOutputTokens: 2048
+  }
 });
 
 export async function runGeminiDebate(input) {
-    const {
-        crossRatio,
-        imageBase64,
-        mandalaSeed,
-        dnaChain
-    } = input;
+  console.log(">> GEMINI AGENT: Starting reasoning engine...");
 
-    console.log(">> GEMINI AGENT: Running multimodal reasoning...");
+  try {
+    // 1. Build the OMNI nuclear prompt
+    const prompt = generarPromptOMNI({
+      valor: input.crossRatio,
+      seed: input.mandalaSeed
+    });
 
-    // System-level intent (NOT a single-prompt wrapper)
-    const systemPrompt = `
-You are OMNI-CHALAMANDRA, a cognitive fortress.
+    // 2. Multimodal payload (image + reasoning)
+    const parts = [];
 
-You operate as a council of experts:
-- Scientist (Neurobiology)
-- Philosopher (Ontology & Telos)
-- Psychologist (Shadow & Trauma)
-- Historian (Entropy & Cycles)
-- Futurist (Techno-evolution)
-- JORGE (Shadow Auditor, ruthless realism)
-
-Rules:
-- Mathematics precedes interpretation.
-- The Cross Ratio (R) is an invariant. Treat it as objective reality.
-- You must debate internally before producing output.
-- Output MUST be valid JSON.
-- No metaphysical claims without structural grounding.
-`;
-
-    // User-level payload (what makes this an application, not a chatbot)
-    const userPrompt = `
-INPUT SIGNAL DETECTED
-
-Cross Ratio (Invariant): ${crossRatio}
-Mandala Seed: ${mandalaSeed}
-DNA Chain Hash (previous context): ${dnaChain || "GENESIS"}
-
-Task:
-1. Interpret the invariant R as a systemic signature.
-2. Run an internal expert debate.
-3. Detect coordination failures or strengths.
-4. Produce a reusable JSON blueprint.
-
-Output schema (MANDATORY):
-{
-  "resonance_hz": number,
-  "mandala_coordinates": [{ "x": number, "y": number, "z": number }],
-  "survival_protocol": {
-    "type": "cognitive | spatial | temporal",
-    "instruction": "string"
-  },
-  "jorge_panic_trigger": boolean,
-  "dna_chain_hash": "string"
-}
-`;
-
-    // Multimodal input (image + reasoning)
-    const parts = [
-        { text: systemPrompt },
-        { text: userPrompt }
-    ];
-
-    // If an image exists, include it (this is CRITICAL for the hackathon)
-    if (imageBase64) {
-        parts.push({
-            inlineData: {
-                mimeType: "image/png",
-                data: imageBase64
-            }
-        });
+    if (input.imageBase64) {
+      parts.push({
+        inlineData: {
+          data: input.imageBase64,
+          mimeType: "image/png"
+        }
+      });
     }
 
+    parts.push({ text: prompt });
+
+    // 3. Execute Gemini 3 reasoning
     const result = await model.generateContent({
-        contents: [{ role: "user", parts }]
+      contents: [{ role: "user", parts }]
     });
 
     const responseText = result.response.text();
 
-    // Gemini sometimes wraps JSON in markdown — we strip it safely
-    const cleaned = responseText
-        .replace(/json/g, "")
-        .replace(//g, "")
-        .trim();
+    console.log(">> GEMINI AGENT: Reasoning completed.");
 
-    console.log(">> GEMINI AGENT: Debate completed.");
+    // 4. Parse JSON safely (Gemini sometimes wraps with text)
+    const jsonStart = responseText.indexOf("{");
+    const jsonEnd = responseText.lastIndexOf("}") + 1;
 
-    return JSON.parse(cleaned);
+    const cleanJSON = responseText.slice(jsonStart, jsonEnd);
+
+    return JSON.parse(cleanJSON);
+
+  } catch (error) {
+    console.error(">> GEMINI AGENT ERROR:", error);
+    throw new Error("Gemini reasoning failed");
+  }
 }
