@@ -1,34 +1,28 @@
-Geminiimport { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { buildOmniPrompt } from "../prompts/omniPromptBuilder.js";
 
 /**
  * GEMINI REASONING AGENT
- * ----------------------
- * This agent is responsible for:
- * - Sending structured multimodal data to Gemini 3
- * - Orchestrating the 6-agent cognitive debate
- * - Returning a STRICT JSON blueprint (no free text)
+ * =====================
+ * OMNI-CHALAMANDRA CORE
  *
- * This is NOT a chatbot.
- * This is a reasoning engine.
+ * - Multimodal reasoning engine
+ * - 6-agent cognitive debate
+ * - Returns STRICT JSON only
+ * - Hackathon Gemini 3 compliant
  */
 
-// Initialize Gemini 3 (AI Studio free tier)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// IMPORTANT: Gemini 3 model (hackathon compliant)
 const model = genAI.getGenerativeModel({
   model: "gemini-3-pro",
   generationConfig: {
-    temperature: 0.4,        // lower = less hallucination
+    temperature: 0.4,
     topP: 0.9,
     maxOutputTokens: 2048
   }
 });
 
-/**
- * Run the OMNI-CHALAMANDRA debate
- */
 export async function runGeminiDebate(input) {
   console.log(">> GEMINI AGENT: Starting cognitive debate...");
 
@@ -38,21 +32,18 @@ export async function runGeminiDebate(input) {
     const result = await model.generateContent([
       {
         role: "user",
-        parts: [
-          { text: prompt }
-        ]
+        parts: [{ text: prompt }]
       }
     ]);
 
     const rawText = result.response.text();
 
-    // Gemini sometimes wraps JSON in markdown – clean it
+    // Clean markdown wrappers if Gemini adds them
     const cleaned = rawText
       .replace(/json/g, "")
       .replace(//g, "")
       .trim();
 
-    // Parse JSON strictly
     const parsed = JSON.parse(cleaned);
 
     console.log(">> GEMINI AGENT: Debate completed successfully.");
