@@ -1,0 +1,19 @@
+{
+  "model": "gemini-3-reasoning",
+  "mode": "reasoning",
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "max_output_tokens": 2048,
+  "response_format": "application/json",
+  "safety": {
+    "hallucination_control": true,
+    "schema_enforcement": true,
+    "self_critique_enabled": true
+  },
+  "reasoning": {
+    "multi_agent_simulation": true,
+    "debate_enabled": true,
+    "audit_layer": true
+  },
+  "output_schema": "app/config/omniSchema.json"
+}
