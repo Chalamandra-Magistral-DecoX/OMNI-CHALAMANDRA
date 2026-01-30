@@ -1,17 +1,17 @@
 /**
- * JORGE — SHADOW AUDITOR AGENT
- * ----------------------------
+ * GEORGE — SHADOW AUDITOR AGENT
+ * ============================
  * Purpose:
  * - Detect over-optimism and hallucination patterns
  * - Enforce realism and practical constraints
  * - Trigger visual panic when output is unstable
  *
- * Jorge is NOT negative.
+ * George is NOT negative.
  * He is a safety layer.
  */
 
-export function auditWithJorge(geminiOutput, crossRatioValue) {
-  console.log(">> JORGE: Starting shadow audit...");
+export function auditWithGeorge(geminiOutput, crossRatioValue) {
+  console.log(">> GEORGE: Starting shadow audit...");
 
   let panic = false;
   let fraudScore = 0;
@@ -45,7 +45,7 @@ export function auditWithJorge(geminiOutput, crossRatioValue) {
   // --------------------------------------------------
   // 3. Semantic overconfidence detection
   // --------------------------------------------------
-  const jorgeKeywords = [
+  const georgeKeywords = [
     "guaranteed",
     "perfect",
     "always",
@@ -55,7 +55,7 @@ export function auditWithJorge(geminiOutput, crossRatioValue) {
   ];
 
   const serialized = JSON.stringify(geminiOutput).toLowerCase();
-  jorgeKeywords.forEach(word => {
+  georgeKeywords.forEach(word => {
     if (serialized.includes(word)) {
       fraudScore += 10;
     }
@@ -69,9 +69,9 @@ export function auditWithJorge(geminiOutput, crossRatioValue) {
   }
 
   // --------------------------------------------------
-  // 5. Attach Jorge's verdict
+  // 5. Attach George's verdict
   // --------------------------------------------------
-  geminiOutput.jorge_audit = {
+  geminiOutput.george_audit = {
     triggered: panic,
     fraud_score: fraudScore,
     verdict: panic
@@ -80,9 +80,9 @@ export function auditWithJorge(geminiOutput, crossRatioValue) {
     cross_ratio_reference: crossRatioValue
   };
 
-  geminiOutput.jorge_panic_trigger = panic;
+  geminiOutput.george_panic_trigger = panic;
 
-  console.log(>> JORGE: Audit complete (score=${fraudScore}));
+  console.log(>> GEORGE: Audit complete (score=${fraudScore}));
 
   return geminiOutput;
 }
@@ -91,12 +91,12 @@ export function auditWithJorge(geminiOutput, crossRatioValue) {
 // INTERNAL: Panic fallback
 // --------------------------------------------------
 function panicResponse(reason) {
-  console.warn(">> JORGE PANIC:", reason);
+  console.warn(">> GEORGE PANIC:", reason);
 
   return {
     error: true,
-    jorge_panic_trigger: true,
-    jorge_audit: {
+    george_panic_trigger: true,
+    george_audit: {
       triggered: true,
       fraud_score: 100,
       verdict: CRITICAL FAILURE: ${reason}
