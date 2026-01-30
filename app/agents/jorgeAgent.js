@@ -1,66 +1,105 @@
 /**
  * JORGE — SHADOW AUDITOR AGENT
- * Real-world realism injection.
- * Detects hallucinations, over-optimism and symbolic bullshit.
+ * ----------------------------
+ * Purpose:
+ * - Detect over-optimism and hallucination patterns
+ * - Enforce realism and practical constraints
+ * - Trigger visual panic when output is unstable
+ *
+ * Jorge is NOT negative.
+ * He is a safety layer.
  */
 
-export function auditWithJorge(geminiOutput, crossRatio) {
+export function auditWithJorge(geminiOutput, crossRatioValue) {
   console.log(">> JORGE: Starting shadow audit...");
 
-  const audit = {
-    ...geminiOutput,
-    jorge_panic_trigger: false,
-    jorge_flags: []
+  let panic = false;
+  let fraudScore = 0;
+
+  // --------------------------------------------------
+  // 1. Basic sanity check
+  // --------------------------------------------------
+  if (!geminiOutput || typeof geminiOutput !== "object") {
+    return panicResponse("Invalid or empty Gemini output");
+  }
+
+  // --------------------------------------------------
+  // 2. Detect extreme or suspicious values
+  // --------------------------------------------------
+  if (crossRatioValue < 0 || crossRatioValue > 10) {
+    fraudScore += 30;
+  }
+
+  if (geminiOutput.indice_coordinacion > 1 || geminiOutput.indice_coordinacion < 0) {
+    fraudScore += 25;
+  }
+
+  if (!geminiOutput.capa_dominante) {
+    fraudScore += 20;
+  }
+
+  if (!geminiOutput.frecuencia_hz) {
+    fraudScore += 20;
+  }
+
+  // --------------------------------------------------
+  // 3. Semantic overconfidence detection
+  // --------------------------------------------------
+  const jorgeKeywords = [
+    "guaranteed",
+    "perfect",
+    "always",
+    "never",
+    "absolute truth",
+    "no risk"
+  ];
+
+  const serialized = JSON.stringify(geminiOutput).toLowerCase();
+  jorgeKeywords.forEach(word => {
+    if (serialized.includes(word)) {
+      fraudScore += 10;
+    }
+  });
+
+  // --------------------------------------------------
+  // 4. Panic threshold
+  // --------------------------------------------------
+  if (fraudScore >= 50) {
+    panic = true;
+  }
+
+  // --------------------------------------------------
+  // 5. Attach Jorge's verdict
+  // --------------------------------------------------
+  geminiOutput.jorge_audit = {
+    triggered: panic,
+    fraud_score: fraudScore,
+    verdict: panic
+      ? "System confidence is unstable. Output should be interpreted symbolically."
+      : "Output passed realism audit.",
+    cross_ratio_reference: crossRatioValue
   };
 
-  /* ---------------------------------------
-     RULE 1: Unrealistic coordination index
-  --------------------------------------- */
-  if (geminiOutput.indice_coordinacion > 0.95) {
-    audit.jorge_flags.push("Suspiciously perfect coordination");
-  }
+  geminiOutput.jorge_panic_trigger = panic;
 
-  /* ---------------------------------------
-     RULE 2: Missing layers
-  --------------------------------------- */
-  const requiredLayers = ["NEURO", "NARRATIVA", "SANACIÓN", "TECNO", "PROTOCOLO"];
-  if (!geminiOutput.analisis_por_capa) {
-    audit.jorge_flags.push("Missing layer analysis");
-  } else {
-    requiredLayers.forEach(layer => {
-      if (!geminiOutput.analisis_por_capa[layer]) {
-        audit.jorge_flags.push(Missing analysis for layer: ${layer});
-      }
-    });
-  }
+  console.log(>> JORGE: Audit complete (score=${fraudScore}));
 
-  /* ---------------------------------------
-     RULE 3: Cross Ratio anomaly detection
-  --------------------------------------- */
-  if (crossRatio < 0 || crossRatio > 10) {
-    audit.jorge_flags.push("Cross-ratio anomaly detected");
-  }
+  return geminiOutput;
+}
 
-  /* ---------------------------------------
-     RULE 4: Empty Jorge verdict (ironic)
-  --------------------------------------- */
-  if (!geminiOutput.veredicto_jorge || geminiOutput.veredicto_jorge.length < 10) {
-    audit.jorge_flags.push("JORGE verdict too soft or missing");
-  }
+// --------------------------------------------------
+// INTERNAL: Panic fallback
+// --------------------------------------------------
+function panicResponse(reason) {
+  console.warn(">> JORGE PANIC:", reason);
 
-  /* ---------------------------------------
-     DECISION: Panic or pass
-  --------------------------------------- */
-  if (audit.jorge_flags.length >= 2) {
-    audit.jorge_panic_trigger = true;
-    audit.veredicto_jorge =
-      "JORGE: Too many red flags. System smells like theoretical bullshit. Triggering panic mode.";
-  } else {
-    audit.veredicto_jorge =
-      "JORGE: Output survived street reality check. Still watching you.";
-  }
-
-  console.log(">> JORGE AUDIT FLAGS:", audit.jorge_flags);
-
-  return audit;
+  return {
+    error: true,
+    jorge_panic_trigger: true,
+    jorge_audit: {
+      triggered: true,
+      fraud_score: 100,
+      verdict: CRITICAL FAILURE: ${reason}
+    }
+  };
 }
