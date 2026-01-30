@@ -1,67 +1,71 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { generarPromptOMNI } from "../prompts/omniPrompt.js";
+Geminiimport { GoogleGenerativeAI } from "@google/generative-ai";
+import { buildOmniPrompt } from "../prompts/omniPromptBuilder.js";
 
 /**
  * GEMINI REASONING AGENT
- * This agent runs the multi-archetype debate using Gemini 3
- * and returns structured reasoning (NOT raw chat text).
+ * ----------------------
+ * This agent is responsible for:
+ * - Sending structured multimodal data to Gemini 3
+ * - Orchestrating the 6-agent cognitive debate
+ * - Returning a STRICT JSON blueprint (no free text)
+ *
+ * This is NOT a chatbot.
+ * This is a reasoning engine.
  */
 
+// Initialize Gemini 3 (AI Studio free tier)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// IMPORTANT: Gemini 3 reasoning model (Hackathon requirement)
+// IMPORTANT: Gemini 3 model (hackathon compliant)
 const model = genAI.getGenerativeModel({
   model: "gemini-3-pro",
   generationConfig: {
-    temperature: 0.7,
+    temperature: 0.4,        // lower = less hallucination
     topP: 0.9,
     maxOutputTokens: 2048
   }
 });
 
+/**
+ * Run the OMNI-CHALAMANDRA debate
+ */
 export async function runGeminiDebate(input) {
-  console.log(">> GEMINI AGENT: Starting reasoning engine...");
+  console.log(">> GEMINI AGENT: Starting cognitive debate...");
+
+  const prompt = buildOmniPrompt(input);
 
   try {
-    // 1. Build the OMNI nuclear prompt
-    const prompt = generarPromptOMNI({
-      valor: input.crossRatio,
-      seed: input.mandalaSeed
-    });
+    const result = await model.generateContent([
+      {
+        role: "user",
+        parts: [
+          { text: prompt }
+        ]
+      }
+    ]);
 
-    // 2. Multimodal payload (image + reasoning)
-    const parts = [];
+    const rawText = result.response.text();
 
-    if (input.imageBase64) {
-      parts.push({
-        inlineData: {
-          data: input.imageBase64,
-          mimeType: "image/png"
-        }
-      });
-    }
+    // Gemini sometimes wraps JSON in markdown – clean it
+    const cleaned = rawText
+      .replace(/json/g, "")
+      .replace(//g, "")
+      .trim();
 
-    parts.push({ text: prompt });
+    // Parse JSON strictly
+    const parsed = JSON.parse(cleaned);
 
-    // 3. Execute Gemini 3 reasoning
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts }]
-    });
-
-    const responseText = result.response.text();
-
-    console.log(">> GEMINI AGENT: Reasoning completed.");
-
-    // 4. Parse JSON safely (Gemini sometimes wraps with text)
-    const jsonStart = responseText.indexOf("{");
-    const jsonEnd = responseText.lastIndexOf("}") + 1;
-
-    const cleanJSON = responseText.slice(jsonStart, jsonEnd);
-
-    return JSON.parse(cleanJSON);
+    console.log(">> GEMINI AGENT: Debate completed successfully.");
+    return parsed;
 
   } catch (error) {
     console.error(">> GEMINI AGENT ERROR:", error);
-    throw new Error("Gemini reasoning failed");
+
+    return {
+      error: true,
+      source: "geminiAgent",
+      message: error.message || "Gemini reasoning failure",
+      jorge_panic_trigger: true
+    };
   }
 }
