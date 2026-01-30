@@ -1,153 +1,183 @@
-import { calculateCrossRatio } from "./crossratio.js";
-import { drawColinearityGuide } from "./colinearityguide.js";
-import { renderMandala } from "./mandalaRenderer.js";
-import { orchestrateOMNI } from "../agents/orchestrator.js";
-import { triggerPanic } from "../feedback/glitchEngine.js";
-
 /**
- * CANVAS CONTROLLER
- * Connects human input → math → AI → geometry → feedback
+ * CANVAS CONTROLLER — OMNI-CHALAMANDRA
+ * Handles image input, point selection, SRAP extraction,
+ * visual guidance, and payload dispatch to the OMNI Orchestrator.
  */
 
-const canvas = document.getElementById("canvasMain");
-const ctx = canvas.getContext("2d");
+import { drawColinearityGuide, drawDeviationWarning } from "./colinearityGuide.js";
+import { computeCrossRatio, isColinear } from "./crossRatio.js";
+import { orchestrateOMNI } from "../agents/orchestrator.js";
 
-let image = null;
-let points = [];
-let isLocked = false;
+export class CanvasController {
+  constructor(canvasElement, imageInputElement) {
+    this.canvas = canvasElement;
+    this.ctx = this.canvas.getContext("2d");
 
-/* ------------------------------------
-   IMAGE LOAD (SRAP INPUT)
------------------------------------- */
+    this.imageInput = imageInputElement;
 
-export function loadImageToCanvas(file) {
-  const img = new Image();
-  img.onload = () => {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    image = img;
-    points = [];
-    isLocked = false;
-    draw();
-  };
-  img.src = URL.createObjectURL(file);
-}
+    this.image = new Image();
+    this.points = [];
+    this.maxPoints = 4;
 
-/* ------------------------------------
-   CLICK HANDLING (POINT SELECTION)
------------------------------------- */
+    this.mandalaSeed = Math.random().toString(36).slice(2);
 
-canvas.addEventListener("click", async (e) => {
-  if (!image || isLocked) return;
-  if (points.length >= 4) return;
-
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  points.push([x, y]);
-  draw();
-
-  if (points.length === 4) {
-    isLocked = true;
-    await transmuteChaos();
-  }
-});
-
-/* ------------------------------------
-   DRAW LOOP
------------------------------------- */
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (image) {
-    ctx.drawImage(image, 0, 0);
+    this._bindEvents();
   }
 
-  // Draw selected points
-  points.forEach(([x, y], i) => {
-    ctx.beginPath();
-    ctx.arc(x, y, 6, 0, Math.PI * 2);
-    ctx.fillStyle = "#FFD54F";
-    ctx.fill();
-    ctx.fillText(i + 1, x + 8, y - 8);
-  });
+  /* ----------------------------------------
+     EVENT BINDING
+  ---------------------------------------- */
+  _bindEvents() {
+    this.imageInput.addEventListener("change", (e) =>
+      this._handleImageUpload(e)
+    );
 
-  // Draw colinearity guide
-  if (points.length >= 2) {
-    drawColinearityGuide(ctx, points);
+    this.canvas.addEventListener("click", (e) =>
+      this._handleCanvasClick(e)
+    );
   }
-}
 
-/* ------------------------------------
-   CORE TRANSMUTATION PIPELINE
------------------------------------- */
+  /* ----------------------------------------
+     IMAGE LOADING
+  ---------------------------------------- */
+  _handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-async function transmuteChaos() {
-  try {
-    const R = calculateCrossRatio(points);
-
-    console.log(">> CROSS RATIO:", R);
-
-    const input = {
-      crossRatio: R,
-      mandalaSeed: points,
-      imageContext: image ? image.src : null
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.image.onload = () => this._render();
+      this.image.src = reader.result;
     };
 
-    const payload = await orchestrateOMNI(input);
+    reader.readAsDataURL(file);
+  }
 
-    if (payload.error) {
-      console.warn("Payload error:", payload.message);
-      triggerPanic();
+  /* ----------------------------------------
+     POINT SELECTION
+  ---------------------------------------- */
+  _handleCanvasClick(event) {
+    if (this.points.length >= this.maxPoints) return;
+
+    const rect = this.canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    this.points.push({ x, y });
+
+    this._render();
+
+    if (this.points.length === this.maxPoints) {
+      this._processSRAP();
+    }
+  }
+
+  /* ----------------------------------------
+     RENDER LOOP
+  ---------------------------------------- */
+  _render() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    if (this.image.src) {
+      this.ctx.drawImage(
+        this.image,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+    }
+
+    this._drawPoints();
+
+    if (this.points.length >= 2) {
+      drawColinearityGuide(this.ctx, this.points);
+    }
+
+    if (this.points.length >= 3) {
+      const baseLine = {
+        start: this.points[0],
+        end: this.points[this.points.length - 1]
+      };
+
+      this.points.slice(1, -1).forEach((p) =>
+        drawDeviationWarning(this.ctx, baseLine, p)
+      );
+    }
+  }
+
+  _drawPoints() {
+    this.points.forEach((p, index) => {
+      this.ctx.save();
+
+      this.ctx.fillStyle = index === 0 || index === 3
+        ? "cyan"
+        : "white";
+
+      this.ctx.beginPath();
+      this.ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+      this.ctx.fill();
+
+      this.ctx.restore();
+    });
+  }
+
+  /* ----------------------------------------
+     SRAP → DECOX PIPELINE
+  ---------------------------------------- */
+  async _processSRAP() {
+    console.log(">> SRAP: Extracting geometric invariant...");
+
+    if (!isColinear(this.points)) {
+      console.warn(">> SRAP WARNING: Points are not colinear.");
       return;
     }
 
-    // Clear canvas for visualization
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const crossRatio = computeCrossRatio(this.points);
 
-    // Render mandala (DECOX → VISUAL)
-    renderMandala(
-      ctx,
-      canvas.width / 2,
-      canvas.height / 2,
-      payload
-    );
+    const payload = {
+      crossRatio,
+      mandalaSeed: this.mandalaSeed,
+      imageMeta: {
+        width: this.image.width,
+        height: this.image.height
+      },
+      srapCoordinates: this.points.map((p) => ({
+        x: p.x / this.canvas.width,
+        y: p.y / this.canvas.height
+      }))
+    };
 
-    // Optional: overlay debug
-    debugOverlay(R, payload);
+    console.log(">> PAYLOAD TO OMNI:", payload);
 
-  } catch (err) {
-    console.error(">> TRANSMUTATION ERROR:", err);
-    triggerPanic();
+    const result = await orchestrateOMNI(payload);
+
+    this._dispatchResult(result);
   }
-}
 
-/* ------------------------------------
-   DEBUG OVERLAY (FOR JUDGES 😎)
------------------------------------- */
+  /* ----------------------------------------
+     OUTPUT DISPATCH
+  ---------------------------------------- */
+  _dispatchResult(result) {
+    if (result?.error) {
+      console.error(">> OMNI RESPONSE ERROR:", result.message);
+      return;
+    }
 
-function debugOverlay(R, payload) {
-  ctx.save();
-  ctx.fillStyle = "rgba(0,0,0,0.6)";
-  ctx.fillRect(10, 10, 320, 120);
+    // Broadcast result for mandala, sound, export modules
+    window.dispatchEvent(
+      new CustomEvent("OMNI_RESULT_READY", {
+        detail: result
+      })
+    );
+  }
 
-  ctx.fillStyle = "#00E5FF";
-  ctx.font = "12px monospace";
-  ctx.fillText(R (Invariant): ${R.toFixed(4)}, 20, 30);
-  ctx.fillText(Freq: ${payload.frecuencia_hz} Hz, 20, 50);
-  ctx.fillText(Geometry: ${payload.geometria_sugerida}, 20, 70);
-  ctx.fillText(Coordination: ${payload.indice_coordinacion}, 20, 90);
-  ctx.restore();
-}
-
-/* ------------------------------------
-   RESET (Manual or Panic)
------------------------------------- */
-
-export function resetCanvas() {
-  points = [];
-  isLocked = false;
-  draw();
+  /* ----------------------------------------
+     RESET
+  ---------------------------------------- */
+  reset() {
+    this.points = [];
+    this.mandalaSeed = Math.random().toString(36).slice(2);
+    this._render();
+  }
 }
