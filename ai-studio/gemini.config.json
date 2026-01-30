@@ -1,19 +1,35 @@
 {
+  "project": "OMNI-CHALAMANDRA",
+  "version": "3.2",
+  "platform": "Google AI Studio",
   "model": "gemini-3-reasoning",
-  "mode": "reasoning",
-  "temperature": 0.7,
-  "top_p": 0.9,
-  "max_output_tokens": 2048,
-  "response_format": "application/json",
-  "safety": {
-    "hallucination_control": true,
-    "schema_enforcement": true,
-    "self_critique_enabled": true
+  "tier": "free",
+  "reasoning_mode": "multi-agent",
+  "thinking_level": "deep",
+  "persistence": true,
+  "orchestration": {
+    "type": "cognitive-fortress",
+    "agents": [
+      "scientist",
+      "philosopher",
+      "psychologist",
+      "historian",
+      "futurist",
+      "jorge"
+    ]
   },
-  "reasoning": {
-    "multi_agent_simulation": true,
-    "debate_enabled": true,
-    "audit_layer": true
+  "input_modalities": ["image", "geometry", "text"],
+  "output_modalities": ["json", "audio", "visual"],
+  "anti_hallucination": {
+    "schema_enforced": true,
+    "shadow_auditor": true,
+    "panic_mode": true
   },
-  "output_schema": "app/config/omniSchema.json"
+  "hackathon_alignment": {
+    "action_era": true,
+    "autonomous_agents": true,
+    "long_running_tasks": true,
+    "verified_reasoning": true
+  }
 }
+
