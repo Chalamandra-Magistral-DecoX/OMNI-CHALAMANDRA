@@ -1,42 +1,39 @@
 /**
  * VISUAL ENGINE — OMNI-CHALAMANDRA
- * Purpose:
- * - Control visual feedback layer (auras, states, system mood)
- * - Responds to dominant layer + coordination index
+ * Handles non-destructive visual feedback:
+ * aura, color shifts, coherence state.
  */
 
-export function updateVisualState({
+export function applyVisualState({
   dominantLayer,
   coordinationIndex,
   geometry
 }) {
   const root = document.documentElement;
 
-  /* Coordination affects saturation */
-  const saturation = Math.min(100, Math.max(20, coordinationIndex * 100));
-  root.style.setProperty("--system-saturation", ${saturation}%);
+  // Normalize coordination (0–1)
+  const intensity = Math.max(0, Math.min(1, coordinationIndex || 0));
 
-  /* Geometry hint (used by canvas renderer) */
-  root.setAttribute("data-geometry", geometry || "UNKNOWN");
+  // Color mapping by layer
+  const layerColors = {
+    NEURO: "#4cc9f0",
+    NARRATIVE: "#f72585",
+    HEALING: "#80ffdb",
+    TECHNO: "#ffd166",
+    PROTOCOL: "#cdb4db"
+  };
 
-  /* Dominant cognitive layer coloring */
-  switch (dominantLayer) {
-    case "NEURO":
-      root.style.setProperty("--system-hue", "200");
-      break;
-    case "NARRATIVE":
-      root.style.setProperty("--system-hue", "40");
-      break;
-    case "HEALING":
-      root.style.setProperty("--system-hue", "120");
-      break;
-    case "TECHNO":
-      root.style.setProperty("--system-hue", "280");
-      break;
-    case "PROTOCOL":
-      root.style.setProperty("--system-hue", "0");
-      break;
-    default:
-      root.style.setProperty("--system-hue", "180");
-  }
+  const color = layerColors[dominantLayer] || "#ffffff";
+
+  root.style.setProperty("--omni-accent-color", color);
+  root.style.setProperty("--omni-coherence", intensity.toString());
+
+  // Geometry hint (used by canvas renderer if needed)
+  root.dataset.omniGeometry = geometry || "UNKNOWN";
+
+  // Subtle glow proportional to coordination
+  root.style.setProperty(
+    "--omni-glow-strength",
+    ${Math.floor(intensity * 20)}px
+  );
 }
