@@ -15,7 +15,7 @@
       "psychologist",
       "historian",
       "futurist",
-      "jorge"
+      "george"
     ]
   },
   "input_modalities": ["image", "geometry", "text"],
@@ -32,4 +32,3 @@
     "verified_reasoning": true
   }
 }
-
