@@ -1,103 +1,104 @@
 /**
- * VALIDATOR AGENT — SCHEMA GUARDIAN
- * ================================
- * Purpose:
- * - Ensure Gemini output is valid, complete, and safe for UI rendering
- * - Prevent canvas crashes due to malformed JSON
- * - Enforce contract between reasoning engine and visual system
+ * VALIDATOR AGENT — OMNI-CHALAMANDRA
+ * Role: Output integrity & schema enforcement
  *
- * This agent does NOT think.
- * This agent protects.
+ * Responsibilities:
+ * - Extract the FINAL JSON block from Gemini output
+ * - Validate required fields
+ * - Prevent UI / Canvas crashes
+ *
+ * IMPORTANT:
+ * - This agent does NOT modify meaning
+ * - It only accepts or rejects
  */
 
-const REQUIRED_FIELDS = [
-  "frecuencia_hz",
-  "geometria_sugerida",
-  "capa_dominante",
-  "indice_coordinacion",
-  "puntos_de_fuga",
-  "analisis_por_capa",
-  "veredicto_jorge"
-];
+export function validateOutput(rawGeminiOutput) {
+  console.log(">> VALIDATOR: Parsing Gemini output...");
 
-export function validateOutput(payload) {
-  console.log(">> VALIDATOR: Checking schema integrity...");
-
-  if (!payload || typeof payload !== "object") {
-    return invalid("Payload is not an object");
-  }
-
-  // --------------------------------------------------
-  // 1. Required top-level fields
-  // --------------------------------------------------
-  for (const field of REQUIRED_FIELDS) {
-    if (!(field in payload)) {
-      return invalid(Missing required field: ${field});
+  try {
+    if (typeof rawGeminiOutput !== "string") {
+      return invalid("Output is not a string.");
     }
+
+    /* --------------------------------------------------
+       1. EXTRACT JSON BLOCK
+       Assumes JSON is LAST thing in the response
+    -------------------------------------------------- */
+    const jsonStart = rawGeminiOutput.lastIndexOf("{");
+    const jsonEnd = rawGeminiOutput.lastIndexOf("}");
+
+    if (jsonStart === -1 || jsonEnd === -1) {
+      return invalid("No JSON block detected.");
+    }
+
+    const jsonString = rawGeminiOutput.slice(
+      jsonStart,
+      jsonEnd + 1
+    );
+
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonString);
+    } catch (e) {
+      return invalid("JSON parsing failed.");
+    }
+
+    /* --------------------------------------------------
+       2. SCHEMA VALIDATION (MINIMAL BUT STRICT)
+    -------------------------------------------------- */
+
+    const requiredTopLevel = [
+      "hackathon_project",
+      "input_analysis",
+      "output_signals",
+      "dominant_layer",
+      "agent_insights",
+      "shadow_verdict",
+      "action_plan",
+      "chain_data"
+    ];
+
+    for (const key of requiredTopLevel) {
+      if (!(key in parsed)) {
+        return invalid(Missing top-level key: ${key});
+      }
+    }
+
+    // Shadow audit integrity (JORGE)
+    if (
+      parsed.shadow_verdict.auditor !== "JORGE" ||
+      typeof parsed.shadow_verdict.hallucination_score !== "number"
+    ) {
+      return invalid("Shadow audit invalid or missing.");
+    }
+
+    /* --------------------------------------------------
+       3. PANIC SIGNAL NORMALIZATION
+    -------------------------------------------------- */
+    parsed.jorge_panic_trigger =
+      parsed.shadow_verdict.panic_triggered === true ||
+      parsed.shadow_verdict.hallucination_score > 70;
+
+    console.log(">> VALIDATOR: Output accepted.");
+    return {
+      isValid: true,
+      payload: parsed
+    };
+
+  } catch (error) {
+    console.error(">> VALIDATOR ERROR:", error);
+    return invalid("Unexpected validation failure.");
   }
-
-  // --------------------------------------------------
-  // 2. Type validation
-  // --------------------------------------------------
-  if (typeof payload.frecuencia_hz !== "number") {
-    return invalid("frecuencia_hz must be a number");
-  }
-
-  if (!Array.isArray(payload.geometria_sugerida)) {
-    return invalid("geometria_sugerida must be an array");
-  }
-
-  if (typeof payload.capa_dominante !== "string") {
-    return invalid("capa_dominante must be a string");
-  }
-
-  if (
-    typeof payload.indice_coordinacion !== "number" ||
-    payload.indice_coordinacion < 0 ||
-    payload.indice_coordinacion > 1
-  ) {
-    return invalid("indice_coordinacion must be between 0 and 1");
-  }
-
-  if (!Array.isArray(payload.puntos_de_fuga)) {
-    return invalid("puntos_de_fuga must be an array");
-  }
-
-  if (typeof payload.analisis_por_capa !== "object") {
-    return invalid("analisis_por_capa must be an object");
-  }
-
-  if (typeof payload.veredicto_jorge !== "string") {
-    return invalid("veredicto_jorge must be a string");
-  }
-
-  // --------------------------------------------------
-  // 3. Safety clamps (prevents visual/audio explosions)
-  // --------------------------------------------------
-  payload.frecuencia_hz = clamp(payload.frecuencia_hz, 100, 1000);
-  payload.indice_coordinacion = clamp(payload.indice_coordinacion, 0, 1);
-
-  // --------------------------------------------------
-  // 4. Passed
-  // --------------------------------------------------
-  console.log(">> VALIDATOR: Schema valid.");
-  return {
-    isValid: true,
-    payload
-  };
 }
 
-// --------------------------------------------------
-// Internal helpers
-// --------------------------------------------------
+/* --------------------------------------------------
+   HELPERS
+-------------------------------------------------- */
+
 function invalid(message) {
-  console.warn(">> VALIDATOR FAILED:", message);
+  console.warn(">> VALIDATOR REJECTED:", message);
   return {
     isValid: false,
     errorMsg: message
   };
-}
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
 }
