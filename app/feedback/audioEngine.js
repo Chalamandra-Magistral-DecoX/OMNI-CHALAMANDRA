@@ -1,39 +1,31 @@
-/**
- * VISUAL ENGINE — OMNI-CHALAMANDRA
- * Handles non-destructive visual feedback:
- * aura, color shifts, coherence state.
- */
+// app/feedback/audioEngine.js
 
-export function applyVisualState({
-  dominantLayer,
-  coordinationIndex,
-  geometry
-}) {
-  const root = document.documentElement;
+let audioContext = null;
+let oscillator = null;
 
-  // Normalize coordination (0–1)
-  const intensity = Math.max(0, Math.min(1, coordinationIndex || 0));
+export function playFrequency(frequencyHz, duration = 3000) {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
 
-  // Color mapping by layer
-  const layerColors = {
-    NEURO: "#4cc9f0",
-    NARRATIVE: "#f72585",
-    HEALING: "#80ffdb",
-    TECHNO: "#ffd166",
-    PROTOCOL: "#cdb4db"
-  };
+  oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
 
-  const color = layerColors[dominantLayer] || "#ffffff";
-
-  root.style.setProperty("--omni-accent-color", color);
-  root.style.setProperty("--omni-coherence", intensity.toString());
-
-  // Geometry hint (used by canvas renderer if needed)
-  root.dataset.omniGeometry = geometry || "UNKNOWN";
-
-  // Subtle glow proportional to coordination
-  root.style.setProperty(
-    "--omni-glow-strength",
-    ${Math.floor(intensity * 20)}px
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(
+    frequencyHz,
+    audioContext.currentTime
   );
+
+  gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  oscillator.start();
+
+  setTimeout(() => {
+    oscillator.stop();
+    oscillator.disconnect();
+  }, duration);
 }
