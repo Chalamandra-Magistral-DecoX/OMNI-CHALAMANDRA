@@ -1,33 +1,71 @@
-# OMNI-CHALAMANDRA – Safety & Reliability Notes
+# OMNI-CHALAMANDRA — SAFETY & RELIABILITY NOTES
 
-## Scope
-OMNI-CHALAMANDRA is a reasoning and visualization system.
-It does NOT:
-- Control external systems
-- Execute autonomous actions
-- Access private or real-world data
+## Overview
+
+OMNI-CHALAMANDRA is a structured reasoning system designed for
+demonstration, not autonomous decision-making.
+
+Its safety model prioritizes:
+- Determinism over creativity
+- Verification over speculation
+- Auditability over persuasion
+
+---
 
 ## Anti-Hallucination Design
-- All numerical values are pre-computed
-- Strict JSON schema enforcement
-- External shadow auditor (George)
-- Panic / glitch feedback instead of silent failure
 
-## Agent Constraints
-- Agents speak once per cycle
-- No memory persistence between runs
-- No self-modifying logic
-- No tool invocation beyond declared modules
+The system actively prevents hallucinations through:
 
-## User Safety
-- Outputs are advisory and interpretative
-- No medical, legal, or financial decisions are automated
-- System prioritizes clarity over persuasion
+1. *Pre-computed Math*
+   - All numeric values are calculated externally.
+   - The model is forbidden from recomputing equations.
 
-## Audit Layer
-George (Shadow Auditor) exists explicitly to:
-- Detect optimism bias
-- Flag incoherent reasoning
-- Reduce hallucinated confidence
+2. *Schema Enforcement*
+   - Outputs must conform to a strict JSON schema.
+   - Invalid outputs are rejected before rendering.
 
-This project is designed for transparency, not autonomy.
+3. *Multi-Agent Constraint*
+   - Each agent is limited to a fixed domain.
+   - Cross-domain speculation is discouraged.
+
+4. *Shadow Auditor (George)*
+   - An external agent reviews all reasoning.
+   - Flags optimism, abstraction, or incoherence.
+   - Can trigger panic/glitch mode.
+
+---
+
+## Panic & Glitch Mode
+
+If instability is detected:
+- The system reduces claims.
+- Visual/audio feedback signals uncertainty.
+- Human intervention is recommended.
+
+This prevents silent failure or misleading confidence.
+
+---
+
+## Intended Use
+
+✔ Concept exploration  
+✔ Pattern interpretation  
+✔ Hackathon demonstration  
+✔ Human-in-the-loop reasoning  
+
+✖ Medical decisions  
+✖ Legal judgments  
+✖ Autonomous control  
+✖ Unsupervised deployment  
+
+---
+
+## Judge Transparency
+
+All components are:
+- Observable
+- Explainable
+- Reproducible
+
+No hidden reasoning layers exist beyond what is shown
+in the debate and final JSON output.
