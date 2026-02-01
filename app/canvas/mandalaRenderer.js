@@ -1,75 +1,90 @@
 /**
  * MANDALA RENDERER
- * Translates OMNI JSON into living geometry
- * This is NOT decoration — it is data visualization of coordination
+ * OMNI-CHALAMANDRA
+ *
+ * Responsibility:
+ * - Convert validated signals into drawable geometry
+ * - No reasoning, no validation, no AI logic
+ * - Pure geometric construction
  */
 
-export function renderMandala(ctx, centerX, centerY, payload) {
-  const {
-    frecuencia_hz,
-    geometria_sugerida,
-    indice_coordinacion
-  } = payload;
+export function buildMandalaGeometry({
+  geometryType,
+  frequencyHz,
+  crossRatio,
+  colinearity
+}) {
+  console.log(">> MANDALA: Building geometry...");
 
-  ctx.save();
-  ctx.translate(centerX, centerY);
+  const baseRadius = normalizeFrequency(frequencyHz);
+  const symmetry = resolveSymmetry(geometryType);
+  const rotation = crossRatio * Math.PI;
 
-  const baseRadius = 60 + indice_coordinacion * 120;
-  const pulse = Math.sin(Date.now() / 300) * 5;
+  const layers = [];
 
-  ctx.strokeStyle = hsla(${mapFreqToHue(frecuencia_hz)}, 80%, 60%, 0.9);
-  ctx.lineWidth = 2;
+  for (let i = 0; i < symmetry; i++) {
+    const angle = (2 * Math.PI / symmetry) * i + rotation;
 
-  switch (geometria_sugerida) {
-    case "hexagono":
-      drawPolygon(ctx, 6, baseRadius + pulse);
-      break;
-    case "pentagono":
-      drawPolygon(ctx, 5, baseRadius + pulse);
-      break;
-    case "tetraedro":
-      drawPolygon(ctx, 3, baseRadius + pulse);
-      break;
+    layers.push({
+      id: layer_${i},
+      angle,
+      radius: baseRadius * (1 + colinearity.tension),
+      opacity: resolveOpacity(colinearity.alignmentScore),
+      weight: resolveWeight(crossRatio)
+    });
+  }
+
+  return {
+    type: geometryType,
+    symmetry,
+    frequency_hz: frequencyHz,
+    base_radius: baseRadius,
+    layers,
+    render_hint: resolveRenderHint(geometryType)
+  };
+}
+
+/* --------------------------------------------------
+   INTERNAL HELPERS (PURE MATH / VISUAL)
+-------------------------------------------------- */
+
+function normalizeFrequency(freq) {
+  // Keeps radius visually stable across wide Hz ranges
+  return Math.min(1.0, Math.max(0.3, freq / 1000));
+}
+
+function resolveSymmetry(geometryType) {
+  switch (geometryType) {
+    case "HEXAGONAL":
+      return 6;
+    case "OCTAGONAL":
+      return 8;
+    case "SPIRAL":
+      return 12;
+    case "CHAOTIC":
+      return 5;
     default:
-      drawChaos(ctx, baseRadius);
+      return 6;
   }
-
-  ctx.restore();
 }
 
-/* -----------------------------
-   GEOMETRY PRIMITIVES
------------------------------ */
-
-function drawPolygon(ctx, sides, radius) {
-  const angle = (Math.PI * 2) / sides;
-
-  ctx.beginPath();
-  for (let i = 0; i < sides; i++) {
-    const x = Math.cos(i * angle) * radius;
-    const y = Math.sin(i * angle) * radius;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  }
-  ctx.closePath();
-  ctx.stroke();
+function resolveOpacity(alignmentScore) {
+  return Math.min(1, Math.max(0.2, alignmentScore));
 }
 
-function drawChaos(ctx, radius) {
-  ctx.beginPath();
-  for (let i = 0; i < 20; i++) {
-    const x = (Math.random() - 0.5) * radius * 2;
-    const y = (Math.random() - 0.5) * radius * 2;
-    ctx.lineTo(x, y);
-  }
-  ctx.stroke();
+function resolveWeight(crossRatio) {
+  if (crossRatio > 1.5) return 2.5;
+  if (crossRatio > 1.0) return 1.5;
+  return 0.8;
 }
 
-/* -----------------------------
-   FREQUENCY → COLOR
------------------------------ */
-
-function mapFreqToHue(freq) {
-  // 432–528 Hz → 180–360 hue
-  return ((freq - 432) / (528 - 432)) * 180 + 180;
+function resolveRenderHint(geometryType) {
+  switch (geometryType) {
+    case "SPIRAL":
+      return "ROTATIONAL_FLOW";
+    case "CHAOTIC":
+      return "NOISE_PERTURBATION";
+    default:
+      return "SYMMETRIC_STATIC";
+  }
 }
