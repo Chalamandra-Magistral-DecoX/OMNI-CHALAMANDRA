@@ -1,61 +1,72 @@
-import { orchestrateOMNI } from "./core/orchestrator.js";
-import { exportJSON } from "./utils/exporter.js";
-import { computeCrossRatio } from "./utils/geometry.js";
+// app/main.js
 
-const canvas = document.getElementById("canvasMain");
-const ctx = canvas.getContext("2d");
-const imgInput = document.getElementById("imageInput");
-const btn = document.getElementById("btnProject");
-const output = document.getElementById("output");
-const exportBtn = document.getElementById("btnExport");
+import { CanvasController } from "./canvas/CanvasController.js";
 
-let img = new Image();
-let points = [];
+import { runAgentDebate } from "./agents/debateController.js";
+import { runGeorgeAudit } from "./agents/GeorgeAgent.js";
 
-imgInput.onchange = (e) => {
-  const file = e.target.files[0];
-  img.src = URL.createObjectURL(file);
-};
+import { AudioEngine } from "./feedback/audioEngine.js";
+import { VisualEngine } from "./feedback/visualEngine.js";
+import { GlitchEngine } from "./feedback/glitchEngine.js";
 
-img.onload = () => {
-  canvas.width = img.width;
-  canvas.height = img.height;
-  ctx.drawImage(img, 0, 0);
-};
+import { exportResultJSON } from "./export/exportJson.js";
 
-canvas.onclick = (e) => {
-  if (points.length >= 4) return;
-
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  points.push([x, y]);
-
-  ctx.fillStyle = "red";
-  ctx.beginPath();
-  ctx.arc(x, y, 4, 0, Math.PI * 2);
-  ctx.fill();
-
-  document.getElementById("nodes-active").innerText = points.length;
-};
-
-btn.onclick = async () => {
-  if (points.length < 4) {
-    alert("Select 4 colinear points.");
-    return;
-  }
-
-  const R = computeCrossRatio(points);
-
-  const result = await orchestrateOMNI({
-    crossRatio: R,
-    mandalaSeed: Date.now(),
-    points
+export async function runOmniChalamandra({
+  imageInput,
+  mandalaSeed,
+  computedValues,
+  hashChain
+}) {
+  // 1. Render mandala + extract geometric invariant
+  const canvasController = new CanvasController();
+  const geometryResult = canvasController.render({
+    imageInput,
+    mandalaSeed
   });
 
-  output.textContent = JSON.stringify(result, null, 2);
-};
+  const crossRatio = geometryResult.crossRatio;
 
-exportBtn.onclick = () => {
-  exportJSON(output.textContent);
-};
+  // 2. Run 5-agent structured debate
+  const debateResult = await runAgentDebate({
+    crossRatio,
+    mandalaSeed,
+    computedValues,
+    hashChain
+  });
+
+  // 3. George = FINAL auditor (6th voice, not debate)
+  const georgeVerdict = runGeorgeAudit({
+    debate: debateResult,
+    crossRatio,
+    computedValues
+  });
+
+  // 4. Feedback orchestration (DECIDED BY GEORGE)
+  VisualEngine.apply({
+    geometry: computedValues.geometryCategory,
+    stability: computedValues.stabilityScore
+  });
+
+  if (georgeVerdict.panicTriggered) {
+    GlitchEngine.trigger({
+      intensity: georgeVerdict.glitchIntensity
+    });
+  } else {
+    AudioEngine.play({
+      frequencyHz: computedValues.frequencyHz
+    });
+  }
+
+  // 5. Exportable final artifact (debate + George + signals)
+  const finalPayload = {
+    debate: debateResult,
+    george: georgeVerdict,
+    signals: computedValues,
+    crossRatio,
+    hashChain
+  };
+
+  exportResultJSON(finalPayload);
+
+  return finalPayload;
+}
