@@ -1,82 +1,88 @@
-/**
- * OMNI-CHALAMANDRA
- * Main Orchestrator — Hackathon Final
- *
- * Responsibilities:
- * 1. Receive final payload from Gemini reasoning
- * 2. Orchestrate Canvas rendering
- * 3. Trigger multimodal feedback (audio / visual / glitch)
- * 4. Export final JSON for user download
- *
- * This file is the EXECUTIVE BRAIN.
- */
+// app/main.js
 
-import { orchestrateOMNI } from "./app/index/orchestrator.js";
+import { orchestrateOMNI } from "./orchestrator.js";
 
-// Canvas
-import { renderMandala } from "./app/canvas/mandalaRenderer.js";
+import { getCrossRatio } from "./canvas/crossratio.js";
+import { renderMandala } from "./canvas/mandalaRenderer.js";
 
-// Feedback Engines
-import { playFrequency } from "./app/feedback/audioEngine.js";
-import { applyVisualFeedback } from "./app/feedback/visualEngine.js";
-import { triggerGlitch } from "./app/feedback/glitchEngine.js";
+import { playFrequency } from "./feedback/audioEngine.js";
+import { applyVisualFeedback } from "./feedback/visualEngine.js";
+import { triggerGlitch } from "./feedback/glitchEngine.js";
 
-// Export
-import { exportJSON } from "./app/export/exportJson.js";
+import { exportJSON } from "./export/exportJSON.js";
 
 /**
- * ENTRY POINT
- * This function is called once the user provides input
- * (crossRatio, mandalaSeed, etc.)
+ * OMNI-CHALAMANDRA – MAIN ENTRY POINT
+ * Role:
+ * - Handle user interaction
+ * - Send data to cognitive layer
+ * - Render audio / visual feedback
+ * - Enable export
  */
-export async function runOmniChalamandra(input) {
-  console.log("🌀 OMNI-CHALAMANDRA :: System booting...");
+async function runOMNI() {
+  console.log(">> OMNI MAIN: User interaction detected");
 
-  try {
-    /* --------------------------------------------------
-       1. CORE REASONING (Agents + George Audit)
-    -------------------------------------------------- */
-    const payload = await orchestrateOMNI(input);
+  /* -----------------------------------------
+     1. COLLECT INPUT FROM CANVAS
+  ----------------------------------------- */
+  const crossRatio = getCrossRatio();
 
-    if (payload.error) {
-      console.warn("⚠️ OMNI returned fallback payload");
+  const input = {
+    crossRatio,
+    mandalaSeed: {
+      time: Date.now(),
+      randomness: Math.random()
     }
+  };
 
-    /* --------------------------------------------------
-       2. CANVAS RENDERING (Geometry Layer)
-    -------------------------------------------------- */
-    renderMandala(payload.output_signals.geometry);
+  /* -----------------------------------------
+     2. CALL COGNITIVE ORCHESTRATOR
+  ----------------------------------------- */
+  const payload = await orchestrateOMNI(input);
 
-    /* --------------------------------------------------
-       3. MULTIMODAL FEEDBACK
-       (Audio + Visual + Optional Glitch)
-    -------------------------------------------------- */
-    playFrequency(payload.output_signals.frequency_hz);
-    applyVisualFeedback(payload.output_signals);
-
-    if (payload.shadow_audit?.panic_triggered === true) {
-      console.warn("🚨 George triggered panic protocol");
-      triggerGlitch(payload.shadow_audit.glitch_intensity);
-    }
-
-    /* --------------------------------------------------
-       4. EXPORT FINAL ARTIFACT
-    -------------------------------------------------- */
-    exportJSON(payload);
-
-    console.log("✅ OMNI-CHALAMANDRA :: Execution complete");
-
-    return payload;
-
-  } catch (error) {
-    console.error("❌ OMNI-CHALAMANDRA :: Fatal execution error", error);
-
-    // Absolute safety fallback
+  if (payload.error) {
+    console.warn(">> OMNI MAIN: Error payload received");
     triggerGlitch(1.0);
-
-    return {
-      error: true,
-      message: "Critical system failure",
-    };
+    return;
   }
+
+  /* -----------------------------------------
+     3. VISUAL OUTPUT (MANDALA)
+  ----------------------------------------- */
+  renderMandala(payload.output_signals.geometry);
+
+  /* -----------------------------------------
+     4. AUDIO OUTPUT (RESONANT FREQUENCY)
+  ----------------------------------------- */
+  playFrequency(payload.output_signals.frequency_hz);
+
+  /* -----------------------------------------
+     5. VISUAL FEEDBACK (AURA / COHERENCE)
+  ----------------------------------------- */
+  applyVisualFeedback(payload.output_signals);
+
+  /* -----------------------------------------
+     6. SHADOW PANIC RESPONSE
+  ----------------------------------------- */
+  if (payload.shadow_audit?.panic_triggered) {
+    triggerGlitch(payload.shadow_audit.glitch_intensity);
+  }
+
+  /* -----------------------------------------
+     7. ENABLE EXPORT (JUDGES LOVE THIS)
+  ----------------------------------------- */
+  exportJSON(payload);
+
+  console.log(">> OMNI MAIN: Execution completed");
 }
+
+/* -----------------------------------------
+   BOOTSTRAP
+----------------------------------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  const runButton = document.getElementById("run-omni");
+
+  if (runButton) {
+    runButton.addEventListener("click", runOMNI);
+  }
+});
