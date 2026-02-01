@@ -1,12 +1,14 @@
 {
   "project": "OMNI-CHALAMANDRA",
-  "version": "3.2",
+  "version": "3.5-hackathon",
   "platform": "Google AI Studio",
   "model": "gemini-3-reasoning",
   "tier": "free",
-  "reasoning_mode": "multi-agent",
+  "reasoning_mode": "multi-agent-structured",
   "thinking_level": "deep",
+  "determinism": true,
   "persistence": true,
+
   "orchestration": {
     "type": "cognitive-fortress",
     "agents": [
@@ -16,19 +18,33 @@
       "historian",
       "futurist",
       "george"
-    ]
+    ],
+    "final_authority": "george"
   },
-  "input_modalities": ["image", "geometry", "text"],
-  "output_modalities": ["json", "audio", "visual"],
+
+  "input_modalities": [
+    "image",
+    "geometry",
+    "text"
+  ],
+
+  "output_modalities": [
+    "json",
+    "audio",
+    "visual"
+  ],
+
   "anti_hallucination": {
     "schema_enforced": true,
     "shadow_auditor": true,
-    "panic_mode": true
+    "panic_mode": true,
+    "math_recomputation_disabled": true
   },
+
   "hackathon_alignment": {
-    "action_era": true,
-    "autonomous_agents": true,
-    "long_running_tasks": true,
-    "verified_reasoning": true
+    "judge_facing": true,
+    "live_demo_ready": true,
+    "verifiable_reasoning": true,
+    "actionable_output": true
   }
 }
