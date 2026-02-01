@@ -1,183 +1,102 @@
 /**
- * CANVAS CONTROLLER — OMNI-CHALAMANDRA
- * Handles image input, point selection, SRAP extraction,
- * visual guidance, and payload dispatch to the OMNI Orchestrator.
+ * CANVAS CONTROLLER
+ * OMNI-CHALAMANDRA
+ *
+ * Responsibility:
+ * - Receive FINAL payload approved by George
+ * - Validate audit state
+ * - Transform signals into render instructions
+ * - Coordinate geometric + visual layers
  */
 
-import { drawColinearityGuide, drawDeviationWarning } from "./colinearityGuide.js";
-import { computeCrossRatio, isColinear } from "./crossRatio.js";
-import { orchestrateOMNI } from "../agents/orchestrator.js";
+import { buildMandalaGeometry } from "./mandalaRenderer.js";
+import { applyColinearityGuide } from "./colinearityGuide.js";
+import { computeCrossRatioVisual } from "./crossRatio.js";
 
-export class CanvasController {
-  constructor(canvasElement, imageInputElement) {
-    this.canvas = canvasElement;
-    this.ctx = this.canvas.getContext("2d");
+export function CanvasController(finalPayload) {
+  console.log(">> CANVAS: Initializing render pipeline...");
 
-    this.imageInput = imageInputElement;
+  /* --------------------------------------------------
+     1. SAFETY CHECK — GEORGE AUTHORITY
+  -------------------------------------------------- */
 
-    this.image = new Image();
-    this.points = [];
-    this.maxPoints = 4;
-
-    this.mandalaSeed = Math.random().toString(36).slice(2);
-
-    this._bindEvents();
+  if (!finalPayload?.shadow_verdict) {
+    throw new Error("Canvas blocked: Shadow verdict missing.");
   }
 
-  /* ----------------------------------------
-     EVENT BINDING
-  ---------------------------------------- */
-  _bindEvents() {
-    this.imageInput.addEventListener("change", (e) =>
-      this._handleImageUpload(e)
-    );
-
-    this.canvas.addEventListener("click", (e) =>
-      this._handleCanvasClick(e)
-    );
-  }
-
-  /* ----------------------------------------
-     IMAGE LOADING
-  ---------------------------------------- */
-  _handleImageUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.image.onload = () => this._render();
-      this.image.src = reader.result;
+  if (finalPayload.shadow_verdict.panic_triggered === true) {
+    console.warn(">> CANVAS: Panic triggered. Rendering aborted.");
+    return {
+      status: "ABORTED",
+      reason: "Shadow auditor blocked execution"
     };
-
-    reader.readAsDataURL(file);
   }
 
-  /* ----------------------------------------
-     POINT SELECTION
-  ---------------------------------------- */
-  _handleCanvasClick(event) {
-    if (this.points.length >= this.maxPoints) return;
+  /* --------------------------------------------------
+     2. EXTRACT CORE SIGNALS
+  -------------------------------------------------- */
 
-    const rect = this.canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+  const {
+    input_analysis,
+    output_signals,
+    dominant_layer,
+    chain_data
+  } = finalPayload;
 
-    this.points.push({ x, y });
+  const crossRatio = input_analysis.cross_ratio;
+  const frequencyHz = output_signals.frequency_hz;
+  const geometryType = output_signals.geometry;
 
-    this._render();
+  if (!crossRatio || !frequencyHz || !geometryType) {
+    throw new Error("Canvas blocked: Missing core render signals.");
+  }
 
-    if (this.points.length === this.maxPoints) {
-      this._processSRAP();
+  /* --------------------------------------------------
+     3. GEOMETRIC PRE-PROCESSING
+  -------------------------------------------------- */
+
+  const visualCrossRatio = computeCrossRatioVisual(crossRatio);
+
+  const colinearityData = applyColinearityGuide({
+    crossRatio: visualCrossRatio,
+    dominantLayer: dominant_layer
+  });
+
+  /* --------------------------------------------------
+     4. MANDALA GEOMETRY BUILD
+  -------------------------------------------------- */
+
+  const mandala = buildMandalaGeometry({
+    geometryType,
+    frequencyHz,
+    crossRatio: visualCrossRatio,
+    colinearity: colinearityData
+  });
+
+  /* --------------------------------------------------
+     5. FINAL CANVAS PAYLOAD
+  -------------------------------------------------- */
+
+  const canvasPayload = {
+    status: "READY",
+    render_mode: "REAL_TIME",
+
+    visual_parameters: {
+      geometry: geometryType,
+      frequency_hz: frequencyHz,
+      cross_ratio: visualCrossRatio,
+      dominant_layer: dominant_layer
+    },
+
+    mandala,
+    colinearity: colinearityData,
+
+    metadata: {
+      chain_hash: chain_data.integrity_hash,
+      timestamp: chain_data.timestamp
     }
-  }
+  };
 
-  /* ----------------------------------------
-     RENDER LOOP
-  ---------------------------------------- */
-  _render() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    if (this.image.src) {
-      this.ctx.drawImage(
-        this.image,
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.height
-      );
-    }
-
-    this._drawPoints();
-
-    if (this.points.length >= 2) {
-      drawColinearityGuide(this.ctx, this.points);
-    }
-
-    if (this.points.length >= 3) {
-      const baseLine = {
-        start: this.points[0],
-        end: this.points[this.points.length - 1]
-      };
-
-      this.points.slice(1, -1).forEach((p) =>
-        drawDeviationWarning(this.ctx, baseLine, p)
-      );
-    }
-  }
-
-  _drawPoints() {
-    this.points.forEach((p, index) => {
-      this.ctx.save();
-
-      this.ctx.fillStyle = index === 0 || index === 3
-        ? "cyan"
-        : "white";
-
-      this.ctx.beginPath();
-      this.ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
-      this.ctx.fill();
-
-      this.ctx.restore();
-    });
-  }
-
-  /* ----------------------------------------
-     SRAP → DECOX PIPELINE
-  ---------------------------------------- */
-  async _processSRAP() {
-    console.log(">> SRAP: Extracting geometric invariant...");
-
-    if (!isColinear(this.points)) {
-      console.warn(">> SRAP WARNING: Points are not colinear.");
-      return;
-    }
-
-    const crossRatio = computeCrossRatio(this.points);
-
-    const payload = {
-      crossRatio,
-      mandalaSeed: this.mandalaSeed,
-      imageMeta: {
-        width: this.image.width,
-        height: this.image.height
-      },
-      srapCoordinates: this.points.map((p) => ({
-        x: p.x / this.canvas.width,
-        y: p.y / this.canvas.height
-      }))
-    };
-
-    console.log(">> PAYLOAD TO OMNI:", payload);
-
-    const result = await orchestrateOMNI(payload);
-
-    this._dispatchResult(result);
-  }
-
-  /* ----------------------------------------
-     OUTPUT DISPATCH
-  ---------------------------------------- */
-  _dispatchResult(result) {
-    if (result?.error) {
-      console.error(">> OMNI RESPONSE ERROR:", result.message);
-      return;
-    }
-
-    // Broadcast result for mandala, sound, export modules
-    window.dispatchEvent(
-      new CustomEvent("OMNI_RESULT_READY", {
-        detail: result
-      })
-    );
-  }
-
-  /* ----------------------------------------
-     RESET
-  ---------------------------------------- */
-  reset() {
-    this.points = [];
-    this.mandalaSeed = Math.random().toString(36).slice(2);
-    this._render();
-  }
+  console.log(">> CANVAS: Render payload ready.");
+  return canvasPayload;
 }
