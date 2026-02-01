@@ -1,62 +1,105 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { buildOmniPrompt } from "../prompts/omniPromptBuilder.js";
-
 /**
- * GEMINI REASONING AGENT
- * =====================
- * OMNI-CHALAMANDRA CORE
+ * GEMINI AGENT — OMNI-CHALAMANDRA
+ * Model: Gemini 3 (AI Studio)
+ * Role: Multimodal Reasoning Engine
  *
- * - Multimodal reasoning engine
- * - 6-agent cognitive debate
- * - Returns STRICT JSON only
- * - Hackathon Gemini 3 compliant
+ * Responsibilities:
+ * - Build the FINAL core prompt
+ * - Send reasoning request to Gemini 3
+ * - Return RAW text output (debate + JSON)
+ *
+ * IMPORTANT:
+ * - No validation here
+ * - No Jorge logic here
+ * - No UI logic here
  */
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+import { generateOmniCorePrompt } from "../config/configPrompt.js";
 
-const model = genAI.getGenerativeModel({
-  model: "gemini-3-pro",
-  generationConfig: {
-    temperature: 0.4,
-    topP: 0.9,
-    maxOutputTokens: 2048
-  }
-});
-
+/**
+ * Runs the Gemini 3 debate reasoning cycle
+ * @param {Object} input - Normalized input from orchestrator
+ * @returns {String} Raw Gemini output (text + JSON)
+ */
 export async function runGeminiDebate(input) {
-  console.log(">> GEMINI AGENT: Starting cognitive debate...");
+  console.log(">> GEMINI AGENT: Initializing Gemini 3 reasoning...");
 
-  const prompt = buildOmniPrompt(input);
+  const {
+    crossRatio,
+    mandalaSeed,
+    computedValues,
+    hashChain,
+    imageBase64 // optional, future multimodal expansion
+  } = input;
+
+  // 1. Build the SINGLE source-of-truth prompt
+  const prompt = generateOmniCorePrompt({
+    crossRatio,
+    mandalaSeed,
+    computedValues,
+    hashChain
+  });
 
   try {
-    const result = await model.generateContent([
+    // 2. Call Gemini 3 via AI Studio REST endpoint
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3:generateContent",
       {
-        role: "user",
-        parts: [{ text: prompt }]
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": Bearer ${process.env.GEMINI_API_KEY}
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: prompt }
+
+                // FUTURE MULTIMODAL HOOK (disabled for now)
+                // imageBase64
+                //   ? {
+                //       inline_data: {
+                //         mime_type: "image/png",
+                //         data: imageBase64
+                //       }
+                //     }
+                //   : null
+              ].filter(Boolean)
+            }
+          ],
+          generationConfig: {
+            temperature: 0.4,          // disciplined reasoning
+            topP: 0.9,
+            maxOutputTokens: 4096,
+            responseMimeType: "text/plain"
+          }
+        })
       }
-    ]);
+    );
 
-    const rawText = result.response.text();
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        Gemini API error ${response.status}: ${errorText}
+      );
+    }
 
-    // Clean markdown wrappers if Gemini adds them
-    const cleaned = rawText
-      .replace(/json/g, "")
-      .replace(//g, "")
-      .trim();
+    const data = await response.json();
 
-    const parsed = JSON.parse(cleaned);
+    const rawOutput =
+      data.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    console.log(">> GEMINI AGENT: Debate completed successfully.");
-    return parsed;
+    if (!rawOutput) {
+      throw new Error("Gemini returned empty response.");
+    }
+
+    console.log(">> GEMINI AGENT: Reasoning completed.");
+    return rawOutput;
 
   } catch (error) {
     console.error(">> GEMINI AGENT ERROR:", error);
-
-    return {
-      error: true,
-      source: "geminiAgent",
-      message: error.message || "Gemini reasoning failure",
-      jorge_panic_trigger: true
-    };
+    throw error; // Let orchestrator decide panic / fallback
   }
 }
