@@ -1,35 +1,4 @@
-[9:14 p.m., 31/1/2026] 🦈: /**
- * COLINEARITY GUIDE
- * OMNI-CHALAMANDRA
- *
- * Responsibility:
- * - Analyze point alignment and deviation
- * - Quantify visual tension for rendering
- * - No AI, no debate, no judgment
- */
-
-export function analyzeColinearity(points = []) {
-  if (!Array.isArray(points) || points.length < 3) {
-    return {
-      alignmentScore: 0,
-      tension: 0,
-      deviationMap: [],
-      status: "INSUFFICIENT_DATA"
-    };
-  }
-
-  const baseline = computeBaseline(points[0], points[points.length - 1]);
-  let totalDeviation = 0;
-
-  const deviationMap = points.map((p) => {
-    const deviation = distanceFromLine(p, baseline);
-    totalDeviation += deviation;
-    return deviation;
-  });
-
-  const avgDeviation = totalDeviation / points.length;
-  const alignmentScore = normali…
-[9:15 p.m., 31/1/2026] 🦈: /**
+/**
  * COLINEARITY GUIDE
  * OMNI-CHALAMANDRA
  *
