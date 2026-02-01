@@ -1,107 +1,146 @@
 # 🌀 OMNI-CHALAMANDRA
-### Gemini 3 Hackathon Project — Multimodal Reasoning System
+### Multimodal Reasoning System with Shadow Audit (Gemini 3)
 
-OMNI-CHALAMANDRA is a deterministic, multimodal reasoning engine that transforms
-visual chaos into actionable strategy through structured multi-agent debate,
-mathematical invariants, and an external shadow audit.
+OMNI-CHALAMANDRA is a *deterministic, multi-agent reasoning system*
+designed to transform perceptual chaos into *auditable, actionable insight*.
 
-This project is designed explicitly for *live demo environments* and
-*hackathon judging*, prioritizing clarity, reproducibility, and execution
-over speculative AI behavior.
-
----
-
-## 🚀 Core Idea
-
-Instead of a single monolithic AI response, OMNI-CHALAMANDRA uses:
-
-- *Projective geometry invariants* (cross-ratio)
-- *Five specialized reasoning agents*
-- *One external auditor (George)*
-- *Deterministic JSON output*
-- *Executable feedback systems (audio / visual / glitch)*
-
-Reasoning and execution are *strictly separated*.
+Built for *live hackathon demos*, it combines:
+- Mathematical invariants
+- Structured multi-agent debate
+- External shadow auditing
+- Audio + visual feedback loops
 
 ---
 
-## 🧠 System Architecture (High Level)
-Input ↓ Orchestrator (prompt + rules) ↓ 5-Agent Structured Debate ↓ George (Shadow Auditor) ↓ Deterministic JSON Payload ↓ Main Executor ↓ Audio / Visual / Glitch Feedback
----
+## 🚀 Why This Project Matters
 
-## 🎭 Agents
+Most AI demos:
+- Hide reasoning
+- Hallucinate confidence
+- Produce unverified answers
 
-1. *Scientist (Neuro)* — cognitive load & biological sustainability  
-2. *Philosopher (Narrative)* — meaning & symbolic coherence  
-3. *Psychologist (Healing)* — shadow integration & trauma patterns  
-4. *Historian (Techno)* — historical cycles & systemic risk  
-5. *Futurist (Protocol)* — execution & infrastructure  
-6. *George (Shadow Auditor)* — final authority, reality check  
+*OMNI-CHALAMANDRA does the opposite.*
 
-George is not part of the debate.  
-George delivers the final verdict.
-
----
-
-## 🧮 Mathematical Backbone
-
-- Core invariant: *Cross-Ratio (R)*
-- Computed once, injected as constant
-- No recalculation by AI
-- Prevents hallucinated math
-
-Details in docs/invariant-math.md
+It makes reasoning:
+- Visible
+- Verifiable
+- Audited
+- Actionable
 
 ---
 
-## 🔊 Multimodal Output
+## 🧠 Core Idea
 
-The final JSON payload drives:
+At the heart of the system is a *geometric invariant*:
+> The *cross-ratio (R)* — a projective constant that remains stable
+> under perspective transformations.
 
-- *Audio* → Resonant frequency (Hz)
-- *Visuals* → Mandala geometry
-- *Glitch* → Triggered only if panic is declared by George
+This invariant is used as a *signal*, not a metaphor.
 
-All feedback is reactive, never interpretative.
-
----
-
-## 📦 Output Guarantee
-
-Each execution produces:
-- Human-readable debate
-- Machine-executable JSON
-- Downloadable export
-- Reproducible results
-
-No hidden state. No ambiguity.
+From it, the system:
+1. Generates structured debate
+2. Produces harmonics (audio)
+3. Renders geometry (visual)
+4. Triggers safety feedback if instability appears
 
 ---
 
-## 🧪 Hackathon Readiness
+## 🎭 Multi-Agent Debate Architecture
 
-- Gemini 3 compatible
-- Live-demo safe
-- Judge-readable
-- Modular and auditable
-- Clear separation of concerns
+OMNI-CHALAMANDRA simulates a structured debate between *five specialized agents*:
 
----
+| Agent | Layer | Role |
+|-----|------|-----|
+| Scientist | NEURO | Biological & cognitive sustainability |
+| Philosopher | NARRATIVE | Meaning & symbolic coherence |
+| Psychologist | HEALING | Shadow & emotional integration |
+| Historian | TECHNO | Systemic & historical patterns |
+| Futurist | PROTOCOL | Execution & infrastructure |
 
-## 📁 Key Files
-
-- app/orchestrator.js → reasoning controller
-- app/main.js → execution engine
-- app/agents/ → all agents including George
-- app/canvas/ → geometry & mandala logic
-- app/feedback/ → audio / visual / glitch engines
-- docs/ → theory & flow documentation
+Each agent:
+- Speaks once
+- Stays in domain
+- May disagree with others
 
 ---
 
-## 🏁 Final Note for Judges
+## 🔍 Shadow Audit (George)
 
-OMNI-CHALAMANDRA does not try to be “creative”.
-It tries to be *honest, inspectable, and executable*.
+After the debate, a *sixth agent* intervenes:
 
-Thank you for reviewing.
+### *George — Shadow Auditor*
+
+George:
+- Does *not* participate in the debate
+- Reviews all agent reasoning
+- Flags optimism, abstraction, or hallucination
+- Decides if panic/glitch feedback is required
+
+George is the *final authority*.
+
+---
+
+## 📦 Output Design
+
+The system produces *one final JSON object*, used to drive:
+
+- 🔊 Audio resonance (frequency-based)
+- 🌀 Visual mandala rendering
+- ⚠️ Glitch feedback (if instability detected)
+- 📋 Actionable user instruction
+
+No hidden layers.  
+No post-processing hallucinations.
+
+---
+
+## 🛡️ Safety & Anti-Hallucination
+
+OMNI-CHALAMANDRA enforces safety by design:
+
+- All math is *pre-computed*
+- JSON schema is strictly validated
+- Outputs are rejected if malformed
+- Shadow auditor can reduce claims or trigger panic mode
+
+This ensures *trust over theatrics*.
+
+---
+
+## 🧩 System Architecture (High Level)
+User Input (Image / Geometry) ↓ Invariant Math (Cross-Ratio) ↓ Prompt Configuration ↓ Gemini 3 Reasoning ↓ 5-Agent Structured Debate ↓ George Shadow Audit ↓ Validated JSON Output ↓ Canvas + Audio + Visual Feedback
+---
+
+## 🎥 Live Demo Flow
+
+1. User inputs image or geometry
+2. System computes invariant
+3. Agents debate in real time
+4. George delivers verdict
+5. Mandala renders + audio plays
+6. User receives concrete action
+
+---
+
+## 🏁 Hackathon Alignment
+
+✔ Multi-agent reasoning  
+✔ Verified outputs  
+✔ Live demo friendly  
+✔ Judge-explainable  
+✔ Visually compelling  
+✔ Safety-first  
+
+---
+
+## 🧠 Final Note for Judges
+
+OMNI-CHALAMANDRA is not trying to be “smart”.
+
+It is trying to be *honest*.
+
+Every conclusion can be traced.
+Every signal can be challenged.
+Every failure is visible.
+
+That is the point.
