@@ -1,76 +1,110 @@
-/**
- * COLINEARITY GUIDE — OMNI-CHALAMANDRA
- * Visual aid to help users select colinear points
- * before transmutation.
+[9:14 p.m., 31/1/2026] 🦈: /**
+ * COLINEARITY GUIDE
+ * OMNI-CHALAMANDRA
+ *
+ * Responsibility:
+ * - Analyze point alignment and deviation
+ * - Quantify visual tension for rendering
+ * - No AI, no debate, no judgment
  */
 
-/**
- * Draws a dynamic guide line between the first
- * and last selected point.
- * Helps enforce mathematical validity.
- */
-export function drawColinearityGuide(ctx, points) {
-  if (!ctx || points.length < 2) return;
-
-  const first = points[0];
-  const last = points[points.length - 1];
-
-  ctx.save();
-
-  ctx.strokeStyle = "rgba(0, 255, 255, 0.6)";
-  ctx.lineWidth = 1;
-  ctx.setLineDash([6, 4]);
-
-  ctx.beginPath();
-  ctx.moveTo(first.x, first.y);
-  ctx.lineTo(last.x, last.y);
-  ctx.stroke();
-
-  ctx.restore();
-}
-
-/**
- * Highlights non-colinear deviation visually
- * when the third or fourth point drifts too far.
- */
-export function drawDeviationWarning(ctx, baseLine, point) {
-  if (!ctx || !baseLine || !point) return;
-
-  const distance = perpendicularDistance(
-    baseLine.start,
-    baseLine.end,
-    point
-  );
-
-  if (distance > 8) {
-    ctx.save();
-
-    ctx.fillStyle = "rgba(255, 0, 0, 0.6)";
-    ctx.beginPath();
-    ctx.arc(point.x, point.y, 6, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.restore();
+export function analyzeColinearity(points = []) {
+  if (!Array.isArray(points) || points.length < 3) {
+    return {
+      alignmentScore: 0,
+      tension: 0,
+      deviationMap: [],
+      status: "INSUFFICIENT_DATA"
+    };
   }
+
+  const baseline = computeBaseline(points[0], points[points.length - 1]);
+  let totalDeviation = 0;
+
+  const deviationMap = points.map((p) => {
+    const deviation = distanceFromLine(p, baseline);
+    totalDeviation += deviation;
+    return deviation;
+  });
+
+  const avgDeviation = totalDeviation / points.length;
+  const alignmentScore = normali…
+[9:15 p.m., 31/1/2026] 🦈: /**
+ * COLINEARITY GUIDE
+ * OMNI-CHALAMANDRA
+ *
+ * Responsibility:
+ * - Analyze point alignment and deviation
+ * - Quantify visual tension for rendering
+ * - No AI, no debate, no judgment
+ */
+
+export function analyzeColinearity(points = []) {
+  if (!Array.isArray(points) || points.length < 3) {
+    return {
+      alignmentScore: 0,
+      tension: 0,
+      deviationMap: [],
+      status: "INSUFFICIENT_DATA"
+    };
+  }
+
+  const baseline = computeBaseline(points[0], points[points.length - 1]);
+  let totalDeviation = 0;
+
+  const deviationMap = points.map((p) => {
+    const deviation = distanceFromLine(p, baseline);
+    totalDeviation += deviation;
+    return deviation;
+  });
+
+  const avgDeviation = totalDeviation / points.length;
+  const alignmentScore = normalizeAlignment(avgDeviation);
+  const tension = computeTension(alignmentScore);
+
+  return {
+    alignmentScore,
+    tension,
+    deviationMap,
+    status: resolveStatus(alignmentScore)
+  };
 }
 
-/**
- * Perpendicular distance from point to line
- */
-function perpendicularDistance(A, B, P) {
+/* --------------------------------------------------
+   INTERNAL MATH HELPERS
+-------------------------------------------------- */
+
+function computeBaseline(p1, p2) {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+
+  return { p1, p2, dx, dy };
+}
+
+function distanceFromLine(point, baseline) {
+  const { p1, dx, dy } = baseline;
   const numerator = Math.abs(
-    (B.y - A.y) * P.x -
-    (B.x - A.x) * P.y +
-    B.x * A.y -
-    B.y * A.x
+    dy * point.x - dx * point.y + baseline.p2.x * p1.y - baseline.p2.y * p1.x
   );
+  const denominator = Math.sqrt(dx * dx + dy * dy);
 
-  const denominator = Math.hypot(
-    B.y - A.y,
-    B.x - A.x
-  );
+  return denominator === 0 ? 0 : numerator / denominator;
+}
 
-  if (denominator === 0) return 0;
+function normalizeAlignment(avgDeviation) {
+  // Lower deviation = higher alignment
+  const score = 1 - Math.min(avgDeviation, 1);
+  return Math.max(0, Math.min(1, score));
+}
 
-  return numerator / denominator;
+function computeTension(alignmentScore) {
+  // Tension rises as alignment breaks
+  return Number((1 - alignmentScore).toFixed(4));
+}
+
+function resolveStatus(alignmentScore) {
+  if (alignmentScore > 0.85) return "HIGH_ALIGNMENT";
+  if (alignmentScore > 0.6) return "MODERATE_ALIGNMENT";
+  if (alignmentScore > 0.3) return "LOW_ALIGNMENT";
+  return "FRACTURED";
 }
