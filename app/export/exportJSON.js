@@ -1,71 +1,69 @@
-// app/export/exportJson.js
+/**
+ * EXPORT JSON — OMNI-CHALAMANDRA
+ * Responsibility: Create a downloadable artifact of the reasoning process.
+ */
 
 export function exportResultJSON(finalPayload) {
+  // Ajustamos el destructuring para que coincida con la estructura real del payload
   const {
-    debate,
-    george,
-    signals,
-    crossRatio,
-    hashChain
+    agent_insights,
+    shadow_audit,
+    output_signals,
+    input_analysis,
+    chain_data
   } = finalPayload;
 
   const exportObject = {
     project: "OMNI-CHALAMANDRA",
     version: "3.5",
     execution_context: "hackathon_demo",
-
     timestamp: new Date().toISOString(),
 
     geometry_input: {
-      cross_ratio: crossRatio,
-      geometry_category: signals.geometryCategory,
-      stability_score: signals.stabilityScore
+      cross_ratio: input_analysis?.cross_ratio,
+      geometry_category: output_signals?.geometry,
     },
 
     cognitive_signals: {
-      frequency_hz: signals.frequencyHz,
-      coordination_index: signals.coordinationIndex
+      frequency_hz: output_signals?.frequency_hz,
+      coordination_index: output_signals?.coordination_index
     },
 
-    agent_debate: {
-      scientist: debate.scientist,
-      philosopher: debate.philosopher,
-      psychologist: debate.psychologist,
-      historian: debate.historian,
-      futurist: debate.futurist
-    },
+    agent_debate: agent_insights, // Ya viene estructurado por agentes
 
     final_audit: {
       auditor: "GEORGE",
-      street_viability: george.streetViability,
-      hallucination_score: george.hallucinationScore,
-      panic_triggered: george.panicTriggered,
-      glitch_intensity: george.glitchIntensity,
-      final_verdict: george.finalWords
+      panic_triggered: shadow_audit?.panic_triggered,
+      glitch_intensity: shadow_audit?.glitch_intensity,
+      final_verdict: shadow_audit?.final_verdict
     },
 
-    action_protocol: george.actionProtocol,
-
     chain_data: {
-      current_hash: hashChain.current,
-      previous_hash: hashChain.previous || "GENESIS",
-      iteration: hashChain.iteration
+      current_hash: chain_data?.current_hash,
+      iteration: chain_data?.iteration
     }
   };
 
-  // Browser-friendly download
-  const blob = new Blob(
-    [JSON.stringify(exportObject, null, 2)],
-    { type: "application/json" }
-  );
+  // Browser-friendly download logic
+  try {
+    const blob = new Blob(
+      [JSON.stringify(exportObject, null, 2)],
+      { type: "application/json" }
+    );
 
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "omni-chalamandra-result.json";
-  a.click();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = omni-audit-${Date.now()}.json;
+    document.body.appendChild(a); // Requisito para algunos navegadores
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 
-  URL.revokeObjectURL(url);
+    console.log(">> EXPORT: Audit JSON downloaded successfully.");
+  } catch (error) {
+    console.error(">> EXPORT ERROR:", error);
+  }
 
   return exportObject;
 }
