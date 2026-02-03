@@ -1,23 +1,18 @@
-// app/orchestrator.js
+// app/orchestrator/orchestrator.js
+// FIXED PATHS: Using "../" to go up one level and find agents
 import { runGeminiDebate } from "../agents/geminiAgent.js";
 import { auditWithGeorge } from "../agents/georgeAgent.js";
 import { validateOutput } from "../agents/validatorAgent.js";
 
 /**
  * OMNI-CHALAMANDRA — CORE ORCHESTRATOR
- * Coordinates multi-agent reasoning and shadow auditing.
  */
 export async function orchestrateOMNI(input) {
   console.log(">> OMNI ORCHESTRATOR: Sequence initiated");
 
   try {
-    // 1. Multi-agent debate via Gemini 3 Pro
     const reasoningResult = await runGeminiDebate(input);
-
-    // 2. Shadow Audit (George)
     const auditedResult = auditWithGeorge(reasoningResult);
-
-    // 3. Schema Enforcement
     const validation = validateOutput(auditedResult);
 
     if (!validation.isValid) {
