@@ -1,15 +1,6 @@
 /**
  * VALIDATOR AGENT — OMNI-CHALAMANDRA
- * Role: Output integrity & schema enforcement
- *
- * Responsibilities:
- * - Extract the FINAL JSON block from Gemini output
- * - Validate required fields
- * - Prevent UI / Canvas crashes
- *
- * IMPORTANT:
- * - This agent does NOT modify meaning
- * - It only accepts or rejects
+ * Role: Output integrity & schema enforcement (Aligned with GEORGE)
  */
 
 export function validateOutput(rawGeminiOutput) {
@@ -22,7 +13,7 @@ export function validateOutput(rawGeminiOutput) {
 
     /* --------------------------------------------------
        1. EXTRACT JSON BLOCK
-       Assumes JSON is LAST thing in the response
+       Locates the last valid JSON object in the string
     -------------------------------------------------- */
     const jsonStart = rawGeminiOutput.lastIndexOf("{");
     const jsonEnd = rawGeminiOutput.lastIndexOf("}");
@@ -31,30 +22,25 @@ export function validateOutput(rawGeminiOutput) {
       return invalid("No JSON block detected.");
     }
 
-    const jsonString = rawGeminiOutput.slice(
-      jsonStart,
-      jsonEnd + 1
-    );
+    const jsonString = rawGeminiOutput.slice(jsonStart, jsonEnd + 1);
 
     let parsed;
     try {
       parsed = JSON.parse(jsonString);
     } catch (e) {
-      return invalid("JSON parsing failed.");
+      return invalid("JSON parsing failed. Ensure no text follows the JSON block.");
     }
 
     /* --------------------------------------------------
-       2. SCHEMA VALIDATION (MINIMAL BUT STRICT)
+       2. SCHEMA VALIDATION (STRICT ALIGNMENT)
+       Updated to match configPrompt.js fields
     -------------------------------------------------- */
-
     const requiredTopLevel = [
-      "hackathon_project",
+      "project",
       "input_analysis",
       "output_signals",
-      "dominant_layer",
       "agent_insights",
-      "shadow_verdict",
-      "action_plan",
+      "shadow_audit", // Corrected from shadow_verdict
       "chain_data"
     ];
 
@@ -64,22 +50,23 @@ export function validateOutput(rawGeminiOutput) {
       }
     }
 
-    // Shadow audit integrity (JORGE)
+    // Shadow audit integrity (GEORGE - Final Check)
     if (
-      parsed.shadow_verdict.auditor !== "JORGE" ||
-      typeof parsed.shadow_verdict.hallucination_score !== "number"
+      parsed.shadow_audit.auditor !== "GEORGE" ||
+      typeof parsed.shadow_audit.panic_triggered !== "boolean"
     ) {
-      return invalid("Shadow audit invalid or missing.");
+      return invalid("Shadow audit (GEORGE) data is invalid or missing.");
     }
 
     /* --------------------------------------------------
-       3. PANIC SIGNAL NORMALIZATION
+       3. SYSTEM NORMALIZATION
     -------------------------------------------------- */
-    parsed.jorge_panic_trigger =
-      parsed.shadow_verdict.panic_triggered === true ||
-      parsed.shadow_verdict.hallucination_score > 70;
+    // Ensure all numeric values from prompt exist
+    if (typeof parsed.output_signals.frequency_hz !== "number") {
+      parsed.output_signals.frequency_hz = 432; // Fallback to avoid audio crash
+    }
 
-    console.log(">> VALIDATOR: Output accepted.");
+    console.log(">> VALIDATOR: Integrity verified. Output accepted.");
     return {
       isValid: true,
       payload: parsed
@@ -90,10 +77,6 @@ export function validateOutput(rawGeminiOutput) {
     return invalid("Unexpected validation failure.");
   }
 }
-
-/* --------------------------------------------------
-   HELPERS
--------------------------------------------------- */
 
 function invalid(message) {
   console.warn(">> VALIDATOR REJECTED:", message);
