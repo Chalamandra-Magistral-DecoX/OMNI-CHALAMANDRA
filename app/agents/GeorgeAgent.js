@@ -2,24 +2,17 @@
  * GEORGE AGENT — SHADOW AUDITOR
  * OMNI-CHALAMANDRA
  *
- * Role:
- * - Final authority after multi-agent debate
- * - Detect hallucinations, contradictions, and weak inferences
- * - Produce the ONLY accepted final JSON output
- *
- * George does NOT debate.
- * George audits.
+ * Role: Final authority. Detects hallucinations and enforces schema.
  */
 
-export function GeorgeAgent(debateTranscript, structuredSignals) {
+export function auditWithGeorge(debateTranscript, structuredSignals) {
   console.log(">> GEORGE: Initiating shadow audit...");
 
   /* --------------------------------------------------
      1. INITIAL HEURISTICS
   -------------------------------------------------- */
-
   const audit = {
-    auditor: "JORGE", // Shadow identity (as defined)
+    auditor: "GEORGE", // Corrected identity
     hallucination_score: 0,
     panic_triggered: false,
     detected_issues: [],
@@ -27,46 +20,29 @@ export function GeorgeAgent(debateTranscript, structuredSignals) {
   };
 
   /* --------------------------------------------------
-     2. HALLUCINATION CHECKS
+     2. HALLUCINATION & INTEGRITY CHECKS
   -------------------------------------------------- */
-
   if (!debateTranscript || debateTranscript.length < 50) {
     audit.hallucination_score += 30;
     audit.detected_issues.push("Debate transcript too short or empty.");
   }
 
+  // Check for the existence of required structured data
   if (!structuredSignals || typeof structuredSignals !== "object") {
     audit.hallucination_score += 40;
     audit.detected_issues.push("Structured signals missing or invalid.");
   }
 
-  if (
-    structuredSignals &&
-    structuredSignals.frequency_hz &&
-    (structuredSignals.frequency_hz < 0 || structuredSignals.frequency_hz > 10000)
-  ) {
+  // Safety check for Resonant Frequency
+  const freq = structuredSignals?.output_signals?.frequency_hz;
+  if (freq && (freq < 20 || freq > 20000)) {
     audit.hallucination_score += 20;
-    audit.detected_issues.push("Frequency value out of plausible range.");
+    audit.detected_issues.push("Frequency value out of human audible range.");
   }
 
   /* --------------------------------------------------
-     3. CONTRADICTION DETECTION
+     3. PANIC LOGIC
   -------------------------------------------------- */
-
-  if (
-    structuredSignals?.dominant_layer === "symbolic" &&
-    structuredSignals?.confidence_score < 0.4
-  ) {
-    audit.hallucination_score += 15;
-    audit.detected_issues.push(
-      "High symbolic dominance with low confidence score."
-    );
-  }
-
-  /* --------------------------------------------------
-     4. PANIC LOGIC
-  -------------------------------------------------- */
-
   if (audit.hallucination_score >= 70) {
     audit.panic_triggered = true;
     audit.confidence_level = "critical";
@@ -75,56 +51,43 @@ export function GeorgeAgent(debateTranscript, structuredSignals) {
   }
 
   /* --------------------------------------------------
-     5. FINAL JSON CONSTRUCTION
-     (THIS IS THE ONLY ACCEPTED OUTPUT)
+     4. FINAL JSON CONSTRUCTION (ALIGNED WITH VALIDATOR)
   -------------------------------------------------- */
-
   const finalPayload = {
-    hackathon_project: "OMNI-CHALAMANDRA",
-    engine_version: "Gemini Hackathon 3",
-    audit_layer: "Shadow Governance",
+    project: "OMNI-CHALAMANDRA",
+    version: "3.5",
+    execution_context: "live_demo",
 
     input_analysis: structuredSignals.input_analysis || {},
-    output_signals: structuredSignals.output_signals || {},
-
-    dominant_layer: structuredSignals.dominant_layer || "undefined",
-
-    agent_insights: structuredSignals.agent_insights || [],
-
-    shadow_verdict: {
-      auditor: audit.auditor,
-      hallucination_score: audit.hallucination_score,
-      confidence_level: audit.confidence_level,
-      detected_issues: audit.detected_issues,
-      panic_triggered: audit.panic_triggered
+    output_signals: structuredSignals.output_signals || {
+      frequency_hz: 432,
+      geometry: "NEUTRAL",
+      coordination_index: 0.5
     },
 
-    action_plan: audit.panic_triggered
-      ? [
-          "Invalidate output",
-          "Request human verification",
-          "Reduce model autonomy"
-        ]
-      : [
-          "Approve output",
-          "Render to Canvas",
-          "Export chain data"
-        ],
+    agent_insights: structuredSignals.agent_insights || {},
+
+    shadow_audit: { // Matches validator key
+      auditor: audit.auditor,
+      hallucination_score: audit.hallucination_score,
+      panic_triggered: audit.panic_triggered,
+      glitch_intensity: audit.hallucination_score / 100,
+      final_verdict: audit.panic_triggered 
+        ? "CRITICAL: Potential hallucination detected. Initiating glitch protocol." 
+        : "COHERENT: Logic verified by Shadow Governance."
+    },
 
     chain_data: {
       debate_length: debateTranscript.length,
-      timestamp: new Date().toISOString(),
-      integrity_hash: generateIntegrityHash(debateTranscript)
+      timestamp: Date.now(),
+      current_hash: structuredSignals.chain_data?.current_hash || "0x0",
+      iteration: structuredSignals.chain_data?.iteration || 0
     }
   };
 
-  console.log(">> GEORGE: Shadow audit complete.");
+  console.log(">> GEORGE: Shadow audit complete. Verdict: " + audit.confidence_level);
   return finalPayload;
 }
-
-/* --------------------------------------------------
-   INTERNAL UTILITIES
--------------------------------------------------- */
 
 function generateIntegrityHash(text) {
   let hash = 0;
