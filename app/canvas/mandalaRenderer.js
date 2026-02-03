@@ -1,11 +1,6 @@
 /**
- * MANDALA RENDERER
- * OMNI-CHALAMANDRA
- *
- * Responsibility:
- * - Convert validated signals into drawable geometry
- * - No reasoning, no validation, no AI logic
- * - Pure geometric construction
+ * MANDALA RENDERER — OMNI-CHALAMANDRA
+ * Responsibility: Convert validated signals into drawable geometry structures.
  */
 
 export function buildMandalaGeometry({
@@ -14,11 +9,12 @@ export function buildMandalaGeometry({
   crossRatio,
   colinearity
 }) {
-  console.log(">> MANDALA: Building geometry...");
+  console.log(">> MANDALA: Building geometry construction...");
 
+  // Normalización para mantener el mandala dentro del canvas
   const baseRadius = normalizeFrequency(frequencyHz);
   const symmetry = resolveSymmetry(geometryType);
-  const rotation = crossRatio * Math.PI;
+  const rotation = (crossRatio || 1.0) * Math.PI;
 
   const layers = [];
 
@@ -26,10 +22,11 @@ export function buildMandalaGeometry({
     const angle = (2 * Math.PI / symmetry) * i + rotation;
 
     layers.push({
-      id: layer_${i},
+      id: layer_${i}, // Corregido: Template literal para el ID
       angle,
-      radius: baseRadius * (1 + colinearity.tension),
-      opacity: resolveOpacity(colinearity.alignmentScore),
+      // La tensión expande el radio, el colineality.alignmentScore lo define
+      radius: baseRadius * (1 + (colinearity?.tension || 0)),
+      opacity: resolveOpacity(colinearity?.alignmentScore || 1),
       weight: resolveWeight(crossRatio)
     });
   }
@@ -49,26 +46,23 @@ export function buildMandalaGeometry({
 -------------------------------------------------- */
 
 function normalizeFrequency(freq) {
-  // Keeps radius visually stable across wide Hz ranges
+  // Mapeo visual: convierte Hz en un factor de escala (0.3 a 1.0)
   return Math.min(1.0, Math.max(0.3, freq / 1000));
 }
 
 function resolveSymmetry(geometryType) {
   switch (geometryType) {
-    case "HEXAGONAL":
-      return 6;
-    case "OCTAGONAL":
-      return 8;
-    case "SPIRAL":
-      return 12;
-    case "CHAOTIC":
-      return 5;
-    default:
-      return 6;
+    case "HEXAGON":      return 6; // Alineado con invariantconfig.js
+    case "PENTAGON":     return 5;
+    case "TETRAHEDRON":  return 3;
+    case "SPIRAL":       return 12;
+    case "CHAOTIC":      return 7;
+    default:             return 6;
   }
 }
 
 function resolveOpacity(alignmentScore) {
+  // Si la alineación es baja, el mandala se desvanece (pérdida de realidad)
   return Math.min(1, Math.max(0.2, alignmentScore));
 }
 
@@ -80,11 +74,8 @@ function resolveWeight(crossRatio) {
 
 function resolveRenderHint(geometryType) {
   switch (geometryType) {
-    case "SPIRAL":
-      return "ROTATIONAL_FLOW";
-    case "CHAOTIC":
-      return "NOISE_PERTURBATION";
-    default:
-      return "SYMMETRIC_STATIC";
+    case "SPIRAL":  return "ROTATIONAL_FLOW";
+    case "CHAOTIC": return "NOISE_PERTURBATION";
+    default:        return "SYMMETRIC_STATIC";
   }
 }
