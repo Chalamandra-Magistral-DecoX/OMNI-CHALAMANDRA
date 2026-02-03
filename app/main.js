@@ -1,45 +1,77 @@
-// app/main.js
-// FIXED PATH: Pointing to the subfolder
+/**
+ * OMNI-CHALAMANDRA — MAIN ENTRY POINT
+ * Connects UI Events to Orchestration and Rendering
+ */
+
+import { CanvasController as ControllerUI } from "./canvas/controller.js";
+import { calculateCrossRatio } from "./canvas/crossRatio.js";
 import { orchestrateOMNI } from "./orchestrator/orchestrator.js";
+import { CanvasController as RenderUI } from "./canvas/controller.js";
 
-import { getCrossRatio } from "./canvas/crossratio.js";
-import { renderMandala } from "./canvas/mandalaRenderer.js";
-import { playFrequency } from "./feedback/audioEngine.js";
-import { applyVisualFeedback } from "./feedback/visualEngine.js";
-import { triggerGlitch } from "./feedback/glitchEngine.js";
-import { exportJSON } from "./export/exportJSON.js";
+// Global State
+const state = {
+  points: [],
+  isProcessing: false
+};
 
-async function runOMNI() {
-  console.log(">> OMNI MAIN: User interaction detected");
+// Initialize Canvas interaction
+const canvas = document.getElementById("main-canvas");
+const ctx = canvas.getContext("2d");
 
-  const input = {
-    crossRatio: getCrossRatio(),
-    mandalaSeed: {
-      time: Date.now(),
-      randomness: Math.random()
-    }
-  };
+canvas.addEventListener("click", async (e) => {
+  if (state.isProcessing) return;
 
-  const payload = await orchestrateOMNI(input);
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
 
-  if (payload.error) {
-    console.error(">> OMNI MAIN: Execution halted");
-    triggerGlitch(1.0);
-    return;
+  state.points.push({ x, y });
+  drawPoint(x, y);
+
+  // OMNI-CHALAMANDRA triggers when 4 points are set
+  if (state.points.length === 4) {
+    await runOmniSequence();
   }
+});
 
-  renderMandala(payload.output_signals.geometry);
-  playFrequency(payload.output_signals.frequency_hz);
-  applyVisualFeedback(payload.output_signals);
+async function runOmniSequence() {
+  state.isProcessing = true;
+  updateStatus("ORCHESTRATING DEBATE...");
 
-  if (payload.shadow_audit?.panic_triggered) {
-    triggerGlitch(payload.shadow_audit.glitch_intensity || 0.5);
+  try {
+    // 1. Math Invariant
+    const R = calculateCrossRatio(state.points);
+
+    // 2. Core Orchestration (Math -> Gemini -> GEORGE)
+    const finalPayload = await orchestrateOMNI({
+      crossRatio: R,
+      mandalaSeed: { points: state.points, timestamp: Date.now() }
+    });
+
+    // 3. Render Execution
+    // Pass the payload back to the Canvas Controller for drawing
+    RenderUI(finalPayload);
+
+    updateStatus("VERDICT: " + finalPayload.shadow_audit.final_verdict);
+    state.points = []; // Reset for next interaction
+    
+  } catch (error) {
+    console.error("OMNI CRITICAL ERROR:", error);
+    updateStatus("SYSTEM GLITCH: Check Console");
+  } finally {
+    state.isProcessing = false;
   }
-
-  exportJSON(payload);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const runButton = document.getElementById("run-omni");
-  if (runButton) runButton.addEventListener("click", runOMNI);
-});
+function drawPoint(x, y) {
+  ctx.fillStyle = "#00f3ff";
+  ctx.beginPath();
+  ctx.arc(x, y, 4, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function updateStatus(msg) {
+  const statusEl = document.getElementById("status-display");
+  if (statusEl) statusEl.innerText = msg;
+  console.log(">> OMNI STATUS:", msg);
+}
