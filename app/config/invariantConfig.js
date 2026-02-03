@@ -1,29 +1,19 @@
 /**
- * OMNI-CHALAMANDRA — INVARIANT CONFIG
+ * OMNI-CHALAMANDRA — INVARIANT CONFIG v3.5
  * All math is deterministic and computed outside the model.
- * Gemini receives values as facts, not tasks.
  */
 
 export const INVARIANTS = {
   GOLDEN_RATIO: 1.61803398875,
-
   FREQUENCY_BASE: 432,
   FREQUENCY_RANGE: 96, // 432 → 528 Hz
-
-  STABILITY_RANGE: {
-    MIN: 0.0,
-    MAX: 1.0
-  },
-
-  COORDINATION_RANGE: {
-    MIN: 0.0,
-    MAX: 1.0
-  }
+  STABILITY_RANGE: { MIN: 0.0, MAX: 1.0 },
+  COORDINATION_RANGE: { MIN: 0.0, MAX: 1.0 }
 };
 
 /**
  * Compute invariant signals from cross-ratio R
- * This function is the ONLY place where math happens.
+ * Transforms the geometric constant into actionable data for Gemini.
  */
 export function computeInvariantSignals(crossRatio) {
   const R = Number(crossRatio);
@@ -47,11 +37,10 @@ export function computeInvariantSignals(crossRatio) {
 
   // Geometry classification
   let geometryCategory = "CHAOTIC";
-
   if (R > 1.55 && R < 1.7) geometryCategory = "HEXAGON";
   else if (R > 1.2 && R <= 1.55) geometryCategory = "PENTAGON";
   else if (R > 0.8 && R <= 1.2) geometryCategory = "SPIRAL";
-  else if (R <= 0.8) geometryCategory = "TETRAHEDRON";
+  else if (R <= 0.😎 geometryCategory = "TETRAHEDRON";
 
   return {
     frequencyHz: Number(frequencyHz.toFixed(2)),
