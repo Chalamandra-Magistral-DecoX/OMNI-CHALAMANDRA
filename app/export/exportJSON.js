@@ -1,10 +1,9 @@
 /**
  * EXPORT JSON — OMNI-CHALAMANDRA
- * Responsibility: Create a downloadable artifact of the reasoning process.
+ * Responsibility: Generate a downloadable audit trail of the reasoning process.
  */
 
 export function exportResultJSON(finalPayload) {
-  // Ajustamos el destructuring para que coincida con la estructura real del payload
   const {
     agent_insights,
     shadow_audit,
@@ -29,9 +28,9 @@ export function exportResultJSON(finalPayload) {
       coordination_index: output_signals?.coordination_index
     },
 
-    agent_debate: agent_insights, // Ya viene estructurado por agentes
+    agent_debate: agent_insights,
 
-    final_audit: {
+    shadow_audit: {
       auditor: "GEORGE",
       panic_triggered: shadow_audit?.panic_triggered,
       glitch_intensity: shadow_audit?.glitch_intensity,
@@ -44,25 +43,22 @@ export function exportResultJSON(finalPayload) {
     }
   };
 
-  // Browser-friendly download logic
   try {
-    const blob = new Blob(
-      [JSON.stringify(exportObject, null, 2)],
-      { type: "application/json" }
-    );
-
+    const dataStr = JSON.stringify(exportObject, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = omni-audit-${Date.now()}.json;
-    document.body.appendChild(a); // Requisito para algunos navegadores
-    a.click();
-    document.body.removeChild(a);
+    
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = omni_audit_${Date.now()}.json;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    console.log(">> EXPORT: Audit JSON downloaded successfully.");
+    console.log(">> EXPORT: Audit report generated successfully.");
   } catch (error) {
-    console.error(">> EXPORT ERROR:", error);
+    console.error(">> EXPORT ERROR: Failed to generate JSON file.", error);
   }
 
   return exportObject;
