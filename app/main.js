@@ -1,89 +1,61 @@
-/**
- * OMNI-CHALAMANDRA — MAIN ENTRY POINT
- * Connects UI Events to Orchestration and Execution
- */
-
-import { calculateCrossRatio } from "./canvas/crossRatio.js";
 import { orchestrateOMNI } from "./orchestrator/flow.js";
-import { renderMandala, clearCanvas } from "./canvas/renderer.js";
-import { triggerFeedback } from "./feedback/visual.js";
+import { CanvasController } from "./canvas/canvasController.js";
+import { playFrequency } from "./feedback/audioEngine.js";
+import { triggerGlitch } from "./feedback/glitchEngine.js";
+import { updateUITheme } from "./feedback/visualEngine.js";
+import { downloadJSON } from "./utils/exportJSON.js";
 
-// Global State
-const state = {
-  points: [],
-  isProcessing: false
-};
-
-// Initialize Canvas
+let points = [];
 const canvas = document.getElementById("main-canvas");
-const ctx = canvas.getContext("2d");
 
+// User interaction: Capture 4 points
 canvas.addEventListener("click", async (e) => {
-  if (state.isProcessing) return;
+  if (points.length < 4) {
+    const rect = canvas.getBoundingClientRect();
+    points.push({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    
+    // Feedback visual inmediato
+    drawPoint(e.clientX - rect.left, e.clientY - rect.top);
 
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-
-  state.points.push({ x, y });
-  drawPoint(x, y);
-
-  // OMNI-CHALAMANDRA triggers when 4 points are set
-  if (state.points.length === 4) {
-    await runOmniSequence();
+    if (points.length === 4) {
+      await runFullPipeline();
+    }
   }
 });
 
-async function runOmniSequence() {
-  state.isProcessing = true;
-  updateStatus("ORCHESTRATING DEBATE...");
-
+async function runFullPipeline() {
   try {
-    // 1. Math Invariant (Deterministic Layer)
-    const R = calculateCrossRatio(state.points);
-
-    // 2. Core Orchestration (Math -> Gemini -> GEORGE Audit)
-    const finalPayload = await orchestrateOMNI({
-      crossRatio: R,
-      mandalaSeed: { points: state.points, timestamp: Date.now() }
-    });
-
-    // 3. Execution Layer (Visual & Audio Feedback)
-    renderMandala(ctx, finalPayload);
-    triggerFeedback(finalPayload);
-
-    // Update UI with GEORGE's Verdict
-    updateStatus("VERDICT: " + finalPayload.george_verdict.status);
+    const finalPayload = await orchestrateOMNI(points);
     
-    // Reset sequence
-    setTimeout(() => {
-        state.points = [];
-        clearCanvas(ctx);
-        updateStatus("SYSTEM READY");
-    }, 5000);
+    // 1. Update UI & Shaders
+    updateUITheme(finalPayload.george_verdict.status);
     
+    // 2. Audio Resonance
+    playFrequency(finalPayload.debate.output_signals.frequency_hz);
+
+    // 3. Render Mandala via Controller
+    CanvasController(finalPayload);
+
+    // 4. Panic Check
+    if (finalPayload.george_verdict.panic_triggered) {
+      triggerGlitch(finalPayload.george_verdict.glitch_intensity);
+    }
+
+    // 5. Automatic Export (Optional)
+    console.log(">> SYSTEM: Analysis complete. Exporting JSON...");
+    downloadJSON(finalPayload);
+
+    points = []; // Reset for next cycle
   } catch (error) {
-    console.error("OMNI CRITICAL ERROR:", error);
-    updateStatus("SYSTEM PANIC: AUDIT FAILED");
-    document.body.classList.add("glitch-active");
-  } finally {
-    state.isProcessing = false;
+    console.error(">> FATAL ERROR:", error);
+    triggerGlitch(1.0);
   }
 }
 
 function drawPoint(x, y) {
+  const ctx = canvas.getContext("2d");
   ctx.fillStyle = "#00f3ff";
-  ctx.shadowBlur = 10;
-  ctx.shadowColor = "#00f3ff";
   ctx.beginPath();
-  ctx.arc(x, y, 5, 0, Math.PI * 2);
+  ctx.arc(x, y, 4, 0, Math.PI * 2);
   ctx.fill();
-}
-
-function updateStatus(msg) {
-  const statusEl = document.getElementById("status-bar");
-  if (statusEl) statusEl.innerText = "STATUS: " + msg;
-  
-  const georgeEl = document.getElementById("george-status");
-  if (georgeEl) georgeEl.innerText = msg.includes("PANIC") ? "CRITICAL" : "ACTIVE";
 }
