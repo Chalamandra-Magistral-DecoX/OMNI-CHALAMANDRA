@@ -1,12 +1,16 @@
-# Multi-Agent Debate System
+# Agent Protocols & Tiered Reasoning
 
-The system simulates a structured debate between five specialized agents:
+OMNI-CHALAMANDRA utilizes a 5+1 agent architecture to ensure high-fidelity reasoning.
 
-1. Scientist (Neuro) — biological and cognitive sustainability
-2. Philosopher (Narrative) — meaning and symbolic coherence
-3. Psychologist (Healing) — trauma and emotional integration
-4. Historian (Techno) — historical cycles and systemic failure
-5. Futurist (Protocol) — execution and infrastructure
+### The Core Consensus Team (Tier 1)
+* *The Scientist:* Analyzes the biological and physical stability of the input.
+* *The Philosopher:* Evaluates the symbolic, ethical, and metaphysical meaning of the ratio.
+* *The Psychologist:* Maps the archetypal and emotional resonance of the geometry.
+* *The Historian:* Contextualizes the pattern within historical and sacred geometry.
+* *The Futurist:* Projects the long-term systemic impact and scalability.
 
-Each agent speaks once and may contradict others.
-No agent has final authority.
+### The Shadow Auditor: GEORGE (Tier 2)
+*GEORGE* is a specialized safety agent designed for verification, not creation.
+* *Independence:* GEORGE is unaware of the debate's "desires"—it only knows the math.
+* *Verification Logic:* Compares agent claims with the deterministic Cross-Ratio $R$.
+* *Veto Power:* GEORGE can reject the entire debate and force a "Glitch" state.
