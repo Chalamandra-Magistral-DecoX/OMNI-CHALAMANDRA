@@ -1,31 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>OMNI-CHALAMANDRA v3.2</title>
-  <link rel="stylesheet" href="./styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNI-CHALAMANDRA | Gemini 3 Pro Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header id="system-header">
+        <div class="logo">OMNI-CHALAMANDRA <span class="version">v3.5</span></div>
+        <div id="status-indicator">SYSTEM READY // AWAITING GEOMETRIC INPUT</div>
+    </header>
 
-  <header>
-    <h1>OMNI-CHALAMANDRA</h1>
-    <p>Geometry → Reasoning → Audit → Protocol</p>
-  </header>
+    <main id="app-container">
+        <div id="canvas-wrapper">
+            <canvas id="main-canvas" width="800" height="600"></canvas>
+            <div id="canvas-overlay">Dibuja 4 puntos para iniciar la sincronización</div>
+        </div>
 
-  <main>
-    <section id="left">
-      <input type="file" id="imageInput" />
-      <canvas id="canvasMain"></canvas>
-      <div id="nodes">Nodes: <span id="nodes-active">0</span>/4</div>
-      <button id="btnProject">TRANSMUTE CHAOS</button>
-    </section>
+        <aside id="agent-panel">
+            <div class="agent-card" id="card-scientist">
+                <header>SCIENTIST.EXE</header>
+                <div class="content"><p>Esperando señal matemática...</p></div>
+            </div>
+            <div class="agent-card" id="card-philosopher">
+                <header>PHILOSOPHER.EXE</header>
+                <div class="content"><p>Esperando significado...</p></div>
+            </div>
+            <div class="agent-card" id="card-george">
+                <header class="audit-header">GEORGE (SHADOW AUDIT)</header>
+                <div class="content audit-content">
+                    <div id="george-status">SCANNING...</div>
+                    <p id="george-verdict">Integridad del sistema: 100%</p>
+                </div>
+            </div>
+        </aside>
+    </main>
 
-    <section id="right">
-      <pre id="output"></pre>
-      <button id="btnExport">EXPORT JSON</button>
-    </section>
-  </main>
+    <footer id="data-footer">
+        <div class="data-block">R: <span id="val-ratio">0.000000</span></div>
+        <div class="data-block">FREQ: <span id="val-freq">0Hz</span></div>
+        <div class="data-block">HASH: <span id="val-hash">0x000...</span></div>
+    </footer>
 
-  <script type="module" src="./main.js"></script>
+    <script type="module" src="app/main.js"></script>
 </body>
 </html>
