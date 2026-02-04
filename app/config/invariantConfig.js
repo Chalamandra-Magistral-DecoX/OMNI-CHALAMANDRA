@@ -1,51 +1,29 @@
 /**
- * OMNI-CHALAMANDRA — INVARIANT CONFIG v3.5
- * All math is deterministic and computed outside the model.
+ * OMNI-CHALAMANDRA — INVARIANT ENGINE
+ * Computes deterministic signals from the Cross-Ratio
  */
 
-export const INVARIANTS = {
-  GOLDEN_RATIO: 1.61803398875,
-  FREQUENCY_BASE: 432,
-  FREQUENCY_RANGE: 96, // 432 → 528 Hz
-  STABILITY_RANGE: { MIN: 0.0, MAX: 1.0 },
-  COORDINATION_RANGE: { MIN: 0.0, MAX: 1.0 }
-};
+export function computeInvariantSignals(R) {
+  // 1. Frequency Mapping (Resonant Audio Signal)
+  // Maps R to a frequency range between 200Hz and 800Hz
+  const frequency = Math.min(Math.max(200 + (R * 100), 200), 800);
 
-/**
- * Compute invariant signals from cross-ratio R
- * Transforms the geometric constant into actionable data for Gemini.
- */
-export function computeInvariantSignals(crossRatio) {
-  const R = Number(crossRatio);
+  // 2. Coordination Index (System Stability)
+  // A value of 1.0 is the Golden Ratio (Harmonic)
+  const phi = 1.61803398875;
+  const coordination = 1 - Math.min(Math.abs(R - phi) / phi, 1);
 
-  // Frequency mapping (bounded)
-  const frequencyHz =
-    INVARIANTS.FREQUENCY_BASE +
-    ((Math.abs(R) % INVARIANTS.GOLDEN_RATIO) * INVARIANTS.FREQUENCY_RANGE);
-
-  // Coordination index (distance from golden ratio)
-  const coordinationIndex = Math.max(
-    0,
-    1 - Math.abs(R - INVARIANTS.GOLDEN_RATIO) / 2
-  );
-
-  // Stability score
-  const stabilityScore =
-    R > 0 && R < 3
-      ? Math.max(0, 1 - Math.abs(R - 1) / 2)
-      : 0;
-
-  // Geometry classification
-  let geometryCategory = "CHAOTIC";
-  if (R > 1.55 && R < 1.7) geometryCategory = "HEXAGON";
-  else if (R > 1.2 && R <= 1.55) geometryCategory = "PENTAGON";
-  else if (R > 0.8 && R <= 1.2) geometryCategory = "SPIRAL";
-  else if (R <= 0.😎 geometryCategory = "TETRAHEDRON";
+  // 3. Geometry Category Definition
+  let category = "STANDARD";
+  if (R === 1) category = "DEGENERATE_LINEAR";
+  if (Math.abs(R - phi) < 0.1) category = "HARMONIC_GOLDEN";
+  if (R < 0) category = "PARADIGM_INVERSION";
+  if (R > 2.0) category = "DISRUPTIVE_EXPANSION";
 
   return {
-    frequencyHz: Number(frequencyHz.toFixed(2)),
-    coordinationIndex: Number(coordinationIndex.toFixed(3)),
-    stabilityScore: Number(stabilityScore.toFixed(3)),
-    geometryCategory
+    frequency_hz: Math.round(frequency),
+    coordination_index: parseFloat(coordination.toFixed(4)),
+    geometry_category: category,
+    stability_score: parseFloat((coordination * 100).toFixed(2))
   };
 }
