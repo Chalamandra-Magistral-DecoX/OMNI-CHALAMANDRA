@@ -3,6 +3,10 @@
  * Responsibility: Convert validated signals into drawable geometry structures.
  */
 
+/**
+ * Builds a geometric object based on AI-debated signals and math invariants.
+ * @param {Object} signals - The output_signals and input_analysis from the payload.
+ */
 export function buildMandalaGeometry({
   geometryType,
   frequencyHz,
@@ -11,7 +15,7 @@ export function buildMandalaGeometry({
 }) {
   console.log(">> MANDALA: Building geometry construction...");
 
-  // Normalización para mantener el mandala dentro del canvas
+  // Normalization to keep the mandala within the viewport
   const baseRadius = normalizeFrequency(frequencyHz);
   const symmetry = resolveSymmetry(geometryType);
   const rotation = (crossRatio || 1.0) * Math.PI;
@@ -22,9 +26,9 @@ export function buildMandalaGeometry({
     const angle = (2 * Math.PI / symmetry) * i + rotation;
 
     layers.push({
-      id: layer_${i}, // Corregido: Template literal para el ID
+      id: layer_${i}, // Corrected Template Literal
       angle,
-      // La tensión expande el radio, el colineality.alignmentScore lo define
+      // Tension expands the radius, alignmentScore defines the presence
       radius: baseRadius * (1 + (colinearity?.tension || 0)),
       opacity: resolveOpacity(colinearity?.alignmentScore || 1),
       weight: resolveWeight(crossRatio)
@@ -46,23 +50,24 @@ export function buildMandalaGeometry({
 -------------------------------------------------- */
 
 function normalizeFrequency(freq) {
-  // Mapeo visual: convierte Hz en un factor de escala (0.3 a 1.0)
+  // Visual mapping: converts Hz into a scale factor (30% to 100%)
   return Math.min(1.0, Math.max(0.3, freq / 1000));
 }
 
 function resolveSymmetry(geometryType) {
+  // Balanced with previous invariant mapping
   switch (geometryType) {
-    case "HEXAGON":      return 6; // Alineado con invariantconfig.js
-    case "PENTAGON":     return 5;
-    case "TETRAHEDRON":  return 3;
-    case "SPIRAL":       return 12;
-    case "CHAOTIC":      return 7;
-    default:             return 6;
+    case "HARMONIC_GOLDEN":     return 8; 
+    case "HARMONIC_EXPANSION":  return 12;
+    case "STABLE_COMPRESSION":  return 6;
+    case "PARADIGM_INVERSION":  return 4;
+    case "DISRUPTIVE_EXPANSION": return 7;
+    default:                    return 6;
   }
 }
 
 function resolveOpacity(alignmentScore) {
-  // Si la alineación es baja, el mandala se desvanece (pérdida de realidad)
+  // High fracture = low opacity (loss of reality/stability)
   return Math.min(1, Math.max(0.2, alignmentScore));
 }
 
@@ -74,8 +79,8 @@ function resolveWeight(crossRatio) {
 
 function resolveRenderHint(geometryType) {
   switch (geometryType) {
-    case "SPIRAL":  return "ROTATIONAL_FLOW";
-    case "CHAOTIC": return "NOISE_PERTURBATION";
-    default:        return "SYMMETRIC_STATIC";
+    case "HARMONIC_EXPANSION": return "ROTATIONAL_FLOW";
+    case "PARADIGM_INVERSION": return "NOISE_PERTURBATION";
+    default:                   return "SYMMETRIC_STATIC";
   }
 }
