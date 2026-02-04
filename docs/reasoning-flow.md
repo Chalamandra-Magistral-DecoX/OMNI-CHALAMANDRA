@@ -1,138 +1,39 @@
 # OMNI-CHALAMANDRA — Reasoning Flow
 
-## Objective
-This document explains how data, reasoning, and execution flow through the
-OMNI-CHALAMANDRA system without redundancy or ambiguity.
+This document defines the unidirectional pipeline of data, reasoning, and execution within the OMNI-CHALAMANDRA system to ensure zero redundancy and maximum auditability.
+
+## High-Level Pipeline
+*Input* → *Orchestrator* → *Multi-Agent Debate* → *GEORGE Audit* → *Payload* → *Execution*
 
 ---
 
-## High-Level Flow
+## 1. Input & Mathematical Extraction
+* *Sources:* Geometric extraction from canvas coordinates or image analysis.
+* *Outputs:* Cross-ratio ($R$), mandala seed, and pre-computed signals.
+* *Note:* No reasoning occurs here; this is purely deterministic data acquisition.
 
-Input → Orchestrator → Agents → George Audit → Payload → Main → Feedback
+## 2. Orchestration Layer (app/orchestrator/flow.js)
+* *Role:* Builds the system prompt and injects the invariant data ($R$).
+* *Responsibility:* Enforces the debate structure and prevents agents from recalculating math.
 
----
+## 3. The Consensus Team (5 Specialized Agents)
+* *Agents:* Scientist (Neuro), Philosopher (Narrative), Psychologist (Healing), Historian (Techno), Futurist (Protocol).
+* *Output:* Qualitative structured insights based strictly on the provided invariants.
 
-## Step-by-Step Breakdown
+## 4. Shadow Audit — GEORGE (app/agents/georgeAgent.js)
+* *The 6th Agent:* An external auditor with no participation in the initial debate.
+* *Authority:* Evaluates hallucination risk, abstraction, and real-world viability.
+* *Signals:* Produces the "Panic Trigger" and "Glitch Intensity" scores.
 
-### 1. Input Layer
-Sources:
-- Image analysis
-- Geometric extraction
-- External math engine
-
-Produces:
-- Cross-ratio (R)
-- Mandala seed
-- Pre-computed signals
-- Hash chain context
-
-No reasoning occurs here.
-
----
-
-### 2. Orchestrator (app/orchestrator.js)
-Role:
-- Builds the system prompt
-- Injects invariant data
-- Defines debate structure
-
-Responsibilities:
-- Enforce agent order
-- Enforce rules
-- Ensure no recalculation
-
-The orchestrator THINKS.
-It does NOT render or play anything.
+## 5. Main Execution (app/main.js)
+* *Execution vs Reasoning:* main.js does NOT think; it executes the JSON payload.
+* *Controllers:* Triggers the Audio, Visual, and Glitch engines based on validated data.
 
 ---
 
-### 3. Agents (5 Internal Agents)
-
-Agents:
-1. Scientist (Neuro)
-2. Philosopher (Narrative)
-3. Psychologist (Healing)
-4. Historian (Techno)
-5. Futurist (Protocol)
-
-Rules:
-- Each agent speaks once
-- May disagree
-- Must use provided values only
-
-Output:
-- Structured qualitative insights
-
----
-
-### 4. Shadow Audit — George (app/agents/GeorgeAgent.js)
-
-George is the SIXTH agent.
-
-Role:
-- External auditor
-- Not part of the debate
-- Final authority
-
-George evaluates:
-- Over-optimism
-- Abstraction
-- Real-world viability
-- Hallucination risk
-
-George produces:
-- Street viability verdict
-- Glitch intensity
-- Panic trigger
-- Final one-line judgment
-
-George closes reasoning.
-
----
-
-### 5. Payload Assembly
-All outputs are assembled into a single deterministic JSON payload.
-
-This payload is:
-- Downloadable
-- Executable
-- Demo-ready
-
-No further reasoning occurs after this step.
-
----
-
-### 6. Main Execution (app/main.js)
-Main is NOT the orchestrator.
-
-Main:
-- Consumes the payload
-- Triggers systems
-
-Main calls:
-- Audio Engine (frequency)
-- Visual Engine (mandala)
-- Glitch Engine (if panic)
-
-Main EXECUTES.
-It does not think.
-
----
-
-### 7. Feedback Engines (app/feedback/)
-
-Engines:
-- AudioEngine.js → plays frequency
-- VisualEngine.js → applies visual modulation
-- GlitchEngine.js → triggers distortion
-
-These engines react ONLY to payload values.
-
----
-
-## Key Distinctions (Important)
-
-- Orchestrator ≠ Main
-- Reasoning ≠ Execution
-- Agents ≠ George
-- Math ≠ Interpretation
+### Key Distinctions
+| Reasoning | Execution |
+| :--- | :--- |
+| *Orchestrator:* Builds the logic | *Main:* Drives the UI |
+| *Agents:* Interpret the data | *Feedback Engines:* Render the signals |
+| *George:* Audits the truth | *Glitch Engine:* Visualizes the error |
