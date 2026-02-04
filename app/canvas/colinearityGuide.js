@@ -1,8 +1,13 @@
 /**
- * COLINEARITY GUIDE — OMNI-CHALAMANDRA
- * Responsibility: Precision math for point alignment.
+ * COLLINEARITY GUIDE — OMNI-CHALAMANDRA
+ * Responsibility: Precision math for point alignment and geometric tension.
  */
 
+/**
+ * Analyzes how well points align on a single vector.
+ * @param {Array} points - Array of {x, y} coordinates.
+ * @returns {Object} Alignment metrics and system status.
+ */
 export function analyzeColinearity(points = []) {
   if (!Array.isArray(points) || points.length < 3) {
     return {
@@ -13,13 +18,14 @@ export function analyzeColinearity(points = []) {
     };
   }
 
+  // Define the vector between the first and last point as the "ideal" line
   const baseline = computeBaseline(points[0], points[points.length - 1]);
   let totalDeviation = 0;
 
   const deviationMap = points.map((p) => {
     const deviation = distanceFromLine(p, baseline);
     totalDeviation += deviation;
-    return Number(deviation.toFixed(2)); // Round for cleaner data
+    return Number(deviation.toFixed(2));
   });
 
   const avgDeviation = totalDeviation / points.length;
@@ -27,8 +33,8 @@ export function analyzeColinearity(points = []) {
   const tension = computeTension(alignmentScore);
 
   return {
-    alignmentScore,
-    tension,
+    alignmentScore, // 1.0 = Perfect line, 0.0 = Chaotic distribution
+    tension,        // High tension means high geometric drift
     deviationMap,
     status: resolveStatus(alignmentScore)
   };
@@ -49,7 +55,7 @@ function computeBaseline(p1, p2) {
 
 function distanceFromLine(point, baseline) {
   const { p1, p2, dx, dy } = baseline;
-  // Standard formula for distance from a point to a line defined by two points
+  // Point-to-line distance formula: |Ax + By + C| / sqrt(A^2 + B^2)
   const numerator = Math.abs(
     dy * point.x - dx * point.y + p2.x * p1.y - p2.y * p1.x
   );
@@ -59,7 +65,7 @@ function distanceFromLine(point, baseline) {
 }
 
 function normalizeAlignment(avgDeviation) {
-  // Threshold-based normalization (adjust 100 based on your canvas scale)
+  // Sensitivity: pixels of deviation before the score hits zero
   const sensitivity = 50; 
   const score = 1 - Math.min(avgDeviation / sensitivity, 1);
   return Math.max(0, Math.min(1, score));
@@ -74,4 +80,4 @@ function resolveStatus(alignmentScore) {
   if (alignmentScore > 0.6) return "MODERATE_ALIGNMENT";
   if (alignmentScore > 0.3) return "LOW_ALIGNMENT";
   return "FRACTURED";
-  }
+}
