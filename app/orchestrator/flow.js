@@ -1,58 +1,44 @@
-**
- * OMNI-CHALAMANDRA — CORE ORCHESTRATOR
- * Coordinates: Math -> Gemini -> GEORGE -> Validator
- */
-import { computeInvariantSignals } from "../config/invariant.js";
 import { runGeminiDebate } from "../agents/geminiAgent.js";
 import { auditWithGeorge } from "../agents/georgeAgent.js";
-import { validateOutput } from "../agents/validatorAgent.js";
+import { calculateCrossRatio, categorizeCrossRatio } from "../canvas/crossRatio.js";
+import { analyzeColinearity } from "../canvas/colinearity.js";
 
-export async function orchestrateOMNI(input) {
-  console.log(">> OMNI ORCHESTRATOR: Sequence initiated");
+export async function orchestrateOMNI(points) {
+  console.log(">> OMNI: Initiating reasoning sequence...");
 
-  try {
-    // 1. MATH LAYER: Deterministic signals before AI intervention
-    const signals = computeInvariantSignals(input.crossRatio);
-    
-    // 2. ENRICHED INPUT: Inject signals into agent context
-    const enrichedInput = {
-      ...input,
-      computedValues: signals,
-      hashChain: {
-        current: 0x${Math.random().toString(16).slice(2, 10)},
-        iteration: 1
-      }
-    };
+  // 1. Deterministic Geometric Analysis
+  const crossRatio = calculateCrossRatio(points);
+  const colinearity = analyzeColinearity(points);
+  const category = categorizeCrossRatio(crossRatio);
 
-    // 3. REASONING LAYER: 5-Agent Debate via Gemini 3
-    const debateTranscript = await runGeminiDebate(enrichedInput);
-
-    // 4. AUDIT LAYER: Shadow Governance by GEORGE
-    const auditedResult = await auditWithGeorge(debateTranscript, enrichedInput);
-
-    // 5. INTEGRITY LAYER: Schema validation
-    const validation = validateOutput(auditedResult);
-
-    if (!validation.isValid) {
-      throw new Error(Integrity Violation: ${validation.errorMsg});
+  const inputPayload = {
+    crossRatio,
+    category,
+    colinearity,
+    mandalaSeed: { points: [...points] },
+    chain_data: { 
+      current_hash: "0x" + Math.random().toString(16).slice(2), 
+      timestamp: Date.now() 
     }
+  };
 
-    return validation.payload;
+  // 2. Generative Reasoning Layer (Gemini 3 Pro)
+  const debate = await runGeminiDebate(inputPayload);
 
-  } catch (error) {
-    console.error(">> OMNI ORCHESTRATOR: Critical System Failure", error);
-    
-    // SAFETY FALLBACK: Activate Glitch Engine
-    return {
-      error: true,
-      message: error.message,
-      george_verdict: { 
-        status: "PANIC", 
-        panic_triggered: true, 
-        glitch_intensity: 1.0,
-        reason: "Mathematical or Integrity Drift detected."
-      },
-      visual_signals: { frequency_hz: 0, geometry: "collapsed" }
-    };
-  }
+  // 3. Shadow Audit Layer (GEORGE)
+  // We pass the debate results and the original math for verification
+  const auditResults = await auditWithGeorge(debate, inputPayload);
+
+  // 4. Return unified payload for UI and Renderers
+  // This object structure is the "Source of Truth" for the entire app
+  return {
+    input_analysis: {
+      cross_ratio: crossRatio,
+      points: points,
+      colinearity: colinearity
+    },
+    debate: debate, // Contains agent_insights and output_signals
+    george_verdict: auditResults.george_verdict,
+    chain_data: inputPayload.chain_data
+  };
 }
