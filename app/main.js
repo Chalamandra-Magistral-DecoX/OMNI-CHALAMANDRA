@@ -7,6 +7,7 @@ import { exportResultJSON } from "./utils/exportJSON.js";
 
 let points = [];
 const canvas = document.getElementById("main-canvas");
+const statusIndicator = document.getElementById("status-indicator");
 
 canvas.addEventListener("click", async (e) => {
   if (points.length < 4) {
@@ -18,7 +19,7 @@ canvas.addEventListener("click", async (e) => {
     drawPoint(x, y);
 
     if (points.length === 4) {
-      document.getElementById("status-indicator").innerText = "PROCESSING GEOMETRY...";
+      statusIndicator.innerText = "PROCESSING GEOMETRY // SYNCHRONIZING AGENTS...";
       await runAnalysis();
     }
   }
@@ -26,41 +27,52 @@ canvas.addEventListener("click", async (e) => {
 
 async function runAnalysis() {
   try {
+    // 1. Execute Orchestrator
     const finalPayload = await orchestrateOMNI(points);
     
-    // 1. Feedback Sensorial
-    updateUITheme(finalPayload.george_verdict.status);
+    // 2. Visual Theme & Audio Resonance
+    updateUITheme(finalPayload.debate.output_signals.geometry);
     playFrequency(finalPayload.debate.output_signals.frequency_hz);
     
-    // 2. Renderizado de Mandala
+    // 3. Render Mandala
     CanvasController(finalPayload);
 
-    // 3. Actualización de UI de Agentes
+    // 4. Update UI Insights (DOM)
     updateAgentUI(finalPayload);
 
-    // 4. Manejo de Pánico/Glitch
+    // 5. Security & Stability Check (GEORGE)
     if (finalPayload.george_verdict.panic_triggered) {
       triggerGlitch(finalPayload.george_verdict.glitch_intensity);
+      statusIndicator.innerText = "SYSTEM INSTABILITY DETECTED // AUDIT ACTIVE";
+    } else {
+      statusIndicator.innerText = "SYSTEM STABILIZED // DATA SECURED";
     }
 
-    // 5. Exportación Automática de Auditoría
+    // 6. Generate Exportable Audit Trail
     exportResultJSON(finalPayload);
 
-    // Reset
+    // Reset capture
     points = [];
-    document.getElementById("status-indicator").innerText = "SYSTEM STABILIZED // READY";
+
   } catch (error) {
     console.error(">> SYSTEM CRASH:", error);
     triggerGlitch(1.0);
-    document.getElementById("status-indicator").innerText = "SYSTEM ERROR";
+    statusIndicator.innerText = "CRITICAL FAILURE // CORE DUMPED";
   }
 }
 
 function updateAgentUI(payload) {
+  // Update Agent Cards
   document.querySelector("#card-scientist .content p").innerText = payload.debate.agent_insights.scientist;
   document.querySelector("#card-philosopher .content p").innerText = payload.debate.agent_insights.philosopher;
-  document.getElementById("george-verdict").innerText = payload.george_verdict.final_verdict;
-  document.getElementById("val-ratio").innerText = payload.crossRatio.toFixed(6);
+  
+  // Update George Audit Info
+  const georgeP = document.getElementById("george-verdict");
+  georgeP.innerText = payload.george_verdict.final_verdict;
+  georgeP.style.color = payload.george_verdict.panic_triggered ? "#ff4400" : "#00ffaa";
+  
+  // Update Footer Data
+  document.getElementById("val-ratio").innerText = payload.input_analysis.cross_ratio.toFixed(6);
   document.getElementById("val-freq").innerText = ${payload.debate.output_signals.frequency_hz}Hz;
   document.getElementById("val-hash").innerText = payload.chain_data.current_hash;
 }
@@ -68,7 +80,10 @@ function updateAgentUI(payload) {
 function drawPoint(x, y) {
   const ctx = canvas.getContext("2d");
   ctx.fillStyle = "#00f3ff";
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = "#00f3ff";
   ctx.beginPath();
   ctx.arc(x, y, 4, 0, Math.PI * 2);
   ctx.fill();
+  ctx.shadowBlur = 0;
 }
