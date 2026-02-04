@@ -4,8 +4,7 @@
  */
 
 import { renderMandala } from "./mandalaRenderer.js";
-import { analyzeColinearity } from "./colinearityGuide.js";
-import { calculateCrossRatio } from "./crossRatio.js";
+import { analyzeColinearity } from "./colinearity.js"; // Sincronizado con el nombre de archivo anterior
 
 export function CanvasController(finalPayload) {
   console.log(">> CANVAS: Initializing render pipeline...");
@@ -13,18 +12,20 @@ export function CanvasController(finalPayload) {
   /* --------------------------------------------------
      1. SAFETY CHECK — GEORGE AUTHORITY
   -------------------------------------------------- */
-  // Sincronizado con shadow_audit (GEORGE)
-  if (!finalPayload?.shadow_audit) {
+  // Sincronizado con la estructura de GEORGE (george_verdict)
+  const audit = finalPayload?.george_verdict;
+  
+  if (!audit) {
     console.error("Canvas blocked: Shadow audit missing.");
     return { status: "ABORTED", reason: "Audit missing" };
   }
 
-  if (finalPayload.shadow_audit.panic_triggered === true) {
+  if (audit.panic_triggered === true) {
     console.warn(">> CANVAS: Panic triggered. Rendering glitch state.");
-    // Aquí el sistema podría disparar un efecto visual de error
+    // El GlitchEngine se encarga del visual, aquí abortamos el render limpio
     return {
       status: "PANIC",
-      reason: finalPayload.shadow_audit.final_verdict
+      reason: audit.final_verdict || audit.reason
     };
   }
 
@@ -39,22 +40,26 @@ export function CanvasController(finalPayload) {
 
   const crossRatio = input_analysis?.cross_ratio || 1.0;
   const frequencyHz = output_signals?.frequency_hz || 432;
-  const geometryType = output_signals?.geometry || "SPIRAL";
+  const geometryType = output_signals?.geometry || "STANDARD";
 
   /* --------------------------------------------------
      3. GEOMETRIC PRE-PROCESSING
   -------------------------------------------------- */
-  // Validamos la colinealidad final para el rendering
+  // Extraemos los puntos del análisis de entrada para validar la tensión
   const colinearityData = analyzeColinearity(input_analysis?.points || []);
 
   /* --------------------------------------------------
      4. EXECUTE RENDERING
   -------------------------------------------------- */
   try {
-    // Renderizamos el Mandala usando los datos auditados por GEORGE
-    renderMandala(geometryType);
+    // Obtenemos el contexto del canvas del DOM
+    const canvas = document.getElementById("main-canvas");
+    const ctx = canvas.getContext("2d");
 
-    console.log(">> CANVAS: Render successful.");
+    // Renderizamos el Mandala usando los datos auditados
+    renderMandala(ctx, finalPayload);
+
+    console.log(>> CANVAS: Render successful. Mode: ${geometryType});
 
     return {
       status: "SUCCESS",
@@ -66,7 +71,7 @@ export function CanvasController(finalPayload) {
       },
       metadata: {
         hash: chain_data?.current_hash || "0x0",
-        timestamp: chain_data?.timestamp || Date.now()
+        timestamp: Date.now()
       }
     };
 
