@@ -1,30 +1,24 @@
 /**
  * OMNI-CHALAMANDRA CORE PROMPT v3.5
- * Version: 3.5
- * Model Target: Gemini 3 Pro
- * Execution Context: Live Demo / Hackathon
- * * Design Principles:
- * - Math-first (cross-ratio as invariant)
- * - Multi-agent structured debate (5 Agents)
- * - External shadow audit (GEORGE)
- * - Deterministic, executable JSON output
+ * Optimized for Gemini 3 Pro - Hackathon Edition
  */
 
-export function generateOmniCorePrompt(input) {
-  // Safety fallbacks to ensure the prompt never breaks if input is missing
-  const {
-    crossRatio = 1.0,
-    mandalaSeed = { time: Date.now(), randomness: 0.5 },
-    computedValues = {
-      frequencyHz: 432,
-      coordinationIndex: 0.5,
-      stabilityScore: 0.5,
-      geometryCategory: "NEUTRAL"
-    },
-    hashChain = { current: "0x0", previous: "GENESIS", iteration: 0 }
-  } = input;
-
+export function SYSTEM_PROMPT(crossRatio, computedValues, mandalaSeed = {}, hashChain = {}) {
   const R = Number(crossRatio).toFixed(6);
+  
+  // Default values for safety during the live demo
+  const signals = {
+    frequencyHz: computedValues.frequency_hz || 432,
+    coordinationIndex: computedValues.coordination_index || 0.5,
+    stabilityScore: computedValues.stability_score || 50,
+    geometryCategory: computedValues.geometry_category || "NEUTRAL"
+  };
+
+  const chain = {
+    current: hashChain.current || "0x0",
+    previous: hashChain.previous || "GENESIS",
+    iteration: hashChain.iteration || 0
+  };
 
   return `
 OMNI-CHALAMANDRA CORE v3.5
@@ -42,20 +36,19 @@ INPUT DATA (PRE-COMPUTED)
 - Mandala Seed: ${JSON.stringify(mandalaSeed)}
 
 Computed Signals:
-- Resonant Frequency (Hz): ${computedValues.frequencyHz}
-- Coordination Index (0–1): ${computedValues.coordinationIndex}
-- Stability Score (0–1): ${computedValues.stabilityScore}
-- Geometry Category: ${computedValues.geometryCategory}
+- Resonant Frequency (Hz): ${signals.frequencyHz}
+- Coordination Index (0–1): ${signals.coordinationIndex}
+- Stability Score (0–100): ${signals.stabilityScore}%
+- Geometry Category: ${signals.geometryCategory}
 
 Chain Context:
-- Current Hash: ${hashChain.current}
-- Previous Hash: ${hashChain.previous || "GENESIS"}
-- Chain Position: ${hashChain.iteration}
+- Current Hash: ${chain.current}
+- Previous Hash: ${chain.previous}
+- Chain Position: ${chain.iteration}
 
 ==================================================
 PHASE 1 — STRUCTURED DEBATE (5 AGENTS)
 ==================================================
-
 AGENT 1 — SCIENTIST (NEURO): Focus on neurobiology and cognitive load.
 AGENT 2 — PHILOSOPHER (NARRATIVE): Focus on ontology and meaning.
 AGENT 3 — PSYCHOLOGIST (HEALING): Focus on shadow and resilience.
@@ -65,23 +58,18 @@ AGENT 5 — FUTURIST (PROTOCOL): Focus on infrastructure and execution.
 ==================================================
 PHASE 2 — SHADOW AUDIT (GEORGE)
 ==================================================
-
 GEORGE is the external auditor. 
 GEORGE’S MANDATE:
 1. Review all five agent positions for contradictions or abstractions.
 2. Evaluate real-world viability (“street test”).
 3. Decide if panic/glitch feedback is warranted.
 
-GEORGE must declare: "Shadow audit complete. My verdict is..."
-
 ==================================================
 PHASE 3 — FINAL OUTPUT (STRICT JSON)
 ==================================================
-
 Rules:
-1. First output the full debate transcript.
-2. End with exactly ONE JSON block.
-3. No markdown formatting in the JSON.
+- Output exactly ONE JSON block.
+- No markdown formatting outside the JSON if responseMimeType is used.
 
 JSON SCHEMA:
 {
@@ -90,12 +78,12 @@ JSON SCHEMA:
   "timestamp": ${Date.now()},
   "input_analysis": {
     "cross_ratio": ${R},
-    "category": "${R > 1.5 ? "EXPANSIVE" : R > 0.8 ? "STABLE" : "COMPRESSED"}"
+    "category": "${signals.geometryCategory}"
   },
   "output_signals": {
-    "frequency_hz": ${computedValues.frequencyHz},
-    "geometry": "${computedValues.geometryCategory}",
-    "coordination_index": ${computedValues.coordinationIndex}
+    "frequency_hz": ${signals.frequencyHz},
+    "geometry": "${signals.geometryCategory}",
+    "coordination_index": ${signals.coordinationIndex}
   },
   "agent_insights": {
     "scientist": "",
@@ -104,18 +92,16 @@ JSON SCHEMA:
     "historian": "",
     "futurist": ""
   },
-  "shadow_audit": {
-    "auditor": "GEORGE",
+  "george_verdict": {
+    "status": "STABLE",
     "panic_triggered": false,
     "glitch_intensity": 0.0,
     "final_verdict": ""
   },
   "chain_data": {
-    "current_hash": "${hashChain.current}",
-    "iteration": ${hashChain.iteration}
+    "current_hash": "${chain.current}",
+    "iteration": ${chain.iteration}
   }
 }
-
-BEGIN NOW.
 `;
 }
