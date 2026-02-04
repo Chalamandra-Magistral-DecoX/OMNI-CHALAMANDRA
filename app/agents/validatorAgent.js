@@ -1,87 +1,21 @@
 /**
- * VALIDATOR AGENT — OMNI-CHALAMANDRA
- * Role: Output integrity & schema enforcement (Aligned with GEORGE)
+ * OMNI-CHALAMANDRA — VALIDATOR
+ * Ensures output matches the required system schema
  */
-
-export function validateOutput(rawGeminiOutput) {
-  console.log(">> VALIDATOR: Parsing Gemini output...");
-
+export function validateOutput(payload) {
   try {
-    if (typeof rawGeminiOutput !== "string") {
-      return invalid("Output is not a string.");
+    const requiredKeys = ["george_verdict", "visual_signals", "debate_transcript"];
+    const hasAllKeys = requiredKeys.every(key => payload.hasOwnProperty(key));
+
+    if (!hasAllKeys) {
+      return { isValid: false, errorMsg: "Missing core payload keys" };
     }
 
-    /* --------------------------------------------------
-       1. EXTRACT JSON BLOCK
-       Locates the last valid JSON object in the string
-    -------------------------------------------------- */
-    const jsonStart = rawGeminiOutput.lastIndexOf("{");
-    const jsonEnd = rawGeminiOutput.lastIndexOf("}");
-
-    if (jsonStart === -1 || jsonEnd === -1) {
-      return invalid("No JSON block detected.");
-    }
-
-    const jsonString = rawGeminiOutput.slice(jsonStart, jsonEnd + 1);
-
-    let parsed;
-    try {
-      parsed = JSON.parse(jsonString);
-    } catch (e) {
-      return invalid("JSON parsing failed. Ensure no text follows the JSON block.");
-    }
-
-    /* --------------------------------------------------
-       2. SCHEMA VALIDATION (STRICT ALIGNMENT)
-       Updated to match configPrompt.js fields
-    -------------------------------------------------- */
-    const requiredTopLevel = [
-      "project",
-      "input_analysis",
-      "output_signals",
-      "agent_insights",
-      "shadow_audit", // Corrected from shadow_verdict
-      "chain_data"
-    ];
-
-    for (const key of requiredTopLevel) {
-      if (!(key in parsed)) {
-        return invalid(Missing top-level key: ${key});
-      }
-    }
-
-    // Shadow audit integrity (GEORGE - Final Check)
-    if (
-      parsed.shadow_audit.auditor !== "GEORGE" ||
-      typeof parsed.shadow_audit.panic_triggered !== "boolean"
-    ) {
-      return invalid("Shadow audit (GEORGE) data is invalid or missing.");
-    }
-
-    /* --------------------------------------------------
-       3. SYSTEM NORMALIZATION
-    -------------------------------------------------- */
-    // Ensure all numeric values from prompt exist
-    if (typeof parsed.output_signals.frequency_hz !== "number") {
-      parsed.output_signals.frequency_hz = 432; // Fallback to avoid audio crash
-    }
-
-    console.log(">> VALIDATOR: Integrity verified. Output accepted.");
     return {
       isValid: true,
-      payload: parsed
+      payload: payload
     };
-
-  } catch (error) {
-    console.error(">> VALIDATOR ERROR:", error);
-    return invalid("Unexpected validation failure.");
+  } catch (e) {
+    return { isValid: false, errorMsg: "Invalid JSON format" };
   }
-}
-
-function invalid(message) {
-  console.warn(">> VALIDATOR REJECTED:", message);
-  return {
-    isValid: false,
-    errorMsg: message
-  };
 }
