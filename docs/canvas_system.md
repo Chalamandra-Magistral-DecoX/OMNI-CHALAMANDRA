@@ -1,11 +1,10 @@
 # Canvas & Geometry System
 
-Visual output is driven by geometric invariants derived from the cross-ratio.
+The visual output of OMNI-CHALAMANDRA is driven by geometric invariants derived directly from the mathematical cross-ratio, ensuring a hallucination-free visualization.
 
-The canvas renders:
-- Mandala geometry
-- Symmetry and complexity
-- Visual coherence or disruption
+### Functional Core:
+* *Mandala Geometry:* Generative patterns mapped to the stability of the AI debate.
+* *Symmetry & Complexity:* Real-time adjustment of vertex count based on agent consensus.
+* *Visual Coherence:* A dedicated feedback loop that distorts the canvas if the "George" auditor detects logical drift.
 
-Canvas rendering is deterministic and does not infer meaning.
-It only visualizes validated output signals.
+*Note:* Canvas rendering is strictly deterministic. It does not "guess" shapes; it visualizes validated output signals from the reasoning core.
