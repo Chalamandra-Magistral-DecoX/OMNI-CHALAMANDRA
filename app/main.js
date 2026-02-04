@@ -3,11 +3,10 @@
  * Connects UI Events to Orchestration and Execution
  */
 
-import { initCanvas, drawCircle, clearCanvas } from "./canvas/controller.js";
 import { calculateCrossRatio } from "./canvas/crossRatio.js";
-import { orchestrateOMNI } from "./orchestrator/flow.js"; // Cambiado para coincidir con tu flow.js
-import { renderMandala } from "./canvas/renderer.js";    // Separación de responsabilidades
-import { triggerFeedback } from "./feedback/visual.js"; // Para el Glitch/Feedback
+import { orchestrateOMNI } from "./orchestrator/flow.js";
+import { renderMandala, clearCanvas } from "./canvas/renderer.js";
+import { triggerFeedback } from "./feedback/visual.js";
 
 // Global State
 const state = {
@@ -50,14 +49,13 @@ async function runOmniSequence() {
     });
 
     // 3. Execution Layer (Visual & Audio Feedback)
-    // El Main solo ejecuta, no piensa.
     renderMandala(ctx, finalPayload);
-    triggerFeedback(finalPayload);    // Activa Glitch si George lo indica
+    triggerFeedback(finalPayload);
 
     // Update UI with GEORGE's Verdict
     updateStatus("VERDICT: " + finalPayload.george_verdict.status);
     
-    // Reset for next interaction after a delay
+    // Reset sequence
     setTimeout(() => {
         state.points = [];
         clearCanvas(ctx);
@@ -67,7 +65,7 @@ async function runOmniSequence() {
   } catch (error) {
     console.error("OMNI CRITICAL ERROR:", error);
     updateStatus("SYSTEM PANIC: AUDIT FAILED");
-    document.body.classList.add("glitch-active"); // Forzado de emergencia
+    document.body.classList.add("glitch-active");
   } finally {
     state.isProcessing = false;
   }
@@ -83,10 +81,9 @@ function drawPoint(x, y) {
 }
 
 function updateStatus(msg) {
-  const statusEl = document.getElementById("status-bar"); // Sincronizado con tu index.html
+  const statusEl = document.getElementById("status-bar");
   if (statusEl) statusEl.innerText = "STATUS: " + msg;
   
   const georgeEl = document.getElementById("george-status");
   if (georgeEl) georgeEl.innerText = msg.includes("PANIC") ? "CRITICAL" : "ACTIVE";
 }
-Escribe en Dana de Brasdefer
