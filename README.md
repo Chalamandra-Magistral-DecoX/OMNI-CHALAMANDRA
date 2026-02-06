@@ -1,146 +1,32 @@
-# 🌀 OMNI-CHALAMANDRA
-### Multimodal Reasoning System with Shadow Audit (Gemini 3)
+# OMNI-CHALAMANDRA | 🦎 Neuro-Symbolic Reasoning Engine
 
-OMNI-CHALAMANDRA is a *deterministic, multi-agent reasoning system*
-designed to transform perceptual chaos into *auditable, actionable insight*.
+OMNI-CHALAMANDRA is a verifiable reasoning system that anchors *Gemini 3 Pro's* generative capabilities to deterministic geometric invariants.
 
-Built for *live hackathon demos*, it combines:
-- Mathematical invariants
-- Structured multi-agent debate
-- External shadow auditing
-- Audio + visual feedback loops
+## 🧠 The "Cognitive Fortress" Architecture
 
----
+Unlike standard chatbots, this system operates through a structured *Multi-Agent Debate* where every insight is audited against mathematical truth.
 
-## 🚀 Why This Project Matters
+### 1. The Reasoning Layer (5 Agents)
+The system orchestrates a debate between five specialized perspectives:
+* *Scientist (NEURO)*: Analyzes mathematical stability.
+* *Philosopher (NARRATIVE)*: Interprets ontological symmetry.
+* *Psychologist (HEALING)*: Maps geometric tension to perception.
+* *Historian (TECHNO)*: Relates patterns to ancient cycles.
+* *Futurist (PROTOCOL)*: Projects evolution into digital spaces.
 
-Most AI demos:
-- Hide reasoning
-- Hallucinate confidence
-- Produce unverified answers
+### 2. The Anti-Hallucination Protocol (GEORGE)
+*George* is the Shadow Auditor. He does not participate in the creative debate; his sole function is *validation*.
+* *Mathematical Anchor*: George compares the agents' output with the pre-computed *Cross-Ratio* and *Colinearity* scores.
+* *Hallucination Detection*: If an agent "invents" a stability score or ignores the geometric input, George flags the discrepancy.
+* *Panic/Glitch Mode*: When George detects high logical drift, he triggers a system-wide "Glitch Mode," signaling instability to the user.
 
-*OMNI-CHALAMANDRA does the opposite.*
+## 🛠 Technical Flow
+1. *Input*: User clicks 4 points.
+2. *Math Engine*: Computes $R = (AC/BC) / (AD/BD)$ (Cross-Ratio).
+3. *Orchestrator*: Passes $R$ and Colinearity to Gemini 3 Pro.
+4. *Debate*: The 5 agents generate insights based on $R$.
+5. *Audit*: George verifies the debate and issues a final verdict.
+6. *Output*: UI renders the Mandala, sounds the frequency, and exports the Audit JSON.
 
-It makes reasoning:
-- Visible
-- Verifiable
-- Audited
-- Actionable
-
----
-
-## 🧠 Core Idea
-
-At the heart of the system is a *geometric invariant*:
-> The *cross-ratio (R)* — a projective constant that remains stable
-> under perspective transformations.
-
-This invariant is used as a *signal*, not a metaphor.
-
-From it, the system:
-1. Generates structured debate
-2. Produces harmonics (audio)
-3. Renders geometry (visual)
-4. Triggers safety feedback if instability appears
-
----
-
-## 🎭 Multi-Agent Debate Architecture
-
-OMNI-CHALAMANDRA simulates a structured debate between *five specialized agents*:
-
-| Agent | Layer | Role |
-|-----|------|-----|
-| Scientist | NEURO | Biological & cognitive sustainability |
-| Philosopher | NARRATIVE | Meaning & symbolic coherence |
-| Psychologist | HEALING | Shadow & emotional integration |
-| Historian | TECHNO | Systemic & historical patterns |
-| Futurist | PROTOCOL | Execution & infrastructure |
-
-Each agent:
-- Speaks once
-- Stays in domain
-- May disagree with others
-
----
-
-## 🔍 Shadow Audit (George)
-
-After the debate, a *sixth agent* intervenes:
-
-### *George — Shadow Auditor*
-
-George:
-- Does *not* participate in the debate
-- Reviews all agent reasoning
-- Flags optimism, abstraction, or hallucination
-- Decides if panic/glitch feedback is required
-
-George is the *final authority*.
-
----
-
-## 📦 Output Design
-
-The system produces *one final JSON object*, used to drive:
-
-- 🔊 Audio resonance (frequency-based)
-- 🌀 Visual mandala rendering
-- ⚠️ Glitch feedback (if instability detected)
-- 📋 Actionable user instruction
-
-No hidden layers.  
-No post-processing hallucinations.
-
----
-
-## 🛡️ Safety & Anti-Hallucination
-
-OMNI-CHALAMANDRA enforces safety by design:
-
-- All math is *pre-computed*
-- JSON schema is strictly validated
-- Outputs are rejected if malformed
-- Shadow auditor can reduce claims or trigger panic mode
-
-This ensures *trust over theatrics*.
-
----
-
-## 🧩 System Architecture (High Level)
-User Input (Image / Geometry) ↓ Invariant Math (Cross-Ratio) ↓ Prompt Configuration ↓ Gemini 3 Reasoning ↓ 5-Agent Structured Debate ↓ George Shadow Audit ↓ Validated JSON Output ↓ Canvas + Audio + Visual Feedback
----
-
-## 🎥 Live Demo Flow
-
-1. User inputs image or geometry
-2. System computes invariant
-3. Agents debate in real time
-4. George delivers verdict
-5. Mandala renders + audio plays
-6. User receives concrete action
-
----
-
-## 🏁 Hackathon Alignment
-
-✔ Multi-agent reasoning  
-✔ Verified outputs  
-✔ Live demo friendly  
-✔ Judge-explainable  
-✔ Visually compelling  
-✔ Safety-first  
-
----
-
-## 🧠 Final Note for Judges
-
-OMNI-CHALAMANDRA is not trying to be “smart”.
-
-It is trying to be *honest*.
-
-Every conclusion can be traced.
-Every signal can be challenged.
-Every failure is visible.
-
-That is the point.
+## 📁 AI Studio Configuration
+The /ai-studio folder contains the *Schema-Enforcement* rules that prevent the model from deviating from the required JSON structure, ensuring 100% interoperability with the frontend.
