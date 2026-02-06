@@ -4,7 +4,7 @@
  */
 
 import { renderMandala } from "./mandalaRenderer.js";
-import { analyzeColinearity } from "./colinearity.js"; // Sincronizado con el nombre de archivo anterior
+import { analyzeColinearity } from "./colinearity.js";
 
 export function CanvasController(finalPayload) {
   console.log(">> CANVAS: Initializing render pipeline...");
@@ -34,13 +34,18 @@ export function CanvasController(finalPayload) {
   -------------------------------------------------- */
   const {
     input_analysis,
-    output_signals,
-    chain_data
+    debate,
+    chain_data,
+    computed_signals
   } = finalPayload;
 
   const crossRatio = input_analysis?.cross_ratio || 1.0;
-  const frequencyHz = output_signals?.frequency_hz || 432;
-  const geometryType = output_signals?.geometry || "STANDARD";
+  const frequencyHz = debate?.output_signals?.frequency_hz
+    ?? computed_signals?.frequency_hz
+    ?? 432;
+  const geometryType = debate?.output_signals?.geometry
+    ?? computed_signals?.geometry_category
+    ?? "STANDARD";
 
   /* --------------------------------------------------
      3. GEOMETRIC PRE-PROCESSING
@@ -59,7 +64,7 @@ export function CanvasController(finalPayload) {
     // Renderizamos el Mandala usando los datos auditados
     renderMandala(ctx, finalPayload);
 
-    console.log(>> CANVAS: Render successful. Mode: ${geometryType});
+    console.log(`>> CANVAS: Render successful. Mode: ${geometryType}`);
 
     return {
       status: "SUCCESS",

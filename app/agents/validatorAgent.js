@@ -4,7 +4,7 @@
  */
 export function validateOutput(payload) {
   try {
-    const requiredKeys = ["george_verdict", "visual_signals", "debate_transcript"];
+    const requiredKeys = ["input_analysis", "debate", "george_verdict", "chain_data"];
     const hasAllKeys = requiredKeys.every(key => payload.hasOwnProperty(key));
 
     if (!hasAllKeys) {

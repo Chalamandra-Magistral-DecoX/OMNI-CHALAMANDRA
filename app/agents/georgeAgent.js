@@ -6,7 +6,7 @@ export async function auditWithGeorge(debate, input) {
   console.log(">> GEORGE: Commencing shadow audit...");
 
   const R = input.crossRatio;
-  const debateText = Object.values(debate).join(" ");
+  const debateText = JSON.stringify(debate);
   
   // Logic: Calculate a "Drift Score" based on consistency
   // In a full version, this could be another Gemini call. 
@@ -27,7 +27,9 @@ export async function auditWithGeorge(debate, input) {
       panic_triggered: panicTriggered,
       drift_score: driftScore,
       glitch_intensity: panicTriggered ? 0.8 : 0.0,
-      reason: panicTriggered ? "Mathematical drift detected in agent narrative." : "Coherence verified."
+      final_verdict: panicTriggered
+        ? "Mathematical drift detected in agent narrative."
+        : "Coherence verified."
     },
     visual_signals: input.computedValues
   };

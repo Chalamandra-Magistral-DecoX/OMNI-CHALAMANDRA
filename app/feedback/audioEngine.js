@@ -53,7 +53,7 @@ export function playFrequency(frequencyHz, duration = 3000) {
       }
     }, duration);
 
-    console.log(>> AUDIO: Synthesizing resonance at ${frequencyHz}Hz);
+    console.log(`>> AUDIO: Synthesizing resonance at ${frequencyHz}Hz`);
   } catch (error) {
     console.warn(">> AUDIO ERROR: Synthesis failed. Audio might be blocked by browser.", error);
   }

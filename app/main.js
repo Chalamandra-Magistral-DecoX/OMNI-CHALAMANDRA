@@ -73,7 +73,7 @@ function updateAgentUI(payload) {
   
   // Update Footer Data
   document.getElementById("val-ratio").innerText = payload.input_analysis.cross_ratio.toFixed(6);
-  document.getElementById("val-freq").innerText = ${payload.debate.output_signals.frequency_hz}Hz;
+  document.getElementById("val-freq").innerText = `${payload.debate.output_signals.frequency_hz}Hz`;
   document.getElementById("val-hash").innerText = payload.chain_data.current_hash;
 }
 

@@ -24,12 +24,16 @@ export function exportResultJSON(finalPayload) {
 
     geometry_input: {
       cross_ratio: input_analysis?.cross_ratio || finalPayload.crossRatio,
-      geometry_category: debate?.output_signals?.geometry || finalPayload.category,
+      geometry_category: debate?.output_signals?.geometry
+        || finalPayload.computed_signals?.geometry_category
+        || finalPayload.category
     },
 
     cognitive_signals: {
-      frequency_hz: debate?.output_signals?.frequency_hz,
+      frequency_hz: debate?.output_signals?.frequency_hz
+        ?? finalPayload.computed_signals?.frequency_hz,
       coordination_index: debate?.output_signals?.coordination_index
+        ?? finalPayload.computed_signals?.coordination_index
     },
 
     agent_debate: debate?.agent_insights || {},
@@ -55,7 +59,7 @@ export function exportResultJSON(finalPayload) {
     const link = document.createElement("a");
     link.href = url;
     // Corrected Template Literal
-    link.download = omni_audit_${Date.now()}.json; 
+    link.download = `omni_audit_${Date.now()}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

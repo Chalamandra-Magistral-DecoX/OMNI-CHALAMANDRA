@@ -29,5 +29,5 @@ export function updateUITheme(category) {
   // Add a smooth transition effect to the body
   document.body.style.transition = "background-color 1.5s ease, color 1.5s ease";
   
-  console.log(>> VISUAL: UI Theme synchronized to ${category});
+  console.log(`>> VISUAL: UI Theme synchronized to ${category}`);
 }

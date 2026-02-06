@@ -29,7 +29,7 @@ export function calculateCrossRatio(points) {
     const ratio = (AC / BC) / (AD / BD);
     
     // Log with high precision for the Shadow Auditor
-    console.log(>> MATH: Invariant R synthesized: ${ratio.toFixed(6)});
+    console.log(`>> MATH: Invariant R synthesized: ${ratio.toFixed(6)}`);
     return Number(ratio.toFixed(6));
   } catch (e) {
     console.error(">> MATH ERROR: Cross-ratio calculation failed.", e);

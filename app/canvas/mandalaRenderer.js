@@ -26,7 +26,7 @@ export function buildMandalaGeometry({
     const angle = (2 * Math.PI / symmetry) * i + rotation;
 
     layers.push({
-      id: layer_${i}, // Corrected Template Literal
+      id: `layer_${i}`,
       angle,
       // Tension expands the radius, alignmentScore defines the presence
       radius: baseRadius * (1 + (colinearity?.tension || 0)),
@@ -43,6 +43,41 @@ export function buildMandalaGeometry({
     layers,
     render_hint: resolveRenderHint(geometryType)
   };
+}
+
+/**
+ * Renders the mandala to the canvas context using computed geometry layers.
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {Object} finalPayload
+ */
+export function renderMandala(ctx, finalPayload) {
+  const crossRatio = finalPayload?.input_analysis?.cross_ratio || 1.0;
+  const colinearity = finalPayload?.input_analysis?.colinearity || {};
+  const outputSignals = finalPayload?.debate?.output_signals || {};
+
+  const geometry = buildMandalaGeometry({
+    geometryType: outputSignals.geometry || "STANDARD",
+    frequencyHz: outputSignals.frequency_hz || 432,
+    crossRatio,
+    colinearity
+  });
+
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.save();
+  ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+
+  geometry.layers.forEach((layer) => {
+    ctx.save();
+    ctx.rotate(layer.angle);
+    ctx.beginPath();
+    ctx.arc(0, 0, layer.radius * 200, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(0, 243, 255, ${layer.opacity})`;
+    ctx.lineWidth = layer.weight;
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  ctx.restore();
 }
 
 /* --------------------------------------------------
