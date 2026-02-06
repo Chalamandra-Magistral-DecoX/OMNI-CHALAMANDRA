@@ -15,9 +15,9 @@ export async function runGeminiDebate(input) {
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
   const promptText = SYSTEM_PROMPT(
-    input.crossRatio, 
-    input.computedValues, 
-    input.mandalaSeed, 
+    input.crossRatio,
+    input.computedValues,
+    input.mandalaSeed,
     input.hashChain
   );
 
@@ -37,6 +37,42 @@ export async function runGeminiDebate(input) {
       maxOutputTokens: 3000 // Higher limit to accommodate the full debate and audit
     }
   };
+
+  // Mock mode for Hackathon/Demo when API key is not set
+  if (!GOOGLE_API_KEY || GOOGLE_API_KEY === "YOUR_GOOGLE_API_KEY_HERE") {
+    console.warn(">> GEMINI 3 PRO: No valid API key. Entering MOCK RESONANCE mode.");
+    return {
+      project: "OMNI-CHALAMANDRA",
+      version: "3.5",
+      timestamp: Date.now(),
+      input_analysis: {
+        cross_ratio: input.crossRatio,
+        category: input.computedValues?.geometry_category || "STABLE"
+      },
+      output_signals: {
+        frequency_hz: input.computedValues?.frequency_hz || 432,
+        geometry: input.computedValues?.geometry_category || "STANDARD",
+        coordination_index: input.computedValues?.coordination_index || 0.618
+      },
+      agent_insights: {
+        scientist: "Mathematical resonance detected in the geometric distribution.",
+        philosopher: "The cross-ratio suggests a return to harmonic principles.",
+        psychologist: "Stable geometry promotes a sense of systemic security.",
+        historian: "Similar patterns were observed during the Renaissance expansion.",
+        futurist: "Geometric stability is a prerequisite for next-gen protocols."
+      },
+      george_verdict: {
+        status: "STABLE",
+        panic_triggered: false,
+        glitch_intensity: 0.0,
+        final_verdict: "Mock audit passed. Integrity verified in demo mode."
+      },
+      chain_data: {
+        current_hash: input.hashChain?.current || "0xMOCK",
+        iteration: input.hashChain?.iteration || 1
+      }
+    };
+  }
 
   try {
     const response = await fetch(endpoint, {

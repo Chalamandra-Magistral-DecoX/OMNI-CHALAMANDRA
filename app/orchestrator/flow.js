@@ -2,7 +2,29 @@ import { runGeminiDebate } from "../agents/geminiAgent.js";
 import { auditWithGeorge } from "../agents/georgeAgent.js";
 import { calculateCrossRatio } from "../canvas/crossRatio.js";
 import { analyzeColinearity } from "../canvas/colinearity.js";
-import { computeInvariantSignals } from "../config/invariantConfig.js";
+
+/**
+ * OMNI-CHALAMANDRA — INVARIANT ENGINE (Internalized)
+ * Computes deterministic signals from the Cross-Ratio
+ */
+function computeInvariantSignals(R) {
+  const frequency = Math.min(Math.max(200 + (R * 100), 200), 800);
+  const phi = 1.61803398875;
+  const coordination = 1 - Math.min(Math.abs(R - phi) / phi, 1);
+
+  let category = "STANDARD";
+  if (R === 1) category = "DEGENERATE_LINEAR";
+  if (Math.abs(R - phi) < 0.1) category = "HARMONIC_GOLDEN";
+  if (R < 0) category = "PARADIGM_INVERSION";
+  if (R > 2.0) category = "DISRUPTIVE_EXPANSION";
+
+  return {
+    frequency_hz: Math.round(frequency),
+    coordination_index: parseFloat(coordination.toFixed(4)),
+    geometry_category: category,
+    stability_score: parseFloat((coordination * 100).toFixed(2))
+  };
+}
 
 export async function orchestrateOMNI(points) {
   console.log(">> OMNI: Initiating reasoning sequence...");
