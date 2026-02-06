@@ -1,7 +1,7 @@
 import { runGeminiDebate } from "../agents/geminiAgent.js";
-import { auditWithGeorge } from "../agents/georgeAgent.js";
+import { auditWithGeorge } from "../agents/GeorgeAgent.js";
 import { calculateCrossRatio, categorizeCrossRatio } from "../canvas/crossRatio.js";
-import { analyzeColinearity } from "../canvas/colinearity.js";
+import { analyzeColinearity } from "../canvas/colinearityGuide.js";
 
 export async function orchestrateOMNI(points) {
   console.log(">> OMNI: Initiating reasoning sequence...");
@@ -16,7 +16,7 @@ export async function orchestrateOMNI(points) {
     category,
     colinearity,
     mandalaSeed: { points: [...points] },
-    chain_data: { 
+    chain_data: {
       current_hash: "0x" + Math.random().toString(16).slice(2), 
       timestamp: Date.now() 
     }

@@ -27,7 +27,7 @@ export async function auditWithGeorge(debate, input) {
       panic_triggered: panicTriggered,
       drift_score: driftScore,
       glitch_intensity: panicTriggered ? 0.8 : 0.0,
-      final_verdict: panicTriggered ? "Mathematical drift detected in agent narrative." : "Coherence verified."
+      reason: panicTriggered ? "Mathematical drift detected in agent narrative." : "Coherence verified."
     },
     visual_signals: input.computedValues
   };

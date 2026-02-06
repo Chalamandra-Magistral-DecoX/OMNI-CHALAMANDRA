@@ -4,6 +4,7 @@
  */
 
 import { renderMandala } from "./mandalaRenderer.js";
+import { analyzeColinearity } from "./colinearityGuide.js"; // Sincronizado con el nombre de archivo anterior
 
 export function CanvasController(finalPayload) {
   console.log(">> CANVAS: Initializing render pipeline...");
@@ -24,7 +25,7 @@ export function CanvasController(finalPayload) {
     // El GlitchEngine se encarga del visual, aquí abortamos el render limpio
     return {
       status: "PANIC",
-      reason: audit.final_verdict
+      reason: audit.final_verdict || audit.reason
     };
   }
 
@@ -44,7 +45,8 @@ export function CanvasController(finalPayload) {
   /* --------------------------------------------------
      3. GEOMETRIC PRE-PROCESSING
   -------------------------------------------------- */
-  const colinearityData = input_analysis?.colinearity || { tension: 0 };
+  // Extraemos los puntos del análisis de entrada para validar la tensión
+  const colinearityData = analyzeColinearity(input_analysis?.points || []);
 
   /* --------------------------------------------------
      4. EXECUTE RENDERING

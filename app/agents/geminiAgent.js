@@ -3,7 +3,7 @@
  * Manages the multi-agent debate using Gemini 3 Pro
  */
 import { GOOGLE_API_KEY } from "../config/secrets.js";
-import { SYSTEM_PROMPT } from "../config/prompt.js";
+import { SYSTEM_PROMPT } from "../config/configPrompt.js";
 
 /**
  * Orchestrates the AI debate by sending deterministic signals to Gemini 3 Pro.

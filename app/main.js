@@ -1,9 +1,9 @@
-import { orchestrateOMNI } from "./orchestrator/flow.js";
-import { CanvasController } from "./canvas/canvasController.js";
+import { orchestrateOMNI } from "./orchestrator/OrchestratorFlow.js";
+import { CanvasController } from "./canvas/CanvasController.js";
 import { playFrequency } from "./feedback/audioEngine.js";
 import { triggerGlitch } from "./feedback/glitchEngine.js";
 import { updateUITheme } from "./feedback/visualEngine.js";
-import { exportResultJSON } from "./utils/exportJSON.js";
+import { exportResultJSON } from "./utils/export.JSON.js";
 
 let points = [];
 const canvas = document.getElementById("main-canvas");
