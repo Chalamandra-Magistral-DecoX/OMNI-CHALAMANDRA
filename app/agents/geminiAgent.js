@@ -12,12 +12,12 @@ import { SYSTEM_PROMPT } from "../config/prompt.js";
  */
 export async function runGeminiDebate(input) {
   // Using Gemini 3 Pro to handle complex multi-agent logic and shadow auditing
-  const endpoint = https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro:generateContent?key=${GOOGLE_API_KEY};
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
   const promptText = SYSTEM_PROMPT(
-    input.crossRatio, 
-    input.computedValues, 
-    input.mandalaSeed, 
+    input.crossRatio,
+    input.computedValues,
+    input.mandalaSeed,
     input.hashChain
   );
 
@@ -49,7 +49,7 @@ export async function runGeminiDebate(input) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(Gemini 3 Pro API Error: ${errorData.error.message || response.statusText});
+      throw new Error(`Gemini 3 Pro API Error: ${errorData.error.message || response.statusText}`);
     }
 
     const data = await response.json();

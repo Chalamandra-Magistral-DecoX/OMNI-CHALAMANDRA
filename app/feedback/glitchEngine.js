@@ -11,11 +11,11 @@ export function triggerGlitch(intensity = 0.5) {
   const canvas = document.getElementById("main-canvas");
   const body = document.body;
 
-  console.log(>> GLITCH: Instability detected. Severity: ${intensity});
+  console.log(`>> GLITCH: Instability detected. Severity: ${intensity}`);
 
   // Apply CSS classes and variables for the glitch shaders
   body.classList.add("glitch-active");
-  body.style.setProperty("--glitch-intensity", ${intensity * 20}px);
+  body.style.setProperty("--glitch-intensity", `${intensity * 20}px`);
 
   // Shake effect for high-severity hallucinations (GEORGE panic mode)
   if (intensity > 0.7) {
@@ -24,7 +24,7 @@ export function triggerGlitch(intensity = 0.5) {
 
   // Chromatic emergency state (Total System Inversion)
   if (intensity > 0.85) {
-    body.style.filter = invert(1) hue-rotate(${intensity * 360}deg);
+    body.style.filter = `invert(1) hue-rotate(${intensity * 360}deg)`;
   }
 
   // Cleanup and stabilization sequence
@@ -44,8 +44,8 @@ function applyShake(element, intensity) {
   const shakeInterval = setInterval(() => {
     const x = (Math.random() - 0.5) * intensity * 25;
     const y = (Math.random() - 0.5) * intensity * 25;
-    element.style.transform = translate(${x}px, ${y}px);
+    element.style.transform = `translate(${x}px, ${y}px)`;
   }, 50);
-  
+
   setTimeout(() => clearInterval(shakeInterval), 800);
 }

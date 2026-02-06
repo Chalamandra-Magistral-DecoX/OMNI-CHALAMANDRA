@@ -15,7 +15,7 @@ canvas.addEventListener("click", async (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     points.push({ x, y });
-    
+
     drawPoint(x, y);
 
     if (points.length === 4) {
@@ -29,11 +29,11 @@ async function runAnalysis() {
   try {
     // 1. Execute Orchestrator
     const finalPayload = await orchestrateOMNI(points);
-    
+
     // 2. Visual Theme & Audio Resonance
     updateUITheme(finalPayload.debate.output_signals.geometry);
     playFrequency(finalPayload.debate.output_signals.frequency_hz);
-    
+
     // 3. Render Mandala
     CanvasController(finalPayload);
 
@@ -65,15 +65,15 @@ function updateAgentUI(payload) {
   // Update Agent Cards
   document.querySelector("#card-scientist .content p").innerText = payload.debate.agent_insights.scientist;
   document.querySelector("#card-philosopher .content p").innerText = payload.debate.agent_insights.philosopher;
-  
+
   // Update George Audit Info
   const georgeP = document.getElementById("george-verdict");
   georgeP.innerText = payload.george_verdict.final_verdict;
   georgeP.style.color = payload.george_verdict.panic_triggered ? "#ff4400" : "#00ffaa";
-  
+
   // Update Footer Data
   document.getElementById("val-ratio").innerText = payload.input_analysis.cross_ratio.toFixed(6);
-  document.getElementById("val-freq").innerText = ${payload.debate.output_signals.frequency_hz}Hz;
+  document.getElementById("val-freq").innerText = `${payload.debate.output_signals.frequency_hz}Hz`;
   document.getElementById("val-hash").innerText = payload.chain_data.current_hash;
 }
 
