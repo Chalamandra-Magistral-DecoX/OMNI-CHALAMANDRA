@@ -1,117 +1,132 @@
 # 🧬 OMNI-CHALAMANDRA  
-### Verifiable Multi-Agent System for Strategic Decisions Under Uncertainty
+### Verifiable Multi-Agent Reasoning System for Strategic Decisions Under Uncertainty
 
-OMNI-CHALAMANDRA transforms abstract uncertainty into **visible, measurable, and verifiable intelligence**.
+OMNI-CHALAMANDRA is a structured multi-agent AI system built on Gemini 3 that transforms high-uncertainty strategic decisions into transparent, verifiable, and actionable outcomes.
 
-Instead of hiding doubt, the system exposes it through:
-
-• Multi-agent debate  
-• Confidence scoring  
-• Geometric invariant validation  
-• Visual mandala feedback  
-
-Built for Gemini-powered reasoning under high-stakes strategic ambiguity.
+Instead of relying on single opaque model responses, the system exposes expert reasoning, quantified uncertainty, and independent auditing.
 
 ---
 
-## 🎯 Core Philosophy
+## 🚀 Why OMNI-CHALAMANDRA
 
-> We don’t seek the smartest answers.  
-> We seek the most verifiable ones.
-
-Uncertainty is not noise.  
-Uncertainty is data.
+✔ Makes uncertainty visible  
+✔ Prevents hallucinated confidence  
+✔ Enables structured decision workflows  
+✔ Designed for real-world strategic risk  
 
 ---
 
 ## 🧠 System Architecture
+┌───────────────┐
+│ User Input │
+└───────┬───────┘
+↓
+┌───────────────────────┐
+│ Multi-Agent Debate │
+│ │
+│ Scientist → Tech realism
+│ Philosopher → Tradeoffs
+│ Psychologist→ Human risk
+│ Historian → Precedents
+│ Futurist → Long-term impact
+└────────┬──────────────┘
+↓
+┌───────────────────────┐
+│ George Shadow Audit │
+│ │
+│ • Hallucination risk │
+│ • Stability score │
+│ • Verdict │
+└────────┬──────────────┘
+↓
+┌───────────────────────┐
+│ Verifiable Strategy │
+│ + Confidence Metrics │
+└───────────────────────┘
 
-```mermaid
-flowchart TD
-    UserPrompt --> Orchestrator
+---
 
-    Orchestrator --> GeminiAgent
-    Orchestrator --> GeorgeAgent
-    Orchestrator --> ValidatorAgent
+## 👥 Agents & Roles
 
-    GeminiAgent --> Debate
-    GeorgeAgent --> Debate
-    ValidatorAgent --> Debate
+| Agent | Responsibility |
+|------|---------------|
+| Scientist | Technical feasibility & unknowns |
+| Philosopher | Strategic framing & tradeoffs |
+| Psychologist | Organizational & human impact |
+| Historian | Real-world precedent analysis |
+| Futurist | Long-term systemic risk |
+| George (Auditor) | Detects instability & hallucination |
 
-    Debate --> ConfidenceScores
+---
 
-    ConfidenceScores --> MandalaRenderer
-    ValidatorAgent --> InvariantMath
+## 📊 Verifiability Metrics
 
-    InvariantMath --> MandalaRenderer
+Each decision generates:
 
-    MandalaRenderer --> VisualFeedback
-    MandalaRenderer --> ExportJSON
+• Agent confidence scores  
+• Explicit unknowns  
+• Hallucination likelihood  
+• Stability score  
+• Audit verdict  
 
-🤖 Agents
-Agent	Role
-GeminiAgent	Strategic reasoning & scenario exploration
-GeorgeAgent	Risk audit, assumptions exposure
-ValidatorAgent	Confidence scoring + uncertainty enforcement
+Uncertainty is surfaced by design.
 
-All agents must explicitly state unknowns.
+---
 
-📐 Mathematical Verification Layer
+## 🛡️ Anti-Hallucination Design
 
-Instead of trusting raw text outputs:
+✔ Schema-enforced structured output  
+✔ Contradictory agent debate allowed  
+✔ External auditor layer  
+✔ Panic mode for missing data  
+✔ Conservative fallback strategies  
 
-• Cross-ratio invariants
-• Colinearity validation
-• Geometric coherence
+---
 
-These ensure reasoning stability under uncertainty.
+## 🎯 Example Scenario
 
-🎨 Mandala Intelligence Canvas
+Strategic pivot evaluation under high uncertainty:
 
-The system visualizes:
+> A legacy automotive company considering a risky investment in solid-state battery technology.
 
-🔵 High confidence stability
-🟠 Medium uncertainty zones
-🔴 High risk reasoning gaps
+The system exposes technical unknowns, market timing risks, organizational strain, and long-term opportunity cost.
 
-Making strategic fragility instantly visible.
+---
 
-📊 Metrics
-Qualitative
+## 🧩 Built With
 
-• Transparency of unknowns
-• Debate coherence
-• Strategic assumption exposure
+• Gemini 3 Pro  
+• TypeScript  
+• Structured JSON schemas  
+• Multi-agent orchestration  
+• Uncertainty-aware UX  
 
-Quantitative
+---
 
-• Confidence variance
-• Invariant stability score
-• Risk clustering density
+## 🌍 Impact
 
-🚀 Why It Matters
+Traditional AI systems hide uncertainty behind fluent language.
 
-Most AI hides uncertainty.
+OMNI-CHALAMANDRA makes reasoning inspectable, measurable, and safer for real-world strategic decisions.
 
-OMNI-CHALAMANDRA makes it:
+---
 
-✔ visible
-✔ measurable
-✔ strategic
+## 📈 Future Extensions
 
-Perfect for:
+• Scenario comparison engine  
+• Confidence evolution over time  
+• Visual decision mandalas  
+• Enterprise risk dashboards  
 
-• High-stakes decisions
-• Ambiguous innovation pivots
-• Risk-heavy strategy planning
+---
 
-🧪 Powered by Gemini Reasoning
+### 🏆 Hackathon Focus
 
-Designed to push Gemini beyond text generation into:
+Demonstrating:
 
-Strategic verification systems.
+✔ Responsible AI  
+✔ Multi-agent reasoning  
+✔ Verifiable outputs  
+✔ Real strategic workflows  
 
-Author
 
-Chalamandra Magistral DecoX
-“Making uncertainty visible instead of concealed.”
