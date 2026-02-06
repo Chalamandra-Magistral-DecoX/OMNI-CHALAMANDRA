@@ -1,50 +1,47 @@
 {
-  "project": "OMNI-CHALAMANDRA",
-  "version": "3.5-hackathon",
-  "platform": "Google AI Studio",
-  "model": "gemini-3-reasoning",
-  "tier": "free",
-  "reasoning_mode": "multi-agent-structured",
-  "thinking_level": "deep",
-  "determinism": true,
-  "persistence": true,
-
-  "orchestration": {
-    "type": "cognitive-fortress",
-    "agents": [
-      "scientist",
-      "philosopher",
-      "psychologist",
-      "historian",
-      "futurist",
-      "george"
-    ],
-    "final_authority": "george"
-  },
-
-  "input_modalities": [
-    "image",
-    "geometry",
-    "text"
-  ],
-
-  "output_modalities": [
-    "json",
-    "audio",
-    "visual"
-  ],
-
-  "anti_hallucination": {
-    "schema_enforced": true,
-    "shadow_auditor": true,
-    "panic_mode": true,
-    "math_recomputation_disabled": true
-  },
-
-  "hackathon_alignment": {
-    "judge_facing": true,
-    "live_demo_ready": true,
-    "verifiable_reasoning": true,
-    "actionable_output": true
+  "system_instruction": "REFER_TO_SYSTEM_INSTRUCTIONS_TXT",
+  "generationConfig": {
+    "temperature": 0,
+    "topP": 0.1,
+    "topK": 1,
+    "maxOutputTokens": 4096,
+    "responseMimeType": "application/json",
+    "responseSchema": {
+      "type": "object",
+      "properties": {
+        "agent_insights": {
+          "type": "object",
+          "properties": {
+            "scientist": { "type": "string" },
+            "philosopher": { "type": "string" },
+            "psychologist": { "type": "string" },
+            "historian": { "type": "string" },
+            "futurist": { "type": "string" }
+          },
+          "required": ["scientist", "philosopher", "historian", "psychologist", "futurist"]
+        },
+        "george_verdict": {
+          "type": "object",
+          "properties": {
+            "status": { "type": "string", "enum": ["STABILIZED", "WARNING", "CRITICAL"] },
+            "panic_triggered": { "type": "boolean" },
+            "glitch_intensity": { "type": "number" },
+            "final_verdict": { "type": "string" },
+            "hallucination_score": { "type": "number" }
+          },
+          "required": ["status", "panic_triggered", "glitch_intensity", "final_verdict", "hallucination_score"]
+        },
+        "output_signals": {
+          "type": "object",
+          "properties": {
+            "frequency_hz": { "type": "number" },
+            "geometry": { "type": "string" },
+            "coordination_index": { "type": "number" }
+          },
+          "required": ["frequency_hz", "geometry", "coordination_index"]
+        }
+      },
+      "required": ["agent_insights", "george_verdict", "output_signals"]
+    }
   }
 }
