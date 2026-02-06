@@ -22,99 +22,26 @@ Instead of relying on single opaque model responses, the system exposes:
 ---
 
 ## 🧠 System Architecture Flow
-👥 Agents & Roles
-Agent	Responsibility
-Scientist	Technical feasibility & unknown variables
-Philosopher	Strategic framing & tradeoffs
-Psychologist	Organizational & human impact
-Historian	Real-world precedent analysis
-Futurist	Long-term systemic consequences
-George (Auditor)	Detects instability, hallucination & risk
-📊 Verifiability Metrics
 
-Each decision produces:
+```
+flowchart TD
+    U[User Scenario] --> A
 
-Agent confidence scores
+    A[Multi-Agent Reasoning Layer]
 
-Explicit unknowns
+    A --> S[Scientist<br/>Technical Unknowns]
+    A --> P[Philosopher<br/>Strategic Tradeoffs]
+    A --> Psy[Psychologist<br/>Human Risk]
+    A --> H[Historian<br/>Precedents]
+    A --> F[Futurist<br/>Long-Term Impact]
 
-Hallucination likelihood
+    S --> G
+    P --> G
+    Psy --> G
+    H --> G
+    F --> G
 
-Stability score
-
-Audit verdict
-
-Uncertainty is surfaced by design.
-
-🛡️ Anti-Hallucination Architecture
-
-✔ Schema-enforced structured output
-
-✔ Contradictory agent debate allowed
-
-✔ Independent auditor layer
-
-✔ Panic mode for missing data
-
-✔ Conservative fallback strategies
-
-🎯 Example Use Case
-
-Strategic pivot under high uncertainty
-
-A legacy automotive company evaluating investment in solid-state battery technology.
-
-The system exposes:
-
-Technical readiness gaps
-
-Market timing risk
-
-Organizational strain
-
-Long-term competitive impact
-
-All with measurable confidence and stability.
-
-🧩 Built With
-
-Gemini 3 Pro
-
-TypeScript
-
-Structured JSON schemas
-
-Multi-agent orchestration
-
-Uncertainty-aware UX
-
-🌍 Why It Matters
-
-Traditional AI hides uncertainty behind fluent language.
-
-OMNI-CHALAMANDRA makes reasoning inspectable, measurable, and safer for real-world decisions.
-
-📈 Roadmap
-
-Scenario comparison engine
-
-Confidence evolution tracking
-
-Mandala stability visualization
-
-Enterprise risk dashboards
-
-🏆 Hackathon Focus
-
-Demonstrating:
-
-✅ Responsible AI
-
-✅ Multi-agent reasoning
-
-✅ Verifiable outputs
-
-✅ Strategic decision workflows
+    G[George Shadow Auditor] --> R[Final Strategy + Metrics]
 👥 Agents & Roles
 Agent	Responsibility
 Scientist	Technical feasibility & unknown variables
