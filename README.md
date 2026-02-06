@@ -1,93 +1,131 @@
-# OMNI-CHALAMANDRA
-Multi-Agent Verifiable Intelligence System powered by Gemini 3
+# 🐉 OMNI-CHALAMANDRA  
+### Verifiable Multi-Agent Reasoning System for Strategic Decisions Under Uncertainty
 
-OMNI-CHALAMANDRA is an orchestration framework that coordinates specialized AI agents to reason, validate, and synthesize reliable outputs while explicitly surfacing uncertainty.
+OMNI-CHALAMANDRA is a structured multi-agent AI system built on Gemini 3 that transforms high-uncertainty strategic decisions into transparent, verifiable, and actionable outcomes.
 
-## Core Pipeline
+Instead of relying on single opaque model responses, the system exposes expert reasoning, quantified uncertainty, and independent auditing.
 
-User Input → Orchestrator → Specialized Agents → Verification Layer → Final Output + Confidence
+---
 
-## Agent Roles
+## 🚀 Why OMNI-CHALAMANDRA
 
-George (Analytical Agent)
-• Deep problem decomposition
-• Structured reasoning
-• Logic consistency checks
+✔ Makes uncertainty visible  
+✔ Prevents hallucinated confidence  
+✔ Enables structured decision workflows  
+✔ Designed for real-world strategic risk  
 
-Strategist Agent
-• Solution planning
-• Decision path generation
+---
 
-Verifier Agent
-• Cross-checking results
-• Hallucination detection
-• Confidence scoring
+## 🧠 System Architecture
 
-Synthesizer Agent
-• Coherent final responses
+┌───────────────┐
+│ User Input │
+└───────┬───────┘
+↓
+┌───────────────────────┐
+│ Multi-Agent Debate │
+│ │
+│ Scientist → Tech realism
+│ Philosopher → Tradeoffs
+│ Psychologist→ Human risk
+│ Historian → Precedents
+│ Futurist → Long-term impact
+└────────┬──────────────┘
+↓
+┌───────────────────────┐
+│ George Shadow Audit │
+│ │
+│ • Hallucination risk │
+│ • Stability score │
+│ • Verdict │
+└────────┬──────────────┘
+↓
+┌───────────────────────┐
+│ Verifiable Strategy │
+│ + Confidence Metrics │
+└───────────────────────┘
 
-Orchestrator
-• Controls agent flow
-• Enforces verification loops
+---
 
-## Architecture Flow Diagram
+## 👥 Agents & Roles
 
-User
-  ↓
-Orchestrator
-  ↓
-George → Strategist → Verifier → Synthesizer
-  ↓
-Validated Output + Confidence Score
+| Agent | Responsibility |
+|------|---------------|
+| Scientist | Technical feasibility & unknowns |
+| Philosopher | Strategic framing & tradeoffs |
+| Psychologist | Organizational & human impact |
+| Historian | Real-world precedent analysis |
+| Futurist | Long-term systemic risk |
+| George (Auditor) | Detects instability & hallucination |
 
-## Gemini 3 Integration
+---
 
-Each agent operates using role-specific system instructions configured in /ai-studio.
+## 📊 Verifiability Metrics
 
-## Evaluation Metrics
+Each decision generates:
 
-### Quantitative
-• Verification pass rate
-• Reasoning consistency score
-• Hallucination reduction %
-• Confidence calibration accuracy
+• Agent confidence scores  
+• Explicit unknowns  
+• Hallucination likelihood  
+• Stability score  
+• Audit verdict  
 
-### Qualitative
-• Clarity of reasoning
-• Transparency of uncertainty
-• Decision reliability
-• User trust perception
+Uncertainty is surfaced by design.
 
-## Why It Matters
+---
 
-Traditional LLM pipelines treat intelligence as a single black box.
+## 🛡️ Anti-Hallucination Design
 
-OMNI-CHALAMANDRA distributes cognition across agents and makes reliability measurable.
+✔ Schema-enforced structured output  
+✔ Contradictory agent debate allowed  
+✔ External auditor layer  
+✔ Panic mode for missing data  
+✔ Conservative fallback strategies  
 
-## Local Setup
+---
 
-git clone https://github.com/Chalamandra-Magistral-DecoX/OMNI-CHALAMANDRA.git
-cd OMNI-CHALAMANDRA
-npm install
+## 🎯 Example Scenario
 
-Create .env:
+Strategic pivot evaluation under high uncertainty:
 
-GEMINI_API_KEY=your_key_here
+> A legacy automotive company considering a risky investment in solid-state battery technology.
 
-Run:
+The system exposes technical unknowns, market timing risks, organizational strain, and long-term opportunity cost.
 
-npm start
+---
 
-## Hackathon Objective
+## 🧩 Built With
 
-Demonstrate scalable, verifiable, multi-agent intelligence powered by Gemini 3.
+• Gemini 3 Pro  
+• TypeScript  
+• Structured JSON schemas  
+• Multi-agent orchestration  
+• Uncertainty-aware UX  
 
-## Creator
+---
 
-Chalamandra Magistral DecoX
+## 🌍 Impact
 
+Traditional AI systems hide uncertainty behind fluent language.
 
+OMNI-CHALAMANDRA makes reasoning inspectable, measurable, and safer for real-world strategic decisions.
 
+---
 
+## 📈 Future Extensions
 
+• Scenario comparison engine  
+• Confidence evolution over time  
+• Visual decision mandalas  
+• Enterprise risk dashboards  
 
+---
+
+### 🏆 Hackathon Focus
+
+Demonstrating:
+
+✔ Responsible AI  
+✔ Multi-agent reasoning  
+✔ Verifiable outputs  
+✔ Real strategic workflows  
