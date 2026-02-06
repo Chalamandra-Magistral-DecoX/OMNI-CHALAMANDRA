@@ -47,6 +47,7 @@ flowchart TD
 
     MandalaRenderer --> VisualFeedback
     MandalaRenderer --> ExportJSON
+
 🤖 Agents
 Agent	Role
 GeminiAgent	Strategic reasoning & scenario exploration
