@@ -23,7 +23,7 @@ Instead of relying on single opaque model responses, the system exposes:
 
 ## 🧠 System Architecture Flow
 
-```
+```mermaid
 flowchart TD
     U[User Scenario] --> A
 
@@ -42,6 +42,7 @@ flowchart TD
     F --> G
 
     G[George Shadow Auditor] --> R[Final Strategy + Metrics]
+
 👥 Agents & Roles
 Agent	Responsibility
 Scientist	Technical feasibility & unknown variables
