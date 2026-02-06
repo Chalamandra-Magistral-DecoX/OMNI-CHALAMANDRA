@@ -4,7 +4,7 @@
  */
 
 import { renderMandala } from "./mandalaRenderer.js";
-import { analyzeColinearity } from "./colinearityGuide.js";
+import { analyzeColinearity } from "./colinearityGuide.js"; // Sincronizado con el nombre de archivo anterior
 
 export function CanvasController(finalPayload) {
   console.log(">> CANVAS: Initializing render pipeline...");

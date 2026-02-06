@@ -22,35 +22,6 @@ body {
   flex-direction: column;
 }
 
-#system-header {
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.logo {
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-
-.version {
-  font-size: 0.7rem;
-  opacity: 0.5;
-}
-
-#status-indicator {
-  font-size: 0.8rem;
-  color: var(--accent-color);
-}
-
-#app-container {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
 /* --- CANVAS CONTAINER --- */
 #canvas-container {
   position: relative;
@@ -66,17 +37,6 @@ body {
   max-height: 80vh;
   filter: drop-shadow(0 0 20px var(--glow-color));
   transition: transform 0.1s ease-out;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 50%;
-}
-
-#canvas-overlay {
-  position: absolute;
-  pointer-events: none;
-  font-size: 0.7rem;
-  opacity: 0.3;
-  text-transform: uppercase;
-  letter-spacing: 2px;
 }
 
 /* --- GLITCH SYSTEM (GEORGE PANIC) --- */
@@ -104,56 +64,18 @@ body {
 
 /* --- UI OVERLAY --- */
 #ui-overlay {
-  width: 300px;
-  background: var(--panel-bg);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-}
-
-.agent-card {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--panel-bg);
+  border: 1px solid var(--accent-color);
   border-radius: 4px;
-  overflow: hidden;
-}
-
-.agent-card header {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 10px;
-  font-size: 0.7rem;
-  font-weight: bold;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.agent-card .content {
-  padding: 15px;
-  font-size: 0.85rem;
-  line-height: 1.4;
-}
-
-.audit-header {
-  color: var(--accent-color);
-}
-
-#data-footer {
-  padding: 10px 20px;
-  display: flex;
-  gap: 30px;
-  background: rgba(0, 0, 0, 0.5);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 0.7rem;
-}
-
-.data-block {
-  opacity: 0.7;
-}
-
-.data-block span {
-  color: var(--accent-color);
-  font-weight: bold;
+  backdrop-filter: blur(10px);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
 }
 
 .agent-insight {

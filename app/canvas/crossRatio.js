@@ -37,6 +37,19 @@ export function calculateCrossRatio(points) {
   }
 }
 
+/**
+ * Categorizes the ratio for downstream logic (Visual/Audio/AI Persona)
+ * Used by the Invariant Engine to signal the system state.
+ */
+export function categorizeCrossRatio(R) {
+  if (R < 0) return "PARADIGM_INVERSION";
+  if (R < 0.618) return "COLLAPSE_RISK";
+  if (R < 1.0) return "STABLE_COMPRESSION";
+  if (Math.abs(R - 1.618) < 0.1) return "HARMONIC_GOLDEN";
+  if (R < 2.0) return "HARMONIC_EXPANSION";
+  return "DISRUPTIVE_EXPANSION";
+}
+
 /* --------------------------------------------------
    INTERNAL HELPERS
 -------------------------------------------------- */
