@@ -2,7 +2,6 @@
 
 **A verifiable AI system that anchors Gemini 3 Pro's generative reasoning to deterministic geometric invariants.**
 
-
 OMNI-CHALAMANDRA addresses the "hallucination problem" in Large Language Models by grounding abstract reasoning in pure mathematics. It utilizes a *Multi-Agent Debate System* audited by a specialized Shadow Agent ("George") to ensure logical consistency.
 
 ---
@@ -71,5 +70,35 @@ The system validates its reasoning through real-time sensory feedback:
 
 1. *Clone the Repository*
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/OMNI-CHALAMANDRA.git](https://github.com/YOUR_USERNAME/OMNI-CHALAMANDRA.git)
+   git clone https://github.com/YOUR_USERNAME/OMNI-CHALAMANDRA.git
    cd OMNI-CHALAMANDRA
+   ```
+
+2. *Add your Gemini key (local only)*
+   - **Option A (recommended for local prototype):** set a runtime key in the browser console:
+     ```js
+     localStorage.setItem("OMNI_GEMINI_API_KEY", "YOUR_KEY_HERE");
+     ```
+   - **Option B:** add an inline config before `app/main.js`:
+     ```html
+     <script>
+       window.OMNI_CONFIG = { GOOGLE_API_KEY: "YOUR_KEY_HERE" };
+     </script>
+     ```
+
+3. *Run a local server*
+   ```bash
+   cd app
+   python -m http.server 8080
+   ```
+   Then open `http://localhost:8080`.
+
+---
+
+## ✅ Hackathon Readiness
+
+For a complete submission checklist, security notes, and a step-by-step AI Studio prototype guide, see:
+
+- `docs/ai-studio-prototype.md`
+- `docs/security-gemini-api.md`
+- `docs/hackathon_alignment.md`
