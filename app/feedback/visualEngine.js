@@ -9,7 +9,7 @@
  */
 export function updateUITheme(category) {
   const root = document.documentElement;
-  
+
   // Color palettes mapped to mathematical archetypes
   const themes = {
     HARMONIC_GOLDEN: { color: "#00f3ff", glow: "rgba(0, 243, 255, 0.5)" }, // Cyan stable
@@ -21,13 +21,13 @@ export function updateUITheme(category) {
 
   // Fallback to STANDARD if the category is unknown
   const theme = themes[category] || themes.STANDARD;
-  
+
   // Inject CSS Variables for real-time styling
   root.style.setProperty("--accent-color", theme.color);
   root.style.setProperty("--glow-color", theme.glow);
-  
+
   // Add a smooth transition effect to the body
   document.body.style.transition = "background-color 1.5s ease, color 1.5s ease";
-  
-  console.log(>> VISUAL: UI Theme synchronized to ${category});
+
+  console.log(`>> VISUAL: UI Theme synchronized to ${category}`);
 }

@@ -30,10 +30,10 @@ export function playFrequency(frequencyHz, duration = 3000) {
 
     // ADSR Envelope: Prevents audio clipping and creates a smooth atmospheric fade
     gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    
+
     // Attack: Quick swell to peak volume
-    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.2); 
-    
+    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.2);
+
     // Release: Long exponential decay to silence
     gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + duration / 1000);
 
@@ -53,7 +53,7 @@ export function playFrequency(frequencyHz, duration = 3000) {
       }
     }, duration);
 
-    console.log(>> AUDIO: Synthesizing resonance at ${frequencyHz}Hz);
+    console.log(`>> AUDIO: Synthesizing resonance at ${frequencyHz}Hz`);
   } catch (error) {
     console.warn(">> AUDIO ERROR: Synthesis failed. Audio might be blocked by browser.", error);
   }

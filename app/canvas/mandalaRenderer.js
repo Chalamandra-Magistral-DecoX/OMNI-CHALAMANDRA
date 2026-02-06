@@ -26,7 +26,7 @@ export function buildMandalaGeometry({
     const angle = (2 * Math.PI / symmetry) * i + rotation;
 
     layers.push({
-      id: layer_${i}, // Corrected Template Literal
+      id: `layer_${i}`, // Corrected Template Literal
       angle,
       // Tension expands the radius, alignmentScore defines the presence
       radius: baseRadius * (1 + (colinearity?.tension || 0)),
@@ -43,6 +43,62 @@ export function buildMandalaGeometry({
     layers,
     render_hint: resolveRenderHint(geometryType)
   };
+}
+
+/**
+ * Renders the mandala to the provided canvas context.
+ * @param {CanvasRenderingContext2D} ctx - The target canvas context.
+ * @param {Object} finalPayload - The complete system payload.
+ */
+export function renderMandala(ctx, finalPayload) {
+  const { input_analysis, debate } = finalPayload;
+
+  const geometry = buildMandalaGeometry({
+    geometryType: debate?.output_signals?.geometry || "STANDARD",
+    frequencyHz: debate?.output_signals?.frequency_hz || 432,
+    crossRatio: input_analysis?.cross_ratio || 1.0,
+    colinearity: input_analysis?.colinearity || { tension: 0, alignmentScore: 1 }
+  });
+
+  const { width, height } = ctx.canvas;
+  ctx.clearRect(0, 0, width, height);
+
+  ctx.save();
+  ctx.translate(width / 2, height / 2);
+
+  // Set global styles for the mandala
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = "rgba(0, 243, 255, 0.8)";
+  ctx.lineCap = "round";
+
+  geometry.layers.forEach((layer, idx) => {
+    ctx.save();
+    ctx.rotate(layer.angle);
+
+    // Aesthetic variation based on layer index
+    const hue = 180 + (idx * 20);
+    ctx.strokeStyle = `hsla(${hue}, 100%, 50%, ${layer.opacity})`;
+    ctx.lineWidth = layer.weight * 2;
+
+    ctx.beginPath();
+    // We use a scale factor of 200 for the radius
+    ctx.arc(0, 0, layer.radius * 200, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Add some internal "sacred geometry" lines
+    if (idx % 2 === 0) {
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(layer.radius * 200, 0);
+      ctx.globalAlpha = layer.opacity * 0.5;
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  });
+
+  ctx.restore();
+  console.log(">> MANDALA: Rendering complete.");
 }
 
 /* --------------------------------------------------

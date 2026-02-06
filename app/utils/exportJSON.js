@@ -55,7 +55,7 @@ export function exportResultJSON(finalPayload) {
     const link = document.createElement("a");
     link.href = url;
     // Corrected Template Literal
-    link.download = omni_audit_${Date.now()}.json; 
+    link.download = `omni_audit_${Date.now()}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
