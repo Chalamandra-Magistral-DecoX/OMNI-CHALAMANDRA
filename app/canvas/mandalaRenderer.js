@@ -84,3 +84,68 @@ function resolveRenderHint(geometryType) {
     default:                   return "SYMMETRIC_STATIC";
   }
 }
+
+/**
+ * RENDER MANDALA — Main entry point for canvas drawing.
+ * @param {CanvasRenderingContext2D} ctx - The canvas context.
+ * @param {Object} finalPayload - The full audited system payload.
+ */
+export function renderMandala(ctx, finalPayload) {
+  const { debate, input_analysis } = finalPayload;
+  const signals = debate?.output_signals;
+
+  const geometry = buildMandalaGeometry({
+    geometryType: signals?.geometry || "STANDARD",
+    frequencyHz: signals?.frequency_hz || 432,
+    crossRatio: input_analysis?.cross_ratio || 1.0,
+    colinearity: input_analysis?.colinearity
+  });
+
+  const { width, height } = ctx.canvas;
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  // Initial feedback: Glow Effect
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = getComputedStyle(document.documentElement).getPropertyValue('--glow-color').trim() || "rgba(0, 243, 255, 0.5)";
+
+  geometry.layers.forEach((layer, index) => {
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(layer.angle);
+
+    ctx.beginPath();
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || "#00f3ff";
+    ctx.lineWidth = layer.weight;
+    ctx.globalAlpha = layer.opacity;
+
+    // Drawing a complex recursive petal shape
+    const petalSize = layer.radius * 150;
+    ctx.moveTo(0, 0);
+    ctx.bezierCurveTo(
+      petalSize / 2, -petalSize / 2,
+      petalSize, -petalSize / 4,
+      petalSize, 0
+    );
+    ctx.bezierCurveTo(
+      petalSize, petalSize / 4,
+      petalSize / 2, petalSize / 2,
+      0, 0
+    );
+
+    ctx.stroke();
+
+    // Secondary detail: Orbital nodes
+    if (index % 2 === 0) {
+      ctx.beginPath();
+      ctx.arc(petalSize, 0, 3, 0, Math.PI * 2);
+      ctx.fillStyle = ctx.strokeStyle;
+      ctx.fill();
+    }
+
+    ctx.restore();
+  });
+
+  // Reset shadow for subsequent draws
+  ctx.shadowBlur = 0;
+}

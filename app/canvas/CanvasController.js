@@ -34,10 +34,11 @@ export function CanvasController(finalPayload) {
   -------------------------------------------------- */
   const {
     input_analysis,
-    output_signals,
+    debate,
     chain_data
   } = finalPayload;
 
+  const output_signals = debate?.output_signals;
   const crossRatio = input_analysis?.cross_ratio || 1.0;
   const frequencyHz = output_signals?.frequency_hz || 432;
   const geometryType = output_signals?.geometry || "STANDARD";
