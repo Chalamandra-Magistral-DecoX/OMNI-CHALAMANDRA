@@ -4,6 +4,57 @@
  */
 
 /**
+ * Renders the mandala to the canvas context based on the final payload.
+ * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+ * @param {Object} payload - The final payload containing all necessary data.
+ */
+export function renderMandala(ctx, payload) {
+  const { input_analysis, debate } = payload;
+  const geometry = buildMandalaGeometry({
+    geometryType: debate.output_signals.geometry,
+    frequencyHz: debate.output_signals.frequency_hz,
+    crossRatio: input_analysis.cross_ratio,
+    colinearity: input_analysis.colinearity
+  });
+
+  // Clear canvas
+  const canvas = ctx.canvas;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Center mandala
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+
+  ctx.save();
+  ctx.translate(centerX, centerY);
+
+  geometry.layers.forEach((layer, index) => {
+    ctx.beginPath();
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || "#00f3ff";
+    ctx.globalAlpha = layer.opacity;
+    ctx.lineWidth = layer.weight;
+
+    const sides = 6; // Base symmetry for individual elements
+    const radius = layer.radius;
+    const angleStep = (Math.PI * 2) / sides;
+
+    ctx.rotate(layer.angle);
+
+    for (let i = 0; i < sides; i++) {
+      const x = radius * Math.cos(i * angleStep);
+      const y = radius * Math.sin(i * angleStep);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+
+    ctx.closePath();
+    ctx.stroke();
+  });
+
+  ctx.restore();
+}
+
+/**
  * Builds a geometric object based on AI-debated signals and math invariants.
  * @param {Object} signals - The output_signals and input_analysis from the payload.
  */
@@ -26,7 +77,7 @@ export function buildMandalaGeometry({
     const angle = (2 * Math.PI / symmetry) * i + rotation;
 
     layers.push({
-      id: layer_${i}, // Corrected Template Literal
+      id: `layer_${i}`,
       angle,
       // Tension expands the radius, alignmentScore defines the presence
       radius: baseRadius * (1 + (colinearity?.tension || 0)),
