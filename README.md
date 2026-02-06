@@ -1,32 +1,72 @@
 # OMNI-CHALAMANDRA | 🦎 Neuro-Symbolic Reasoning Engine
 
-OMNI-CHALAMANDRA is a verifiable reasoning system that anchors *Gemini 3 Pro's* generative capabilities to deterministic geometric invariants.
+**A verifiable AI system that anchors Gemini 3 Pro's generative reasoning to deterministic geometric invariants.**
 
-## 🧠 The "Cognitive Fortress" Architecture
 
-Unlike standard chatbots, this system operates through a structured *Multi-Agent Debate* where every insight is audited against mathematical truth.
+OMNI-CHALAMANDRA addresses the "hallucination problem" in Large Language Models by grounding abstract reasoning in pure mathematics. It utilizes a *Multi-Agent Debate System* audited by a specialized Shadow Agent ("George") to ensure logical consistency.
 
-### 1. The Reasoning Layer (5 Agents)
-The system orchestrates a debate between five specialized perspectives:
-* *Scientist (NEURO)*: Analyzes mathematical stability.
-* *Philosopher (NARRATIVE)*: Interprets ontological symmetry.
-* *Psychologist (HEALING)*: Maps geometric tension to perception.
-* *Historian (TECHNO)*: Relates patterns to ancient cycles.
-* *Futurist (PROTOCOL)*: Projects evolution into digital spaces.
+---
 
-### 2. The Anti-Hallucination Protocol (GEORGE)
-*George* is the Shadow Auditor. He does not participate in the creative debate; his sole function is *validation*.
-* *Mathematical Anchor*: George compares the agents' output with the pre-computed *Cross-Ratio* and *Colinearity* scores.
-* *Hallucination Detection*: If an agent "invents" a stability score or ignores the geometric input, George flags the discrepancy.
-* *Panic/Glitch Mode*: When George detects high logical drift, he triggers a system-wide "Glitch Mode," signaling instability to the user.
+## 🧠 The Architecture: "The Cognitive Fortress"
 
-## 🛠 Technical Flow
-1. *Input*: User clicks 4 points.
-2. *Math Engine*: Computes $R = (AC/BC) / (AD/BD)$ (Cross-Ratio).
-3. *Orchestrator*: Passes $R$ and Colinearity to Gemini 3 Pro.
-4. *Debate*: The 5 agents generate insights based on $R$.
-5. *Audit*: George verifies the debate and issues a final verdict.
-6. *Output*: UI renders the Mandala, sounds the frequency, and exports the Audit JSON.
+Unlike standard chatbots, this system operates through a strict pipeline where *Math is the Seed* and *AI is the Interpreter*.
 
-## 📁 AI Studio Configuration
-The /ai-studio folder contains the *Schema-Enforcement* rules that prevent the model from deviating from the required JSON structure, ensuring 100% interoperability with the frontend.
+### System Flow Diagram
+```mermaid
+graph TD
+    A[User Input (4 Points)] -->|Calculate| B(Math Engine: Cross-Ratio R)
+    B -->|Seed Data| C{Gemini 3 Pro Orchestrator}
+    C -->|Debate| D[Tier 1: The 5 Agents Panel]
+    D -->|Transcript| E[Tier 2: George Shadow Audit]
+    E -->|Verdict| F{Is Logic Valid?}
+    F -->|Yes: STABILIZED| G[Render Mandala & Harmony]
+    F -->|No: PANIC MODE| H[Trigger Glitch & Dissonance]
+
+👥 The Agent Protocol
+The system is governed by a Dual-Layer Cognitive Architecture.
+🛡️ Tier 2: The Governance Layer (Verification)
+| Agent Name | Role | Function | Authority |
+|---|---|---|---|
+| GEORGE | Shadow Auditor | Validates agent insights against the mathematical anchor. Detects hallucinations and logic drift. | VETO POWER (Can trigger System Panic) |
+🗣️ Tier 1: The Reasoning Panel (Exploration)
+| Agent Name | Domain | Cognitive Focus |
+|---|---|---|
+| SCIENTIST | Neuro-Physics | Analyzes structural stability, bio-resonance, and entropy. |
+| PHILOSOPHER | Ontology | Interprets symmetry through formal logic and ethical frameworks. |
+| PSYCHOLOGIST | Perception | Maps geometric tension to Jungian archetypes and cognitive bias. |
+| HISTORIAN | Cycles | Connects the pattern to ancient architecture and techno-cultural cycles. |
+| FUTURIST | Protocol | Projects the geometry's impact on future digital systems. |
+🎨 Multimodal Output & Feedback
+The system validates its reasoning through real-time sensory feedback:
+ * 💠 Procedural Mandala (Canvas): A dynamic geometric rendering. If George approves the logic, the Mandala is symmetrical and cyan/teal. If George triggers panic, the geometry fractures and turns red.
+ * 🔊 Resonant Audio: The system synthesizes a specific frequency (Hz) derived from the Cross-Ratio.
+   * Stable Logic: Pure Sine Wave (Harmony).
+   * Unstable Logic: Sawtooth Wave (Dissonance/Glitch).
+ * 📝 JSON Audit: A transparent log containing the "George Verdict," confidence scores, and justification for the decision.
+🛠️ Technical Stack
+ * Core Model: Gemini 3 Pro (via Google AI Studio).
+ * Frontend: Vanilla JavaScript (ES6 Modules).
+ * Graphics: HTML5 Canvas API (Procedural Geometry).
+ * Sound: Web Audio API (Oscillator Synthesis).
+ * Orchestration: Custom Neuro-Symbolic Pipeline.
+🚀 Installation & Setup
+ * Clone the Repository
+   git clone [https://github.com/YOUR_USERNAME/OMNI-CHALAMANDRA.git](https://github.com/YOUR_USERNAME/OMNI-CHALAMANDRA.git)
+cd OMNI-CHALAMANDRA
+
+ * Configure API Key
+   Create a file named secrets.js in app/config/:
+   // app/config/secrets.js
+export const GEMINI_API_KEY = "YOUR_GOOGLE_AI_STUDIO_KEY";
+
+ * Run Locally
+   Since this project uses ES6 Modules, you must serve it via a local server (e.g., Live Server in VS Code or Python).
+   # Python Example
+python3 -m http.server 8000
+
+ * Launch
+   Open http://localhost:8000 in your browser. Click 4 points on the canvas to initiate the reasoning engine.
+
+📄 License
+Distributed under the MIT License. See LICENSE for more information.
+Built for the Gemini 3 Developer Competition. Powered by the Cognitive Fortress Protocol.
