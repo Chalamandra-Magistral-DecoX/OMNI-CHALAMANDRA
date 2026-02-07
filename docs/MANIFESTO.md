@@ -1,5 +1,6 @@
 # 🧬 OMNI-CHALAMANDRA: System Manifesto
-## Transparent and Auditable AI Reasoning Framework
+**Governed Multi-Agent Cognitive System**
+**Honesty Over Intelligence**
 
 OMNI-CHALAMANDRA transforms complex symbolic or geometric data into verifiable cognitive insights through a governed multi-agent reasoning pipeline combined with deterministic mathematical validation.
 
@@ -114,3 +115,12 @@ Therefore:
 
 ## 🧪 System Objective
 OMNI-CHALAMANDRA explores the transition from probabilistic generative AI toward verifiable cognitive infrastructure capable of producing transparent and accountable intelligence.
+
+---
+
+## 👩‍💻 Author Statement
+OMNI-CHALAMANDRA explores the transition from probabilistic AI toward governed cognitive infrastructures capable of producing verifiable, stable, and interpretable intelligence outputs.
+
+**Lead Developer:** Dana Michelle Vargas
+**Brasdefer — Chalamandra Magistral**
+**Project Initiative:** DecoX
