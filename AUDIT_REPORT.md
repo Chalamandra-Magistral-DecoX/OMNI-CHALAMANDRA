@@ -1,4 +1,7 @@
 # OMNI-CHALAMANDRA REPOSITORY AUDIT REPORT
+**Lead Developer:** Dana Michelle Vargas
+**Brasdefer — Chalamandra Magistral**
+**Project Initiative:** DecoX
 
 ## 1. Critical Issues (Blockers)
 - [ ] **Broken Imports (Case Sensitivity):**

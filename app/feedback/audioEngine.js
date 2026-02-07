@@ -1,5 +1,9 @@
 /**
- * AUDIO ENGINE — OMNI-CHALAMANDRA
+ * OMNI-CHALAMANDRA — AUDIO ENGINE
+ * Lead Developer: Dana Michelle Vargas
+ * Brasdefer — Chalamandra Magistral
+ * Project Initiative: DecoX
+ *
  * Responsibility: Translate frequency signals into resonant acoustic feedback.
  */
 

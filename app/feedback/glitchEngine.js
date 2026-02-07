@@ -1,5 +1,9 @@
 /**
- * GLITCH ENGINE — OMNI-CHALAMANDRA
+ * OMNI-CHALAMANDRA — GLITCH ENGINE
+ * Lead Developer: Dana Michelle Vargas
+ * Brasdefer — Chalamandra Magistral
+ * Project Initiative: DecoX
+ *
  * Responsibility: Visual manifestation of GEORGE's audit intensity.
  */
 

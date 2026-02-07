@@ -1,5 +1,9 @@
 /**
- * CANVAS CONTROLLER — OMNI-CHALAMANDRA
+ * OMNI-CHALAMANDRA — CANVAS CONTROLLER
+ * Lead Developer: Dana Michelle Vargas
+ * Brasdefer — Chalamandra Magistral
+ * Project Initiative: DecoX
+ *
  * Responsibility: Receive final payload and execute the visual render pipeline.
  */
 

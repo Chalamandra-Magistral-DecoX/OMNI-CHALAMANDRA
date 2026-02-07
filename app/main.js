@@ -1,3 +1,10 @@
+/**
+ * OMNI-CHALAMANDRA — Main Entry Point
+ * Lead Developer: Dana Michelle Vargas
+ * Brasdefer — Chalamandra Magistral
+ * Project Initiative: DecoX
+ */
+
 import { orchestrateOMNI } from "./orchestrator/flow.js";
 import { CanvasController } from "./canvas/CanvasController.js";
 import { playFrequency } from "./feedback/audioEngine.js";

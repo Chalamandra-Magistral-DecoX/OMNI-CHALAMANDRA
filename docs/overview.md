@@ -1,4 +1,7 @@
 # OMNI-CHALAMANDRA: Verified Perceptual Intelligence
+**Lead Developer:** Dana Michelle Vargas
+**Brasdefer — Chalamandra Magistral**
+**Project Initiative:** DecoX
 
 *OMNI-CHALAMANDRA* is a deterministic multi-agent reasoning system that transforms raw geometric inputs into actionable, audited insights. By anchoring Gemini 3’s advanced reasoning capabilities to projective invariants, we eliminate hallucinations and provide a verifiable bridge between mathematical truth and AI synthesis.
 

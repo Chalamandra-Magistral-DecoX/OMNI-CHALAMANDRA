@@ -1,5 +1,9 @@
 /**
- * VISUAL ENGINE — OMNI-CHALAMANDRA
+ * OMNI-CHALAMANDRA — VISUAL ENGINE
+ * Lead Developer: Dana Michelle Vargas
+ * Brasdefer — Chalamandra Magistral
+ * Project Initiative: DecoX
+ *
  * Responsibility: Ambient UI updates and peripheral visual feedback.
  */
 
