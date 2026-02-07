@@ -71,6 +71,13 @@ Math exists only as:
 * Interpretation
 * Validation
 
+Invariant Authority Rule:
+* Mathematical invariants are the single deterministic truth source
+* Agents must remain interpretative only
+* Agents cannot recompute or override math
+* George must prioritize invariant math during conflicts
+* George may raise hallucination scoring and trigger panic mode
+
 ==================================================
 5. OUTPUT CONSTRAINTS
 ==================================================
@@ -88,6 +95,10 @@ Rules:
 * NO commentary after JSON.
 * Strings must be concise and concrete.
 * Numbers must align with inputs.
+* JSON must be the final output block.
+* No text allowed after JSON.
+* JSON must remain schema compliant.
+* Missing schema fields must trigger panic mode.
 
 ==================================================
 6. ANTI-HALLUCINATION PROTOCOL

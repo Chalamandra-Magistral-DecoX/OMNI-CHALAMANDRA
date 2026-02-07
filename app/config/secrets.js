@@ -1,6 +1,5 @@
 /**
  * OMNI-CHALAMANDRA — ENVIRONMENT SECRETS
- * Replace with your actual Gemini API Key for production.
- * Do not commit real keys to version control.
+ * API keys are loaded from the environment to ensure security.
  */
-export const GOOGLE_API_KEY = "YOUR_API_KEY_HERE";
+export const GOOGLE_API_KEY = (typeof process !== 'undefined' && process.env.GOOGLE_API_KEY) || "";

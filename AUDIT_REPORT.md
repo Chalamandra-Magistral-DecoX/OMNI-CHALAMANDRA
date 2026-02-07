@@ -4,35 +4,35 @@
 **Project Initiative:** DecoX
 
 ## 1. Critical Issues (Blockers)
-- [ ] **Broken Imports (Case Sensitivity):**
+- [x] **Broken Imports (Case Sensitivity):**
   - `app/orchestrator/flow.js` attempts to import `../agents/georgeAgent.js` (Actual file: `GeorgeAgent.js`).
   - `app/main.js` attempts to import `./canvas/canvasController.js` (Actual file: `CanvasController.js`).
   - `app/main.js` attempts to import `./utils/exportJSON.js` (Actual file: `export.JSON.js`).
-- [ ] **Missing Files:**
+- [x] **Missing Files:**
   - `app/config/secrets.js` is imported by `geminiAgent.js` but does not exist in the repository.
-- [ ] **Incorrect Filenames in Imports:**
+- [x] **Incorrect Filenames in Imports:**
   - `app/orchestrator/flow.js` imports `../canvas/colinearity.js` (Actual file: `colinearityGuide.js`).
   - `app/agents/geminiAgent.js` imports `../config/prompt.js` (Actual file: `configPrompt.js`).
   - `app/canvas/CanvasController.js` imports `./colinearity.js` (Actual file: `colinearityGuide.js`).
-- [ ] **Broken Exports:**
+- [x] **Broken Exports:**
   - `app/canvas/mandalaRenderer.js` is imported by `CanvasController.js` for `renderMandala`, but the function is not exported (it only has `buildMandalaGeometry`).
-- [ ] **Syntax Errors (Template Literals):**
+- [x] **Syntax Errors (Template Literals):**
   - Multiple files (`main.js`, `geminiAgent.js`, `export.JSON.js`) contain template-like expressions (e.g., `${var}`) without backticks, causing immediate runtime syntax errors.
-- [ ] **Invalid Script Source:**
+- [x] **Invalid Script Source:**
   - `app/index.html` references `app/main.js`, but since the HTML file is served from the `app/` directory, the relative path is incorrect (should be `main.js`).
 
 ## 2. Structural Issues
-- [ ] **CSS Inconsistency:** `app/styles.css` contains selectors for IDs and classes (e.g., `#canvas-container`, `#ui-overlay`) that are not present in `app/index.html`.
-- [ ] **Payload Schema Inconsistency:** `app/orchestrator/flow.js` nests `output_signals` inside `debate`, but `app/canvas/CanvasController.js` and `app/utils/export.JSON.js` expect it at the top level or have conflicting destructuring logic.
+- [x] **CSS Inconsistency:** `app/styles.css` contains selectors for IDs and classes (e.g., `#canvas-container`, `#ui-overlay`) that are not present in `app/index.html`.
+- [x] **Payload Schema Inconsistency:** `app/orchestrator/flow.js` nests `output_signals` inside `debate`, but `app/canvas/CanvasController.js` and `app/utils/export.JSON.js` expect it at the top level or have conflicting destructuring logic.
 - [ ] **Unlinked Configuration:** The `ai-studio/` directory contains important JSON schemas and system instructions that are not integrated or referenced by the core application in `app/`.
 
 ## 3. Redundancy Findings
-- [ ] **Dead Code:** `app/agents/validatorAgent.js` is defined but never used or imported.
-- [ ] **Redundant Logic:** `CanvasController.js` re-imports and re-executes `analyzeColinearity`, which is already handled by the orchestrator.
+- [x] **Dead Code:** `app/agents/validatorAgent.js` is defined but never used or imported.
+- [x] **Redundant Logic:** `CanvasController.js` re-imports and re-executes `analyzeColinearity`, which is already handled by the orchestrator.
 
 ## 4. Naming Inconsistencies
 - [ ] **Inconsistent File Naming:** Mixture of camelCase (`geminiAgent.js`), PascalCase (`GeorgeAgent.js`, `CanvasController.js`), and dot-notation (`export.JSON.js`).
-- [ ] **Ambiguous Names:** Discrepancy between file names (`colinearityGuide.js`) and how they are referred to in the code (`colinearity.js`).
+- [x] **Ambiguous Names:** Discrepancy between file names (`colinearityGuide.js`) and how they are referred to in the code (`colinearity.js`).
 
 ## 5. Architecture Summary & Suggestions
 
