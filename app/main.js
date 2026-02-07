@@ -1,4 +1,4 @@
-import { orchestrateOMNI } from "./orchestrator/OrchestratorFlow.js";
+import { orchestrateOMNI } from "./orchestrator/flow.js";
 import { CanvasController } from "./canvas/CanvasController.js";
 import { playFrequency } from "./feedback/audioEngine.js";
 import { triggerGlitch } from "./feedback/glitchEngine.js";
@@ -65,6 +65,9 @@ function updateAgentUI(payload) {
   // Update Agent Cards
   document.querySelector("#card-scientist .content p").innerText = payload.debate.agent_insights.scientist;
   document.querySelector("#card-philosopher .content p").innerText = payload.debate.agent_insights.philosopher;
+  document.querySelector("#card-psychologist .content p").innerText = payload.debate.agent_insights.psychologist;
+  document.querySelector("#card-historian .content p").innerText = payload.debate.agent_insights.historian;
+  document.querySelector("#card-futurist .content p").innerText = payload.debate.agent_insights.futurist;
 
   // Update George Audit Info
   const georgeP = document.getElementById("george-verdict");
