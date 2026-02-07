@@ -14,28 +14,40 @@
     </header>
 
     <main id="app-container">
-        <div id="canvas-wrapper">
+        <div id="canvas-container">
             <canvas id="main-canvas" width="800" height="600"></canvas>
             <div id="canvas-overlay">Dibuja 4 puntos para iniciar la sincronización</div>
         </div>
 
-        <aside id="agent-panel">
-            <div class="agent-card" id="card-scientist">
-                <header>SCIENTIST.EXE</header>
+        <footer id="ui-overlay">
+            <div class="agent-insight" id="card-scientist">
+                <span class="agent-label">Scientist</span>
                 <div class="content"><p>Esperando señal matemática...</p></div>
             </div>
-            <div class="agent-card" id="card-philosopher">
-                <header>PHILOSOPHER.EXE</header>
+            <div class="agent-insight" id="card-philosopher">
+                <span class="agent-label">Philosopher</span>
                 <div class="content"><p>Esperando significado...</p></div>
             </div>
-            <div class="agent-card" id="card-george">
-                <header class="audit-header">GEORGE (SHADOW AUDIT)</header>
+            <div class="agent-insight" id="card-psychologist">
+                <span class="agent-label">Psychologist</span>
+                <div class="content"><p>Analizando arquetipos...</p></div>
+            </div>
+            <div class="agent-insight" id="card-historian">
+                <span class="agent-label">Historian</span>
+                <div class="content"><p>Buscando precedentes...</p></div>
+            </div>
+            <div class="agent-insight" id="card-futurist">
+                <span class="agent-label">Futurist</span>
+                <div class="content"><p>Proyectando protocolos...</p></div>
+            </div>
+            <div class="agent-insight" id="card-george">
+                <span class="agent-label audit-header">George (Audit)</span>
                 <div class="content audit-content">
                     <div id="george-status">SCANNING...</div>
                     <p id="george-verdict">Integridad del sistema: 100%</p>
                 </div>
             </div>
-        </aside>
+        </footer>
     </main>
 
     <footer id="data-footer">
