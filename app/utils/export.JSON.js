@@ -23,13 +23,21 @@ export function exportResultJSON(finalPayload) {
     timestamp: new Date().toISOString(),
 
     geometry_input: {
+      points: input_analysis?.points || [],
       cross_ratio: input_analysis?.cross_ratio || finalPayload.crossRatio,
       geometry_category: debate?.output_signals?.geometry || finalPayload.category,
+      colinearity: input_analysis?.colinearity || {}
+    },
+
+    mandala_seed: {
+      points: input_analysis?.points || [],
+      invariant_anchor: input_analysis?.cross_ratio || 1.0
     },
 
     cognitive_signals: {
       frequency_hz: debate?.output_signals?.frequency_hz,
-      coordination_index: debate?.output_signals?.coordination_index
+      coordination_index: debate?.output_signals?.coordination_index,
+      harmonic_resonance: debate?.output_signals?.frequency_hz ? `${debate.output_signals.frequency_hz}Hz` : "N/A"
     },
 
     agent_debate: debate?.agent_insights || {},

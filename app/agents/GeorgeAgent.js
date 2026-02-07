@@ -1,6 +1,10 @@
 /**
  * OMNI-CHALAMANDRA — GEORGE (SHADOW AUDITOR)
- * Validates agent debate against mathematical invariants
+ * Lead Developer: Dana Michelle Vargas
+ * Brasdefer — Chalamandra Magistral
+ * Project Initiative: DecoX
+ *
+ * Responsibility: Validates agent debate against mathematical invariants
  */
 export async function auditWithGeorge(debate, input) {
   console.log(">> GEORGE: Commencing shadow audit...");

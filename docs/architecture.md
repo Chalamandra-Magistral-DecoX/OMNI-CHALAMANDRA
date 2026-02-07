@@ -1,4 +1,7 @@
 # Technical Architecture
+**Lead Developer:** Dana Michelle Vargas
+**Brasdefer — Chalamandra Magistral**
+**Project Initiative:** DecoX
 
 The OMNI-CHALAMANDRA pipeline ensures that AI reasoning is constrained by deterministic facts before reaching the user.
 

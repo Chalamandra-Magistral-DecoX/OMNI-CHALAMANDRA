@@ -1,3 +1,10 @@
+/**
+ * OMNI-CHALAMANDRA — Orchestrator Flow
+ * Lead Developer: Dana Michelle Vargas
+ * Brasdefer — Chalamandra Magistral
+ * Project Initiative: DecoX
+ */
+
 import { runGeminiDebate } from "../agents/geminiAgent.js";
 import { auditWithGeorge } from "../agents/GeorgeAgent.js";
 import { calculateCrossRatio, categorizeCrossRatio } from "../canvas/crossRatio.js";

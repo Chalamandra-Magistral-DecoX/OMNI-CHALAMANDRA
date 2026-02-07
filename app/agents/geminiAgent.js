@@ -1,6 +1,10 @@
 /**
  * OMNI-CHALAMANDRA — GEMINI ADAPTER
- * Manages the multi-agent debate using Gemini 3 Pro
+ * Lead Developer: Dana Michelle Vargas
+ * Brasdefer — Chalamandra Magistral
+ * Project Initiative: DecoX
+ *
+ * Responsibility: Manages the multi-agent debate using Gemini 3 Pro
  */
 import { GOOGLE_API_KEY } from "../config/secrets.js";
 import { SYSTEM_PROMPT } from "../config/configPrompt.js";
