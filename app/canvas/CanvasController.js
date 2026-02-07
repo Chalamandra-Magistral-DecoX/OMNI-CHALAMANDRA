@@ -8,7 +8,6 @@
  */
 
 import { renderMandala } from "./mandalaRenderer.js";
-import { analyzeColinearity } from "./colinearityGuide.js"; // Sincronizado con el nombre de archivo anterior
 
 export function CanvasController(finalPayload) {
   console.log(">> CANVAS: Initializing render pipeline...");
@@ -50,8 +49,8 @@ export function CanvasController(finalPayload) {
   /* --------------------------------------------------
      3. GEOMETRIC PRE-PROCESSING
   -------------------------------------------------- */
-  // Extraemos los puntos del análisis de entrada para validar la tensión
-  const colinearityData = analyzeColinearity(input_analysis?.points || []);
+  // We use the colinearity data already processed by the orchestrator
+  const colinearityData = input_analysis?.colinearity || {};
 
   /* --------------------------------------------------
      4. EXECUTE RENDERING
