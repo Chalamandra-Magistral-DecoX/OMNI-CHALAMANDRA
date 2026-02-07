@@ -13,12 +13,17 @@ export async function orchestrateOMNI(points) {
 
   const inputPayload = {
     crossRatio,
-    category,
-    colinearity,
     mandalaSeed: { points: [...points] },
-    chain_data: {
-      current_hash: "0x" + Math.random().toString(16).slice(2), 
-      timestamp: Date.now() 
+    computedValues: {
+      frequency_hz: Math.round(400 + (Math.abs(crossRatio) * 20)),
+      coordination_index: colinearity.alignmentScore,
+      stability_score: Math.round(colinearity.alignmentScore * 100),
+      geometry_category: category
+    },
+    hashChain: {
+      current: "0x" + Math.random().toString(16).slice(2),
+      previous: "0xGENESIS",
+      iteration: 1
     }
   };
 
@@ -39,6 +44,9 @@ export async function orchestrateOMNI(points) {
     },
     debate: debate, // Contains agent_insights and output_signals
     george_verdict: auditResults.george_verdict,
-    chain_data: inputPayload.chain_data
+    chain_data: {
+      current_hash: inputPayload.hashChain.current,
+      iteration: inputPayload.hashChain.iteration
+    }
   };
 }

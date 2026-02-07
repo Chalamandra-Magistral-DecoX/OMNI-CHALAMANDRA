@@ -11,8 +11,14 @@ import { SYSTEM_PROMPT } from "../config/configPrompt.js";
  * @returns {Promise<Object>} The structured 5-agent debate and George's audit.
  */
 export async function runGeminiDebate(input) {
-  // Using Gemini 3 Pro to handle complex multi-agent logic and shadow auditing
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro:generateContent?key=${GOOGLE_API_KEY}`;
+  // MOCK MODE: Check if API Key is valid
+  if (!GOOGLE_API_KEY || GOOGLE_API_KEY === "YOUR_API_KEY_HERE") {
+    console.warn(">> GEMINI: API Key missing. Activating Mock Reasoning Engine.");
+    return generateMockDebate(input);
+  }
+
+  // Using Gemini 1.5 Pro (Standard stable version) to handle complex multi-agent logic
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
   const promptText = SYSTEM_PROMPT(
     input.crossRatio,
@@ -67,4 +73,44 @@ export async function runGeminiDebate(input) {
     console.error(">> GEMINI 3 PRO CRITICAL ERROR:", error);
     throw error;
   }
+}
+
+/**
+ * GENERATE MOCK DEBATE — Fallback for when no API Key is provided.
+ */
+function generateMockDebate(input) {
+  const R = input.crossRatio;
+  const vals = input.computedValues;
+
+  return {
+    project: "OMNI-CHALAMANDRA",
+    version: "3.5",
+    timestamp: Date.now(),
+    input_analysis: {
+      cross_ratio: R,
+      category: vals.geometry_category
+    },
+    output_signals: {
+      frequency_hz: vals.frequency_hz,
+      geometry: vals.geometry_category,
+      coordination_index: vals.coordination_index
+    },
+    agent_insights: {
+      scientist: `The invariant R=${R} suggests a highly consistent topological manifold.`,
+      philosopher: `This alignment reflects the inherent duality of projective space.`,
+      psychologist: `The visual harmony of the ${vals.geometry_category} state promotes cognitive ease.`,
+      historian: `Structural resonance of this type mirrors early 20th century cybernetic theory.`,
+      futurist: `Protocol integrity is maintained at a ${vals.coordination_index} coordination level.`
+    },
+    george_verdict: {
+      status: "STABLE",
+      panic_triggered: false,
+      glitch_intensity: 0.0,
+      final_verdict: "MOCK AUDIT: Internal consistency within nominal range."
+    },
+    chain_data: {
+      current_hash: input.hashChain?.current || "0xMOCK",
+      iteration: input.hashChain?.iteration || 1
+    }
+  };
 }
