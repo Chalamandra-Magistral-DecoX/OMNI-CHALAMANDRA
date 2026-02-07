@@ -1,0 +1,4 @@
+-Fork repository
+-Create feature branch 
+-Submit Pull Request
+-Follow code style
