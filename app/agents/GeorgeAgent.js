@@ -6,33 +6,72 @@
  *
  * Responsibility: Validates agent debate against mathematical invariants
  */
+/**
+ * OMNI-CHALAMANDRA — GEORGE (SHADOW AUDITOR)
+ * Responsibility: Validates agent debate against mathematical invariants
+ * and enforces the Shadow Governance policy.
+ */
 export async function auditWithGeorge(debate, input) {
   console.log(">> GEORGE: Commencing shadow audit...");
 
   const R = input.crossRatio;
-  const debateText = Object.values(debate).join(" ");
+  const signals = input.computedValues;
+  const agentInsights = debate.agent_insights || {};
+  const debateText = Object.values(agentInsights).join(" ").toLowerCase();
 
-  // Logic: Calculate a "Drift Score" based on consistency
-  // In a full version, this could be another Gemini call.
-  // For the MVP, we use deterministic validation:
+  // George's internal verdict from the Target Model (Gemini)
+  const internalVerdict = debate.george_verdict || {};
+
   let panicTriggered = false;
   let driftScore = 0;
+  let issues = [];
 
-  // Example deterministic rule: If R is extreme but agents are "too optimistic"
-  if ((R < 0.618 || R > 2.0) && debateText.includes("perfectly stable")) {
-    driftScore = 0.85;
+  // RULE 1: Mathematical Invariant Anchor (Shadow Model)
+  // If the math is chaotic but agents are over-optimistic
+  const isChaotic = R < 0 || R > 2.2;
+  const optimisticTerms = ["perfectly stable", "total harmony", "no risk", "complete safety"];
+  const isTooOptimistic = optimisticTerms.some(term => debateText.includes(term));
+
+  if (isChaotic && isTooOptimistic) {
+    driftScore += 0.4;
+    issues.push("Agent optimism exceeds mathematical stability limits.");
+  }
+
+  // RULE 2: Coordination Integrity (Reasoning Model)
+  // If the coordination index is low but agents don't signal caution
+  if (signals.coordination_index < 0.4 && !debateText.includes("caution") && !debateText.includes("risk")) {
+    driftScore += 0.3;
+    issues.push("Low coordination index not reflected in agent narrative.");
+  }
+
+  // RULE 3: External vs Internal Alignment
+  // If the Target Model's internal George missed a high hallucination score
+  if (internalVerdict.hallucination_score > 0.7) {
+    driftScore += 0.5;
+    issues.push("High hallucination score detected in internal reasoning.");
+  }
+
+  // Final Verdict Logic
+  if (driftScore >= 0.7) {
     panicTriggered = true;
   }
+
+  const finalVerdict = panicTriggered
+    ? `GEORGE: CRITICAL DRIFT [Score: ${driftScore.toFixed(2)}]. Issues: ${issues.join(" ")} SYSTEM PANIC.`
+    : issues.length > 0
+    ? `GEORGE: STABLE WITH WARNINGS. Issues: ${issues.join(" ")}`
+    : "GEORGE: Coherence verified. Mathematical anchor holding. System stable.";
 
   return {
     debate_transcript: debate,
     george_verdict: {
-      status: panicTriggered ? "PANIC" : "STABLE",
+      status: panicTriggered ? "CRITICAL" : issues.length > 0 ? "WARNING" : "STABILIZED",
       panic_triggered: panicTriggered,
       drift_score: driftScore,
-      glitch_intensity: panicTriggered ? 0.8 : 0.0,
-      final_verdict: panicTriggered ? "GEORGE: Mathematical drift detected in agent narrative. SYSTEM PANIC." : "GEORGE: Coherence verified. System stable."
+      glitch_intensity: Math.min(driftScore, 1.0),
+      final_verdict: finalVerdict,
+      hallucination_score: internalVerdict.hallucination_score || driftScore
     },
-    visual_signals: input.computedValues
+    visual_signals: signals
   };
 }

@@ -55,13 +55,13 @@ function normalizeFrequency(freq) {
 }
 
 function resolveSymmetry(geometryType) {
-  // Balanced with previous invariant mapping
+  // Balanced with invariant mapping
   switch (geometryType) {
     case "HARMONIC_GOLDEN":     return 8; 
-    case "HARMONIC_EXPANSION":  return 12;
-    case "STABLE_COMPRESSION":  return 6;
+    case "DEGENERATE_LINEAR":   return 2;
     case "PARADIGM_INVERSION":  return 4;
-    case "DISRUPTIVE_EXPANSION": return 7;
+    case "DISRUPTIVE_EXPANSION": return 12;
+    case "STANDARD":            return 6;
     default:                    return 6;
   }
 }

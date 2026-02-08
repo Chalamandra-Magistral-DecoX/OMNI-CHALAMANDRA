@@ -18,6 +18,11 @@ const statusIndicator = document.getElementById("status-indicator");
 
 canvas.addEventListener("click", async (e) => {
   if (points.length < 4) {
+    // Hide overlay on first click
+    if (points.length === 0) {
+      document.getElementById("canvas-overlay").style.display = "none";
+    }
+
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -77,6 +82,7 @@ function updateAgentUI(payload) {
   document.querySelector("#card-futurist .content p").innerText = payload.debate.agent_insights.futurist;
 
   // Update George Audit Info
+  document.getElementById("george-status").innerText = `VERDICT: ${payload.george_verdict.status}`;
   const georgeP = document.getElementById("george-verdict");
   georgeP.innerText = payload.george_verdict.final_verdict;
   georgeP.style.color = payload.george_verdict.panic_triggered ? "#ff4400" : "#00ffaa";

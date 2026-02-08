@@ -44,8 +44,11 @@ export function exportResultJSON(finalPayload) {
 
     shadow_audit: {
       auditor: "GEORGE",
+      status: george_verdict?.status || "UNKNOWN",
       panic_triggered: george_verdict?.panic_triggered || false,
+      drift_score: george_verdict?.drift_score || 0,
       glitch_intensity: george_verdict?.glitch_intensity || 0,
+      hallucination_score: george_verdict?.hallucination_score || 0,
       final_verdict: george_verdict?.final_verdict || "No audit performed"
     },
 
