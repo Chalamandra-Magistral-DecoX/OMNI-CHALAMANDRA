@@ -7,8 +7,9 @@
 
 import { runGeminiDebate } from "../agents/geminiAgent.js";
 import { auditWithGeorge } from "../agents/GeorgeAgent.js";
-import { calculateCrossRatio, categorizeCrossRatio } from "../canvas/crossRatio.js";
+import { calculateCrossRatio } from "../canvas/crossRatio.js";
 import { analyzeColinearity } from "../canvas/colinearityGuide.js";
+import { computeInvariantSignals } from "../config/invariantConfig.js";
 
 export async function orchestrateOMNI(points) {
   console.log(">> OMNI: Initiating reasoning sequence...");
@@ -16,16 +17,19 @@ export async function orchestrateOMNI(points) {
   // 1. Deterministic Geometric Analysis
   const crossRatio = calculateCrossRatio(points);
   const colinearity = analyzeColinearity(points);
-  const category = categorizeCrossRatio(crossRatio);
+
+  // Use the central Invariant Engine for stability signals
+  const signals = computeInvariantSignals(crossRatio);
 
   const inputPayload = {
     crossRatio,
     mandalaSeed: { points: [...points] },
     computedValues: {
-      frequency_hz: Math.round(400 + (Math.abs(crossRatio) * 20)),
-      coordination_index: colinearity.alignmentScore,
-      stability_score: Math.round(colinearity.alignmentScore * 100),
-      geometry_category: category
+      frequency_hz: signals.frequency_hz,
+      coordination_index: signals.coordination_index,
+      stability_score: signals.stability_score,
+      geometry_category: signals.geometry_category,
+      colinearity_score: colinearity.alignmentScore
     },
     hashChain: {
       current: "0x" + Math.random().toString(16).slice(2),
