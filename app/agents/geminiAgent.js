@@ -42,9 +42,10 @@ export async function runGeminiDebate(input) {
     generationConfig: {
       // Force JSON for interoperability with GEORGE and the Main Controller
       responseMimeType: "application/json",
-      temperature: 0.8, // Slightly higher for more nuanced agent personas
-      topP: 0.95,
-      maxOutputTokens: 3000 // Higher limit to accommodate the full debate and audit
+      temperature: 0, // Deterministic reasoning
+      topP: 0.1,
+      topK: 1,
+      maxOutputTokens: 4096
     }
   };
 
