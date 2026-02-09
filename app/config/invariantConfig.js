@@ -1,29 +1,30 @@
 /**
  * OMNI-CHALAMANDRA — INVARIANT ENGINE
- * Computes deterministic signals from the Cross-Ratio
+ * Deterministic mathematical grounding layer
  */
+export function computeInvariantSignals(crossRatio) {
+  if (typeof crossRatio !== "number" || Number.isNaN(crossRatio)) {
+    throw new Error("Invariant Engine: crossRatio must be a valid number");
+  }
 
-export function computeInvariantSignals(R) {
-  // 1. Frequency Mapping (Resonant Audio Signal)
-  // Maps R to a frequency range between 200Hz and 800Hz
-  const frequency = Math.min(Math.max(200 + (R * 100), 200), 800);
+  let geometry_category;
 
-  // 2. Coordination Index (System Stability)
-  // A value of 1.0 is the Golden Ratio (Harmonic)
-  const phi = 1.61803398875;
-  const coordination = 1 - Math.min(Math.abs(R - phi) / phi, 1);
+  if (crossRatio < 0) geometry_category = "CHAOTIC";
+  else if (crossRatio >= 0 && crossRatio < 0.5) geometry_category = "UNSTABLE";
+  else if (crossRatio >= 0.5 && crossRatio < 1.5) geometry_category = "BALANCED";
+  else geometry_category = "HIGHLY_ORDERED";
 
-  // 3. Geometry Category Definition
-  let category = "STANDARD";
-  if (R === 1) category = "DEGENERATE_LINEAR";
-  if (Math.abs(R - phi) < 0.1) category = "HARMONIC_GOLDEN";
-  if (R < 0) category = "PARADIGM_INVERSION";
-  if (R > 2.0) category = "DISRUPTIVE_EXPANSION";
+  const coordination_index = Math.max(
+    0,
+    Math.min(1, 1 - Math.abs(crossRatio - 1))
+  );
+
+  const frequency_hz = Math.round(220 + coordination_index * 440);
 
   return {
-    frequency_hz: Math.round(frequency),
-    coordination_index: parseFloat(coordination.toFixed(4)),
-    geometry_category: category,
-    stability_score: parseFloat((coordination * 100).toFixed(2))
+    cross_ratio: crossRatio,
+    geometry_category,
+    coordination_index: Number(coordination_index.toFixed(3)),
+    frequency_hz
   };
 }
