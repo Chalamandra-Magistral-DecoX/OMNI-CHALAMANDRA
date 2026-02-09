@@ -113,79 +113,69 @@ Uncertainty is surfaced by design.
 
 ---
 
-🧠 Anti-Hallucination Architecture
+## 🧠 Anti-Hallucination Architecture
 
-Deterministic geometry anchor
+- Deterministic geometry anchor  
+- Multi-agent contradiction  
+- Schema-enforced output  
+- Independent shadow audit  
+- Transparent failure states  
 
-Multi-agent contradiction
+**Trust is earned, not assumed.**
 
-Schema-enforced output
+---
 
-Independent shadow audit
+## 🧩 Built With
 
-Transparent failure states
+- Gemini 3 Pro  
+- TypeScript / JavaScript  
+- Structured JSON schemas  
+- Canvas & WebAudio API  
+- Deterministic math invariants  
+- Multi-agent orchestration  
 
-Trust is earned, not assumed.
+---
 
-🧩 Built With
+## 🎯 Use Cases
 
-Gemini 3 Pro
+- Strategic decision making  
+- Risk analysis  
+- AI safety research  
+- Transparent reasoning systems  
+- Education in critical thinking  
 
-TypeScript / JavaScript
+---
 
-Structured JSON schemas
+## 📈 Future Roadmap
 
-Canvas & WebAudio API
+- Scenario comparison engine  
+- Confidence evolution tracking  
+- Enterprise risk dashboards  
+- Governance-as-a-service  
 
-Deterministic math invariants
+---
 
-Multi-agent orchestration
+## 🛠 Quick Start
 
-🎯 Use Cases
+1. Add Gemini API key in `app/config/secrets.js`  
+2. Run local server  
+3. Click 4 points on canvas  
+4. Observe debate, audit, and outputs  
 
-Strategic decision making
+---
 
-Risk analysis
+## 🏆 Hackathon Focus
 
-AI safety research
+- Responsible AI  
+- Verifiable reasoning  
+- Multi-agent governance  
+- Transparent decision pipelines  
 
-Transparent reasoning systems
+---
 
-Education in critical thinking
+## 🧬 Authorship
 
-📈 Future Roadmap
-
-Scenario comparison engine
-
-Confidence evolution tracking
-
-Enterprise risk dashboards
-
-Governance-as-a-service
-
-🛠 Quick Start
-
-Add Gemini API key in app/config/secrets.js
-
-Run local server
-
-Click 4 points on canvas
-
-Observe debate, audit, and outputs
-
-🏆 Hackathon Focus
-
-Responsible AI
-
-Verifiable reasoning
-
-Multi-agent governance
-
-Transparent decision pipelines
-
-🧬 Authorship
-
-Lead Developer: Dana Michelle Vargas
-Chalamandra Magistral — DecoX
+**Lead Developer:** Dana Michelle Vargas  
+**Chalamandra Magistral — DecoX**
 
 OMNI-CHALAMANDRA pioneers governed cognitive AI.
