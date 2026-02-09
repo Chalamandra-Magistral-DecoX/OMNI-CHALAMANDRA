@@ -40,13 +40,67 @@ export async function runGeminiDebate(input) {
       }
     ],
     generationConfig: {
-      // Force JSON for interoperability with GEORGE and the Main Controller
-      responseMimeType: "application/json",
-      temperature: 0, // Deterministic reasoning
+      temperature: 0,
       topP: 0.1,
       topK: 1,
-      maxOutputTokens: 4096
-    }
+      maxOutputTokens: 4096,
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: "object",
+        properties: {
+          agent_insights: {
+            type: "object",
+            properties: {
+              scientist: { type: "string" },
+              philosopher: { type: "string" },
+              psychologist: { type: "string" },
+              historian: { type: "string" },
+              futurist: { type: "string" }
+            },
+            required: ["scientist", "philosopher", "historian", "psychologist", "futurist"]
+          },
+          george_verdict: {
+            type: "object",
+            properties: {
+              status: { type: "string", enum: ["STABILIZED", "WARNING", "CRITICAL"] },
+              panic_triggered: { type: "boolean" },
+              glitch_intensity: { type: "number" },
+              final_verdict: { type: "string" },
+              hallucination_score: { type: "number" }
+            },
+            required: ["status", "panic_triggered", "glitch_intensity", "final_verdict", "hallucination_score"]
+          },
+          output_signals: {
+            type: "object",
+            properties: {
+              frequency_hz: { type: "number" },
+              geometry: { type: "string" },
+              coordination_index: { type: "number" }
+            },
+            required: ["frequency_hz", "geometry", "coordination_index"]
+          }
+        },
+        required: ["agent_insights", "george_verdict", "output_signals"]
+      }
+    },
+    safetySettings: [
+      {
+        category: "HARM_CATEGORY_HATE_SPEECH",
+        threshold: "BLOCK_ONLY_HIGH"
+      },
+      {
+        category: "HARM_CATEGORY_HARASSMENT",
+        threshold: "BLOCK_ONLY_HIGH"
+      },
+      {
+        category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+        threshold: "BLOCK_LOW_AND_ABOVE"
+      },
+      {
+        category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+        threshold: "BLOCK_ONLY_HIGH"
+      }
+    ]
   };
 
   try {
@@ -88,18 +142,6 @@ function generateMockDebate(input) {
   const vals = input.computedValues;
 
   return {
-    project: "OMNI-CHALAMANDRA",
-    version: "3.5",
-    timestamp: Date.now(),
-    input_analysis: {
-      cross_ratio: R,
-      category: vals.geometry_category
-    },
-    output_signals: {
-      frequency_hz: vals.frequency_hz,
-      geometry: vals.geometry_category,
-      coordination_index: vals.coordination_index
-    },
     agent_insights: {
       scientist: `The invariant R=${R} suggests a highly consistent topological manifold.`,
       philosopher: `This alignment reflects the inherent duality of projective space.`,
@@ -108,14 +150,16 @@ function generateMockDebate(input) {
       futurist: `Protocol integrity is maintained at a ${vals.coordination_index} coordination level.`
     },
     george_verdict: {
-      status: "STABLE",
+      status: "STABILIZED",
       panic_triggered: false,
       glitch_intensity: 0.0,
-      final_verdict: "MOCK AUDIT: Internal consistency within nominal range."
+      final_verdict: "MOCK AUDIT: Internal consistency within nominal range.",
+      hallucination_score: 0.0
     },
-    chain_data: {
-      current_hash: input.hashChain?.current || "0xMOCK",
-      iteration: input.hashChain?.iteration || 1
+    output_signals: {
+      frequency_hz: vals.frequency_hz,
+      geometry: vals.geometry_category,
+      coordination_index: vals.coordination_index
     }
   };
 }
