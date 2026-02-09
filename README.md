@@ -112,6 +112,7 @@ Each session outputs:
 Uncertainty is surfaced by design.
 
 ---
+
 🧠 Anti-Hallucination Architecture
 
 Deterministic geometry anchor
