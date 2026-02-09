@@ -1,7 +1,6 @@
 # 🧬 OMNI-CHALAMANDRA  
 **Governed Multi-Agent Cognitive System**  
-**Lead Developer:** Dana Michelle Vargas  
-**Brasdefer — Chalamandra Magistral**  
+**Lead Developer:** Dana Michelle Vargas de Brasdefer — Chalamandra Magistral**  
 **Project Initiative:** DecoX  
 
 ---
