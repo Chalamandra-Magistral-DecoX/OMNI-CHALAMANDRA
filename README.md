@@ -1,238 +1,191 @@
 # 🧬 OMNI-CHALAMANDRA  
-**Governed Multi-Agent Cognitive System**
-**Lead Developer:** Dana Michelle Vargas
-**Brasdefer — Chalamandra Magistral**
-**Project Initiative:** DecoX
+**Governed Multi-Agent Cognitive System**  
+**Lead Developer:** Dana Michelle Vargas  
+**Brasdefer — Chalamandra Magistral**  
+**Project Initiative:** DecoX  
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Model](https://img.shields.io/badge/engine-Gemini_1.5_Pro-blue)
-![Audit](https://img.shields.io/badge/audit-George_Active-orange)
+---
 
-### 🌐 System Vision
+## 🌐 System Vision
 
 OMNI-CHALAMANDRA is a governed cognitive ecosystem that separates interpretative intelligence from validation authority.
 
 The system generates multi-perspective reasoning through specialized agents while ensuring epistemic stability through a deterministic mathematical anchor and an independent governance layer.
 
-> *“We do not attempt to be intelligent. We attempt to be honest.”*
+> *We do not attempt to be intelligent. We attempt to be honest.*
 
 ---
 
-### 🧠 Conceptual Manifesto — Honesty Over Intelligence
+## 🧠 Why OMNI-CHALAMANDRA Exists
 
-Traditional AI systems often hide reasoning processes and optimize for confidence over truth. OMNI-CHALAMANDRA takes a different approach:
+Modern AI systems optimize for fluency, not truth.
 
-✔ **Visible Cognition:** Makes reasoning observable and verifiable.
-✔ **Independent Audit:** Introduced the **GEORGE Protocol** for shadow governance.
-✔ **Mathematical Grounding:** Uses deterministic anchors to prevent hallucination.
-✔ **Transparent Failure:** Prefers visible failure over silent hallucination.
+They produce confident hallucinations while hiding their reasoning.
 
----
+OMNI-CHALAMANDRA enforces:
 
-## 🚀 System Overview
+- Visible reasoning  
+- Quantified uncertainty  
+- Independent validation  
+- Mathematical grounding  
 
-OMNI-CHALAMANDRA is designed for high-stakes decision-making where AI hallucinations are unacceptable. It bridges the gap between generative reasoning and mathematical certainty through a multi-layered verification pipeline.
-
-✔ **Visible Uncertainty:** Quantifies agent confidence and drift.
-✔ **Anti-Hallucination:** Anchors generative output to projective geometry invariants.
-✔ **Structured Governance:** Independent audit layer (GEORGE Protocol) validates all insights.
-✔ **Multimodal Feedback:** Synthesizes results into visual mandalas, resonant audio, and structured JSON.
+Honesty before intelligence.
 
 ---
 
-## 🧠 Runtime Architecture
+## 🚀 System Pipeline
+User Input (4 visual points)
+↓
+Geometric Invariants (Cross Ratio + Stability Signals)
+↓
+Multi-Agent Debate (Gemini 3 Pro)
+Scientist | Philosopher | Psychologist | Historian | Futurist
+↓
+Shadow Governance Audit (GEORGE Protocol)
+↓
+Verified Output
+→ Visual Mandala
+→ Resonant Audio
+→ Structured JSON
 
-```mermaid
-flowchart TD
-    subgraph Frontend [UI Layer: main.js]
-        UI_IN[Canvas Click: 4 Points] --> ORCH[orchestrateOMNI]
-    end
-
-    subgraph Math [Geometric Invariant Layer]
-        ORCH --> CR[crossRatio.js: Calculate R]
-        ORCH --> COL[colinearityGuide.js: Analyze Alignment]
-    end
-
-    subgraph AI [Cognitive Agent Layer: geminiAgent.js]
-        CR & COL --> GEM[Gemini 1.5 Pro Multi-Agent Debate]
-        GEM --> AGENTS[Scientist | Philosopher | Psychologist | Historian | Futurist]
-    end
-
-    subgraph Audit [Shadow Governance: GeorgeAgent.js]
-        AGENTS --> GEORGE[GEORGE Protocol Audit]
-        CR --> GEORGE
-    end
-
-    subgraph Output [Multimodal Output Layer]
-        GEORGE --> V{Verdict}
-        V -->|STABLE| REND[CanvasController: Render Mandala]
-        V -->|PANIC| GLITCH[glitchEngine.js: Trigger Feedback]
-        REND --> AUDIO[audioEngine.js: Play Resonance]
-        REND --> EXPORT[export.JSON.js: Generate Audit Trail]
-    end
-```
-
-### 🔬 The Mathematical Core — Real Signal Before Inference
-
-OMNI-CHALAMANDRA grounds every reasoning session using the **Cross Ratio (R)**, a projective geometry invariant.
-
-$$R = \frac{AC / AD}{BC / BD}$$
-
-**Properties:**
-✔ Remains invariant under perspective transformations
-✔ Provides deterministic system grounding
-✔ Restricts hallucination drift
-✔ Generates stability classification signals
+(GitHub-safe diagram format)
 
 ---
 
-## 🎭 Tier 1 — The Cognitive Council
+## 🔬 Mathematical Anchor
 
-Each agent operates in a strictly bounded interpretative domain.
+Every reasoning cycle is grounded using the Cross Ratio invariant:
 
-| Agent | Cognitive Layer | Function |
-|-------|-----------------|----------|
-| 🔬 Scientist | Structural / Neuro-Mathematical | Validates measurable consistency |
-| 📜 Philosopher | Ontological / Narrative | Evaluates conceptual coherence |
-| 🧠 Psychologist | Symbolic / Emotional | Interprets perception resonance |
-| 🕰 Historian | Cultural / Pattern Memory | Detects systemic repetition |
-| 🚀 Futurist | Evolution / Protocol | Projects scalability and infrastructure |
+R = (AC / AD) ÷ (BC / BD)
+
+Properties:
+
+• Perspective invariant  
+• Deterministic  
+• Cannot hallucinate  
+• Produces stability classifications  
+
+This creates real signal before AI interpretation.
 
 ---
 
-## 🛡 Tier 2 — Shadow Governance Layer
+## 🎭 Cognitive Agents
 
-### 👁 Shadow Orchestrator (GEORGE Protocol)
+| Agent | Domain | Purpose |
+|------|-------|---------|
+| Scientist | Technical & Mathematical | Feasibility and constraints |
+| Philosopher | Strategic & Conceptual | Tradeoffs and framing |
+| Psychologist | Human dynamics | Organizational impact |
+| Historian | Precedent patterns | Risk from past outcomes |
+| Futurist | Long-term systems | Scalability & disruption |
 
-GEORGE is a non-generative supervisory entity. It never participates in creative reasoning; it only validates.
+---
 
-**Responsibilities:**
-- 🔎 **Detection:** Excessive optimism, symbolic abstraction drift, and logical inconsistency.
-- 🎛 **Control:** Activates panic mode or feedback loops if instability is detected.
-- ⚖ **Verdict Authority:** Classifies output reliability and can invalidate agent conclusions.
+## 🛡 Shadow Governance Layer — GEORGE
+
+GEORGE is a non-generative auditor.
+
+It never reasons.  
+It only verifies.
+
+Functions:
+
+- Detects hallucination drift  
+- Flags overconfidence  
+- Compares narrative vs math  
+- Triggers panic mode when unstable  
+
+Final authority on trustworthiness.
 
 ---
 
 ## 📊 Verifiability Metrics
 
-Each decision generates a set of quantified signals:
+Each session outputs:
 
-• **Stability Score:** Derived from colinearity and geometric tension.
-• **Coordination Index:** Measures alignment between math and reasoning.
-• **Drift Score:** Calculated by the GEORGE Protocol to detect hallucination.
-• **Audit Verdict:** Final classification of system integrity (STABLE vs. PANIC).
+• Stability score  
+• Coordination index  
+• Agent confidence levels  
+• Drift detection  
+• Audit verdict  
 
 Uncertainty is surfaced by design.
 
 ---
+🧠 Anti-Hallucination Architecture
 
-## 🛡️ Anti-Hallucination Philosophy
+Deterministic geometry anchor
 
-The system operates on a "Trust but Verify" model:
-1.  **Mathematical Anchor:** All reasoning begins with the **Cross-Ratio (R)** and **Colinearity** analysis. These are deterministic values that cannot be hallucinated.
-2.  **Schema Enforcement:** Gemini 1.5 Pro is forced to output structured JSON that aligns with the mathematical signals.
-3.  **Shadow Governance:** The **GEORGE Protocol** acts as a deterministic auditor, comparing the AI's narrative against the geometric invariants. If the narrative drifts from the math, a **PANIC** state is triggered.
-4.  **Cognitive Diversity:** 5 specialized agents provide contradictory perspectives, preventing single-model bias.
+Multi-agent contradiction
 
----
+Schema-enforced output
 
-## 📦 JSON Output Schema
+Independent shadow audit
 
-Every session generates a verifiable audit trail in JSON format:
+Transparent failure states
 
-```json
-{
-  "project": "OMNI-CHALAMANDRA",
-  "geometry_input": {
-    "points": [],
-    "cross_ratio": 1.618,
-    "geometry_category": "HARMONIC_GOLDEN"
-  },
-  "cognitive_signals": {
-    "frequency_hz": 432,
-    "coordination_index": 0.95
-  },
-  "agent_debate": {
-    "scientist": "...",
-    "philosopher": "..."
-  },
-  "shadow_audit": {
-    "auditor": "GEORGE",
-    "panic_triggered": false,
-    "final_verdict": "..."
-  },
-  "chain_data": {
-    "current_hash": "0x...",
-    "iteration": 1
-  }
-}
-```
+Trust is earned, not assumed.
 
----
+🧩 Built With
 
-## 🧪 Research Positioning
+Gemini 3 Pro
 
-OMNI-CHALAMANDRA contributes to emerging research in:
-• AI interpretability and governed cognition.
-• Multi-agent reasoning ecosystems.
-• Hybrid symbolic-generative intelligence.
-• Governance-first AI safety and deterministic anchoring.
+TypeScript / JavaScript
 
----
+Structured JSON schemas
 
-## 🚀 Hackathon Value Proposition
+Canvas & WebAudio API
 
-OMNI-CHALAMANDRA demonstrates:
-✔ Advanced agent orchestration.
-✔ Real-time hallucination governance.
-✔ Deterministic + LLM hybrid pipeline.
-✔ Multimodal verified outputs.
-✔ Transparent cognitive simulation.
+Deterministic math invariants
 
----
+Multi-agent orchestration
 
-## 🧩 Built With
+🎯 Use Cases
 
-• **Gemini 1.5 Pro:** Strategic multi-agent reasoning.
-• **Deterministic Invariants:** Projective geometry anchor.
-• **Structured Governance:** GEORGE Protocol audit layer.
-• **Multimodal Feedback:** Resonant audio, mandalas, and JSON.
+Strategic decision making
 
----
+Risk analysis
 
-## 📈 Future Extensions
+AI safety research
 
-• Scenario comparison engine.
-• Confidence evolution over time.
-• Visual decision mandalas.
-• Enterprise risk dashboards.
+Transparent reasoning systems
 
----
+Education in critical thinking
 
-## 🛠️ Setup & Integration
+📈 Future Roadmap
 
-1.  **Configure API Key:** Add your Gemini API key to `app/config/secrets.js`.
-2.  **Serve Application:** Run a local server (e.g., `python3 -m http.server 3000 --directory app`).
-3.  **Geometric Input:** Provide 4 points on the canvas to initiate the reasoning sequence.
-4.  **Audit Export:** Use the automatic JSON export to retrieve the full reasoning trace.
+Scenario comparison engine
 
----
+Confidence evolution tracking
 
-### 🏆 Hackathon Focus
+Enterprise risk dashboards
 
-Demonstrating:
+Governance-as-a-service
 
-✔ Responsible AI  
-✔ Multi-agent reasoning  
-✔ Verifiable outputs  
-✔ Real strategic workflows  
+🛠 Quick Start
 
----
+Add Gemini API key in app/config/secrets.js
 
-## 🧬 Authorship & Project Identity
+Run local server
 
-*   **Lead Developer:** Dana Michelle Vargas
-*   **Brasdefer — Chalamandra Magistral**
-*   **Project Initiative:** DecoX
+Click 4 points on canvas
 
-> *“OMNI-CHALAMANDRA explores the transition from probabilistic AI toward governed cognitive infrastructures capable of producing verifiable, stable, and interpretable intelligence outputs.”*
+Observe debate, audit, and outputs
+
+🏆 Hackathon Focus
+
+Responsible AI
+
+Verifiable reasoning
+
+Multi-agent governance
+
+Transparent decision pipelines
+
+🧬 Authorship
+
+Lead Developer: Dana Michelle Vargas
+Chalamandra Magistral — DecoX
+
+OMNI-CHALAMANDRA pioneers governed cognitive AI.
+
