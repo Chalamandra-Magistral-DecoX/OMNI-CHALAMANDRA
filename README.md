@@ -189,4 +189,3 @@ Lead Developer: Dana Michelle Vargas
 Chalamandra Magistral — DecoX
 
 OMNI-CHALAMANDRA pioneers governed cognitive AI.
-
