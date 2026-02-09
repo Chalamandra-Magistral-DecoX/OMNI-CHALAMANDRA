@@ -10,7 +10,7 @@ import { auditWithGeorge } from "../agents/GeorgeAgent.js";
 import { calculateCrossRatio } from "../canvas/crossRatio.js";
 import { analyzeColinearity } from "../canvas/colinearityGuide.js";
 import { computeInvariantSignals } from "../config/invariantConfig.js";
-import { validateContract } from "../utils/validate-contract.js";
+import { validateContract } from "../../validate-contract.js";
 
 export async function orchestrateOMNI(points) {
   console.log(">> OMNI: Initiating reasoning sequence...");

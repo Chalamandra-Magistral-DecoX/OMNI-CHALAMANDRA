@@ -74,7 +74,7 @@ export { validateContract };
 /**
  * SELF-TEST (When run via 'node validate-contract.js')
  */
-if (typeof process !== "undefined" && process.argv && process.argv[1].includes("validate-contract.js")) {
+if (typeof process !== "undefined" && process.argv && process.argv[1] && process.argv[1].includes("validate-contract.js")) {
   const testPayload = {
     input_analysis: {
       cross_ratio: 1.618,
